@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaideep Phatak — Program &amp; Portfolio Leadership</title>
+<meta name="description" content="Jaideep Phatak — Program &amp; Portfolio Leadership, AI-Enabled Delivery Governance. Executive portfolio of program governance command centers.">
+
+<!-- ==========================================================
+     JAIDEEP PHATAK — EXECUTIVE PORTFOLIO
+     Single-file, dependency-free homepage.
+     Design language: deep navy + warm ivory + single steel-blue
+     accent, serif display type paired with a quiet system sans,
+     hairline rules, no gradients, no external assets.
+     ========================================================== -->
+
+<style>
+  /* ---------- Design tokens ---------- */
+  :root{
+    --ink:        #10151F;   /* primary text */
+    --ink-soft:   #4B5563;   /* secondary text */
+    --ink-faint:  #8A93A3;   /* tertiary text / captions */
+    --navy:       #0B1E38;   /* brand deep navy */
+    --navy-2:     #132C4F;   /* navy, slightly lighter, for gradients-free depth */
+    --steel:      #33618F;   /* single accent — steel blue */
+    --steel-soft: #E7EEF5;   /* accent tint for backgrounds/badges */
+    --paper:      #FFFFFF;   /* page background */
+    --paper-alt:  #F5F6F8;   /* alternate section background */
+    --line:       #E3E6EB;   /* hairline borders */
+    --line-strong:#C7CDD6;
+
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --maxw: 1180px;
+    --radius: 3px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 32px; }
+
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:""; width:9px; height:9px; background:var(--navy); flex-shrink:0;
+  }
+
+  h1,h2,h3{ font-family:var(--serif); font-weight:400; color:var(--navy); letter-spacing:-.01em; }
+  h2{ font-size:clamp(26px,3.2vw,36px); line-height:1.2; }
+  h3{ font-size:19px; line-height:1.35; }
+  p{ color:var(--ink-soft); }
+
+  .section{ padding:88px 0; }
+  .section-alt{ background:var(--paper-alt); }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head p{ font-size:16px; }
+
+  .divider{ border:none; border-top:1px solid var(--line); }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 26px; font-size:14px; font-weight:600; letter-spacing:.02em;
+    border-radius:var(--radius); cursor:pointer; border:1px solid transparent;
+    transition:background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+    font-family:var(--sans);
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--navy); color:#fff; }
+  .btn-primary:hover{ background:var(--navy-2); }
+  .btn-secondary{ background:transparent; color:var(--navy); border-color:var(--line-strong); }
+  .btn-secondary:hover{ border-color:var(--navy); background:var(--paper-alt); }
+  .btn-ghost{ background:transparent; color:var(--steel); border-color:var(--steel); padding:10px 18px; font-size:13px; }
+  .btn-ghost:hover{ background:var(--steel); color:#fff; }
+  .btn svg{ width:14px; height:14px; }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(8px);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .site-header.scrolled{
+    border-bottom-color:var(--line);
+    box-shadow:0 1px 0 rgba(11,30,56,.02);
+  }
+  .site-header .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .brand{
+    font-family:var(--serif); font-size:18px; letter-spacing:.06em; color:var(--navy);
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .mark{
+    width:11px; height:11px; background:var(--navy); flex-shrink:0;
+  }
+  .nav-links{ display:flex; align-items:center; gap:36px; }
+  .nav-links a{
+    font-size:13.5px; font-weight:500; color:var(--ink-soft); letter-spacing:.02em;
+    position:relative; padding:6px 0;
+  }
+  .nav-links a:hover{ color:var(--navy); }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+    background:var(--navy); transform:scaleX(0); transform-origin:left;
+    transition:transform .18s ease;
+  }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+  .nav-cta{ display:flex; align-items:center; gap:18px; }
+
+  .nav-toggle{
+    display:none; width:38px; height:38px; border:1px solid var(--line-strong);
+    background:transparent; border-radius:var(--radius); cursor:pointer;
+    align-items:center; justify-content:center; flex-direction:column; gap:4px;
+  }
+  .nav-toggle span{ display:block; width:18px; height:1.5px; background:var(--navy); }
+
+  .mobile-menu{
+    display:none; flex-direction:column; gap:2px; padding:8px 32px 20px;
+    border-bottom:1px solid var(--line); background:#fff;
+  }
+  .mobile-menu a{
+    padding:12px 0; font-size:14px; color:var(--ink-soft); border-bottom:1px solid var(--line);
+  }
+  .mobile-menu.open{ display:flex; }
+
+  @media (max-width: 880px){
+    .nav-links, .nav-cta .btn-secondary{ display:none; }
+    .nav-toggle{ display:flex; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    padding:96px 0 84px;
+    background:var(--paper);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center;
+  }
+  .hero-kicker{
+    font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(38px,5.4vw,60px); line-height:1.04; color:var(--navy); margin-bottom:20px;
+  }
+  .hero .subline{
+    font-family:var(--serif); font-style:italic; font-size:clamp(17px,1.9vw,21px);
+    color:var(--steel); margin-bottom:8px;
+  }
+  .hero .subline + .subline{ margin-bottom:26px; color:var(--ink-soft); }
+  .hero-intro{ font-size:16.5px; color:var(--ink-soft); max-width:560px; margin-bottom:36px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+
+  .hero-art{ position:relative; height:420px; }
+  .hero-art svg{ width:100%; height:100%; }
+
+  @media (max-width: 880px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-art{ height:260px; order:-1; opacity:.7; }
+  }
+
+  /* ---------- Highlights ---------- */
+  .highlight-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .highlight-item{
+    background:#fff; padding:26px 22px; min-height:118px;
+    display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .highlight-item .h-label{ font-size:13.5px; font-weight:600; color:var(--navy); line-height:1.35; }
+  .highlight-item .h-sub{ font-size:12px; color:var(--ink-faint); }
+  @media (max-width: 880px){ .highlight-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width: 520px){ .highlight-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Why section ---------- */
+  .why-layout{ display:grid; grid-template-columns:.9fr 1.1fr; gap:64px; align-items:start; }
+  .why-list{ display:flex; flex-direction:column; gap:0; }
+  .why-list li{
+    display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--line);
+  }
+  .why-list li:first-child{ padding-top:0; }
+  .why-list .why-dot{ width:6px; height:6px; margin-top:9px; background:var(--steel); flex-shrink:0; }
+  .why-list strong{ display:block; color:var(--navy); font-size:14.5px; margin-bottom:3px; }
+  .why-list span{ font-size:14px; color:var(--ink-soft); }
+  .why-copy p{ margin-bottom:18px; font-size:16px; }
+  .why-copy p:last-child{ margin-bottom:0; }
+
+  @media (max-width: 880px){ .why-layout{ grid-template-columns:1fr; gap:32px; } }
+
+  /* ---------- Command center cards ---------- */
+  .cc-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:24px; align-items:stretch; }
+  .cc-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    padding:34px 32px; display:flex; flex-direction:column; gap:16px;
+    min-height:436px;
+    transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+  .cc-card:hover{
+    border-color:var(--line-strong);
+    box-shadow:0 18px 40px -22px rgba(11,30,56,.28);
+    transform:translateY(-2px);
+  }
+  .cc-icon{
+    width:48px; height:48px; border:1px solid var(--line-strong); border-radius:var(--radius);
+    display:flex; align-items:center; justify-content:center; color:var(--navy);
+    background:var(--steel-soft);
+    transition:background .18s ease, border-color .18s ease;
+  }
+  .cc-card:hover .cc-icon{ background:#fff; border-color:var(--navy); }
+  .cc-icon svg{ width:24px; height:24px; }
+  .cc-card h3{ margin-top:2px; min-height:50px; display:flex; align-items:flex-start; }
+  .cc-card p.desc{ font-size:14.5px; color:var(--ink-soft); flex-grow:1; }
+  .cc-tags{ display:flex; flex-wrap:wrap; align-content:flex-start; gap:8px; margin-top:4px; min-height:64px; }
+  .cc-tag{
+    font-size:11.5px; font-weight:600; letter-spacing:.03em; color:var(--steel);
+    background:var(--steel-soft); padding:5px 10px; border-radius:100px;
+    height:26px; display:inline-flex; align-items:center;
+  }
+  .cc-launch{
+    margin-top:12px; display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:600; color:var(--navy); border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+  .cc-launch svg{ width:14px; height:14px; transition:transform .15s ease; }
+  .cc-card:hover .cc-launch svg{ transform:translateX(3px); }
+
+  @media (max-width: 780px){ .cc-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- How I think ---------- */
+  .think-list{ display:flex; flex-direction:column; }
+  .think-row{
+    display:grid; grid-template-columns:260px 1fr; gap:32px; padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .think-row:first-child{ padding-top:0; }
+  .think-row:last-child{ border-bottom:none; }
+  .think-row h3{ color:var(--navy); }
+  .think-row p{ font-size:15px; }
+  @media (max-width: 780px){ .think-row{ grid-template-columns:1fr; gap:8px; } }
+
+  /* ---------- About ---------- */
+  .about-layout{ display:grid; grid-template-columns:.85fr 1.15fr; gap:56px; align-items:start; }
+  .about-card{
+    background:var(--navy); color:#fff; padding:38px 32px; border-radius:var(--radius);
+  }
+  .about-card .name{ font-family:var(--serif); font-size:22px; margin-bottom:6px; }
+  .about-card .role{ font-size:13.5px; color:#B9C6D9; margin-bottom:22px; }
+  .about-card dl{ display:flex; flex-direction:column; gap:14px; }
+  .about-card dt{ font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7C90AC; margin-bottom:3px; }
+  .about-card dd{ font-size:13.5px; color:#EDEFF3; }
+  .about-copy p{ font-size:16px; margin-bottom:16px; }
+  .about-copy p:last-child{ margin-bottom:0; }
+  .about-highlights-label{
+    font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-faint); margin:24px 0 14px;
+  }
+  .about-highlights{ display:flex; flex-direction:column; gap:11px; margin-bottom:24px; }
+  .about-highlights li{
+    display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:var(--ink-soft);
+  }
+  .about-highlights li::before{
+    content:""; width:6px; height:6px; margin-top:7px; background:var(--steel); flex-shrink:0;
+  }
+  @media (max-width: 880px){ .about-layout{ grid-template-columns:1fr; gap:32px; } }
+
+  /* ---------- Current focus banner ---------- */
+  .focus-banner{ background:var(--navy); color:#fff; padding:56px 0; }
+  .focus-banner .wrap{ display:flex; justify-content:space-between; align-items:flex-end; gap:32px; flex-wrap:wrap; }
+  .focus-banner .eyebrow{ color:#89A6C9; }
+  .focus-banner .eyebrow::before{ background:#fff; }
+  .focus-roles{ display:flex; flex-wrap:wrap; gap:10px; max-width:640px; }
+  .focus-roles span{
+    font-size:13px; font-weight:500; color:#DCE3EC;
+    border:1px solid rgba(255,255,255,.22); padding:8px 14px; border-radius:100px;
+  }
+  .focus-loc{ text-align:right; }
+  .focus-loc .loc-label{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#7C90AC; margin-bottom:4px; }
+  .focus-loc .loc-val{ font-family:var(--serif); font-size:20px; }
+  @media (max-width: 700px){ .focus-loc{ text-align:left; } }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .contact-card{ background:#fff; padding:32px 28px; display:flex; flex-direction:column; gap:14px; }
+  .contact-card .c-icon{ width:34px; height:34px; color:var(--steel); }
+  .contact-card .c-label{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+  .contact-card .c-val{ font-size:15px; font-weight:600; color:var(--navy); word-break:break-word; }
+  .contact-card a.c-val:hover{ color:var(--steel); }
+  @media (max-width: 780px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Footer ---------- */
+  .site-footer{ background:var(--navy); color:#B9C6D9; padding:48px 0 32px; }
+  .footer-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap;
+    padding-bottom:28px; border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  .footer-brand{ font-family:var(--serif); font-size:17px; color:#fff; margin-bottom:6px; }
+  .footer-tag{ font-size:13px; color:#8AA0BE; }
+  .footer-tag + .footer-tag{ margin-top:2px; }
+  .footer-links{ display:flex; gap:22px; }
+  .footer-links a{ font-size:13px; color:#B9C6D9; }
+  .footer-links a:hover{ color:#fff; }
+  .footer-bottom{ padding-top:22px; font-size:12px; color:#6F86A4; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  /* ---------- Back to top ---------- */
+  .to-top{
+    position:fixed; right:24px; bottom:24px; width:44px; height:44px;
+    background:var(--navy); color:#fff; border:none; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    opacity:0; visibility:hidden; transform:translateY(8px);
+    transition:opacity .2s ease, transform .2s ease, background .15s ease;
+    z-index:90; box-shadow:0 10px 24px -10px rgba(11,30,56,.5);
+  }
+  .to-top.visible{ opacity:1; visibility:visible; transform:translateY(0); }
+  .to-top:hover{ background:var(--navy-2); }
+  .to-top svg{ width:16px; height:16px; }
+
+  ::selection{ background:var(--steel-soft); color:var(--navy); }
+  :focus-visible{ outline:2px solid var(--steel); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap">
+    <a href="#top" class="brand"><span class="mark"></span>JAIDEEP PHATAK</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#top">Home</a>
+      <a href="#command-centers">Command Centers</a>
+      <a href="#about">About</a>
+      <a href="#current-focus">Current Focus</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-secondary" href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">
+        LinkedIn
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#top">Home</a>
+    <a href="#command-centers">Command Centers</a>
+    <a href="#about">About</a>
+    <a href="#current-focus">Current Focus</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn ↗</a>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-kicker">Executive Portfolio</div>
+      <h1>Jaideep Phatak</h1>
+      <div class="subline">Program &amp; Portfolio Leadership</div>
+      <div class="subline">AI-Enabled Delivery Governance</div>
+      <p class="hero-intro">
+        The command centers on this site demonstrate how I approach executive program governance—the
+        reporting structures, decision support, and operating cadence that keep complex cross-functional
+        programs moving. Across 10+ years in the industry, including more than 7 years leading complex
+        programs and engineering initiatives across the USA, EU, UAE, India, and APAC, I've developed these
+        demonstrations to illustrate the operating model behind effective program delivery—not simply
+        describe it.
+      </p>
+      <div class="hero-actions">
+        <a href="#command-centers" class="btn btn-primary">
+          Explore Command Centers
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="./resume/Jaideep_Phatak_Resume.pdf" class="btn btn-secondary" target="_blank" rel="noopener">
+          Download Executive Resume
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7.5 11.5L12 16l4.5-4.5"/><path d="M5 19h14"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 480 420" fill="none">
+        <!-- subtle abstract governance / dashboard grid, decorative only -->
+        <rect x="40" y="40" width="400" height="340" rx="3" stroke="#E3E6EB" stroke-width="1.5"/>
+        <line x1="40" y1="100" x2="440" y2="100" stroke="#E3E6EB" stroke-width="1"/>
+        <line x1="180" y1="100" x2="180" y2="380" stroke="#E3E6EB" stroke-width="1"/>
+        <line x1="320" y1="100" x2="320" y2="380" stroke="#E3E6EB" stroke-width="1"/>
+
+        <!-- KPI tiles top -->
+        <rect x="56" y="56" width="108" height="28" rx="2" fill="#F5F6F8"/>
+        <rect x="196" y="56" width="108" height="28" rx="2" fill="#F5F6F8"/>
+        <rect x="336" y="56" width="88" height="28" rx="2" fill="#F5F6F8"/>
+
+        <!-- bar chart, left column -->
+        <g stroke="#33618F" stroke-width="10" stroke-linecap="square">
+          <line x1="76" y1="340" x2="76" y2="270"/>
+          <line x1="102" y1="340" x2="102" y2="230"/>
+          <line x1="128" y1="340" x2="128" y2="290"/>
+          <line x1="154" y1="340" x2="154" y2="200"/>
+        </g>
+        <g stroke="#C7CDD6" stroke-width="10" stroke-linecap="square">
+          <line x1="76" y1="340" x2="76" y2="320" opacity="0"/>
+        </g>
+
+        <!-- line chart, middle column -->
+        <polyline points="200,300 230,260 260,275 290,220 315,240" fill="none" stroke="#0B2545" stroke-width="2"/>
+        <circle cx="200" cy="300" r="3" fill="#0B2545"/>
+        <circle cx="230" cy="260" r="3" fill="#0B2545"/>
+        <circle cx="260" cy="275" r="3" fill="#0B2545"/>
+        <circle cx="290" cy="220" r="3" fill="#0B2545"/>
+        <circle cx="315" cy="240" r="3" fill="#0B2545"/>
+
+        <!-- gate / stage row, right column -->
+        <g>
+          <circle cx="360" cy="230" r="7" fill="none" stroke="#33618F" stroke-width="2"/>
+          <circle cx="360" cy="260" r="7" fill="#33618F"/>
+          <circle cx="360" cy="290" r="7" fill="none" stroke="#C7CDD6" stroke-width="2"/>
+          <circle cx="360" cy="320" r="7" fill="none" stroke="#C7CDD6" stroke-width="2"/>
+          <line x1="360" y1="237" x2="360" y2="253" stroke="#C7CDD6" stroke-width="1.5"/>
+          <line x1="360" y1="267" x2="360" y2="283" stroke="#C7CDD6" stroke-width="1.5"/>
+          <line x1="360" y1="297" x2="360" y2="313" stroke="#C7CDD6" stroke-width="1.5"/>
+          <rect x="382" y="222" width="34" height="16" rx="2" fill="#F5F6F8"/>
+          <rect x="382" y="252" width="34" height="16" rx="2" fill="#F5F6F8"/>
+          <rect x="382" y="282" width="34" height="16" rx="2" fill="#F5F6F8"/>
+          <rect x="382" y="312" width="34" height="16" rx="2" fill="#F5F6F8"/>
+        </g>
+
+        <!-- footer status strip -->
+        <rect x="56" y="352" width="368" height="12" rx="2" fill="#F5F6F8"/>
+        <rect x="56" y="352" width="230" height="12" rx="2" fill="#33618F" opacity=".85"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HIGHLIGHTS ================= -->
+<section class="section" id="highlights">
+  <div class="wrap">
+    <div class="eyebrow">Professional Highlights</div>
+    <div class="highlight-grid">
+      <div class="highlight-item"><div class="h-label">PMP® Certified</div><div class="h-sub">Project Management Institute</div></div>
+      <div class="highlight-item"><div class="h-label">Program &amp; Portfolio Leadership</div><div class="h-sub">10+ years, 7+ in complex programs</div></div>
+      <div class="highlight-item"><div class="h-label">$8M–$10M+ Portfolio Governance</div><div class="h-sub">35+ OEM &amp; Tier-1 programs</div></div>
+      <div class="highlight-item"><div class="h-label">80+ Engineers Led</div><div class="h-sub">Across USA, UAE &amp; India</div></div>
+      <div class="highlight-item"><div class="h-label">AI-Augmented Delivery</div><div class="h-sub">GenAI-enabled reporting</div></div>
+      <div class="highlight-item"><div class="h-label">Executive Reporting</div><div class="h-sub">Power BI &amp; Excel dashboards</div></div>
+      <div class="highlight-item"><div class="h-label">Cost &amp; Weight Optimization</div><div class="h-sub">~$200/vehicle, ~20kg/vehicle (VAVE)</div></div>
+      <div class="highlight-item"><div class="h-label">M.S. Mechanical Engineering</div><div class="h-sub">Lamar University, USA</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY THESE COMMAND CENTERS ================= -->
+<section class="section section-alt" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Why These Command Centers</div>
+      <h2>Governance you can see, not just describe.</h2>
+    </div>
+    <div class="why-layout">
+      <ul class="why-list">
+        <li><span class="why-dot"></span><div><strong>Reporting noise, removed</strong><span>A resume line says "built executive dashboards." A command center shows the dashboard, and the judgment behind what made the cut.</span></div></li>
+        <li><span class="why-dot"></span><div><strong>Decisions, not status</strong><span>Every module is built around what a leadership team actually has to decide next — not a log of what happened last week.</span></div></li>
+        <li><span class="why-dot"></span><div><strong>Governance as a system</strong><span>Stage gates, RACI, escalation paths and SLA tracking are shown as one connected structure, the way they have to work in practice.</span></div></li>
+        <li><span class="why-dot"></span><div><strong>Structured thinking, on the record</strong><span>These are the artifacts of how I organize ambiguous delivery problems — visible before the first conversation, not after it.</span></div></li>
+      </ul>
+      <div class="why-copy">
+        <p>
+          Most of a program manager's real work is invisible in a resume: the governance model that gets built
+          before a single status report goes out, the way a risk register is actually used in a steering
+          committee, the judgment call on which metric belongs in front of an executive and which one doesn't.
+        </p>
+        <p>
+          These command centers are demonstrations, not case studies of a single employer. Each one reflects
+          governance patterns drawn from programs, engineering operations, portfolio management, and executive
+          reporting environments I've worked in — modeled to show how the underlying structure works, not
+          reproduced from any proprietary system. They are built around the same discipline I bring to any
+          program: reduce reporting noise, surface the decision that actually needs to be made, and give
+          leadership a structure they can trust without having to ask for it twice.
+        </p>
+        <p>
+          They are not software projects. They demonstrate my thinking and decision framework, and they're
+          intended to make my approach to program leadership visible before our first conversation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURED COMMAND CENTERS ================= -->
+<section class="section" id="command-centers">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Featured Command Centers</div>
+      <h2>Four governance systems, four classes of program.</h2>
+    </div>
+    <div class="cc-grid">
+
+      <!-- 1 -->
+      <article class="cc-card">
+        <div class="cc-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 3l7 3v5.2c0 4.4-3 8.2-7 9.3-4-1.1-7-4.9-7-9.3V6l7-3z"/>
+            <path d="M9 12.2l2 2 4.2-4.4"/>
+          </svg>
+        </div>
+        <h3>Executive Program Command Center</h3>
+        <p class="desc">
+          Executive governance for complex programs — delivery health, milestones, actions, financial
+          oversight, executive reporting and strategic decision support in one steering-committee view.
+        </p>
+        <div class="cc-tags">
+          <span class="cc-tag">Executive Reporting</span>
+          <span class="cc-tag">Program Governance</span>
+          <span class="cc-tag">Leadership Decisions</span>
+          <span class="cc-tag">AI Insights</span>
+        </div>
+        <a class="cc-launch" href="./executive-program-command-center/">
+          Launch Demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- 2 -->
+      <article class="cc-card">
+        <div class="cc-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 3v2.4M12 18.6V21M4.2 7.8l1.7 1M18.1 15.2l1.7 1M3 12h2.4M18.6 12H21M4.2 16.2l1.7-1M18.1 8.8l1.7-1M7.8 4.2l1 1.7M15.2 18.1l1 1.7M7.8 19.8l1-1.7M15.2 5.9l1-1.7"/>
+          </svg>
+        </div>
+        <h3>Engineering Program Control Tower</h3>
+        <p class="desc">
+          Engineering execution across milestones, risks, resources and actions — a control-tower view built
+          for technical program delivery and cross-regional engineering teams.
+        </p>
+        <div class="cc-tags">
+          <span class="cc-tag">Engineering</span>
+          <span class="cc-tag">Program Control</span>
+          <span class="cc-tag">Risk Management</span>
+          <span class="cc-tag">Resources</span>
+        </div>
+        <a class="cc-launch" href="./engineering-program-control-tower/">
+          Launch Demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- 3 -->
+      <article class="cc-card">
+        <div class="cc-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2.5c2.3 2 3.6 5.1 3.6 8.4 0 2-.5 3.5-1.1 4.6l-2.5 2.3-2.5-2.3c-.6-1.1-1.1-2.6-1.1-4.6 0-3.3 1.3-6.4 3.6-8.4z"/>
+            <circle cx="12" cy="10.4" r="1.5"/>
+            <path d="M8.9 14.6l-2.6 1 .7-2.7M15.1 14.6l2.6 1-.7-2.7"/>
+            <path d="M10.3 17.8l1.7 3 1.7-3"/>
+          </svg>
+        </div>
+        <h3>NPD Executive Command Center</h3>
+        <p class="desc">
+          Executive visibility across Stage-Gate governance, APQP readiness, OEM reporting, launch management
+          and manufacturing readiness for new product development programs.
+        </p>
+        <div class="cc-tags">
+          <span class="cc-tag">NPD</span>
+          <span class="cc-tag">Stage Gate</span>
+          <span class="cc-tag">APQP</span>
+          <span class="cc-tag">Launch Readiness</span>
+        </div>
+        <a class="cc-launch" href="./npd-executive-command-center/">
+          Launch Demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- 4 -->
+      <article class="cc-card">
+        <div class="cc-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 3.4l8 4.3-8 4.3-8-4.3 8-4.3z"/>
+            <path d="M4 12l8 4.3 8-4.3"/>
+            <path d="M4 15.9l8 4.3 8-4.3"/>
+          </svg>
+        </div>
+        <h3>Executive Portfolio Command Center</h3>
+        <p class="desc">
+          Portfolio-level governance integrating financial performance, customer programs, executive
+          priorities and AI insights into a single enterprise portfolio management view.
+        </p>
+        <div class="cc-tags">
+          <span class="cc-tag">Portfolio</span>
+          <span class="cc-tag">Portfolio Governance</span>
+          <span class="cc-tag">Executive Reporting</span>
+          <span class="cc-tag">Business Performance</span>
+        </div>
+        <a class="cc-launch" href="./executive-portfolio-command-center/">
+          Launch Demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW I THINK ================= -->
+<section class="section section-alt" id="how-i-think">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How I Think</div>
+      <h2>The operating principles behind every program I run.</h2>
+    </div>
+    <div class="think-list">
+      <div class="think-row">
+        <h3>Executive Clarity</h3>
+        <p>Leadership shouldn't have to dig for the one number that matters. I design reporting so the health
+          of a program, the risk that needs attention, and the decision that's pending are visible in the
+          first five seconds — not buried in a status deck.</p>
+      </div>
+      <div class="think-row">
+        <h3>Decision Support, Not Status Reporting</h3>
+        <p>A steering committee's time is a governance asset. I build reviews and dashboards around the
+          decisions leadership actually needs to make, backed by the SLA compliance frameworks and
+          engineering change control procedures I've established across every active program.</p>
+      </div>
+      <div class="think-row">
+        <h3>Governance as a System</h3>
+        <p>Stage gates, RACI, budget oversight and quality reviews only work when they're connected. I design
+          governance frameworks — KPI dashboards, SLA structures, escalation paths — as one system, not a
+          collection of separate trackers.</p>
+      </div>
+      <div class="think-row">
+        <h3>AI as an Enabler, Not a Replacement</h3>
+        <p>I've integrated GenAI-driven reporting into program governance to automate status synthesis and
+          speed up leadership reviews — reducing manual reporting effort while keeping judgment, and
+          accountability, with the program manager.</p>
+      </div>
+      <div class="think-row">
+        <h3>Cross-Functional Leadership</h3>
+        <p>Complex programs move at the speed of alignment. I've directed teams of 80+ engineers across the
+          USA, UAE and India, and the frameworks I build are meant to remove dependency friction before it
+          reaches a steering committee.</p>
+      </div>
+      <div class="think-row">
+        <h3>Program Predictability</h3>
+        <p>95%+ on-time delivery across concurrent portfolios doesn't happen by accident. It comes from
+          structured scheduling, disciplined cost control, and governance that catches risk early enough to
+          act on it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="section" id="about">
+  <div class="wrap about-layout">
+    <div class="about-card">
+      <div class="name">Jaideep Phatak</div>
+      <div class="role">Program &amp; Portfolio Leadership</div>
+      <dl>
+        <div><dt>Based In</dt><dd>Pune, India</dd></div>
+        <div><dt>Experience</dt><dd>10+ years, 7+ in complex programs</dd></div>
+        <div><dt>Education</dt><dd>M.S. Mechanical Engineering, Lamar University<br>B.E. Mechanical Engineering, Savitribai Phule Pune University</dd></div>
+        <div><dt>Certifications</dt><dd>PMP® — PMI<br>AI for Project Management — LinkedIn Learning<br>Lean Six Sigma Green Belt — Udemy</dd></div>
+        <div><dt>Domains</dt><dd>Automotive OEM &amp; Tier-1, Portfolio Governance</dd></div>
+      </dl>
+    </div>
+    <div class="about-copy">
+      <div class="eyebrow">About</div>
+      <p>
+        I help engineering organizations improve program execution by combining structured governance with
+        executive decision support.
+      </p>
+      <div class="about-highlights-label">Highlights</div>
+      <ul class="about-highlights">
+        <li>10+ years in the industry</li>
+        <li>7+ years leading global technical programs</li>
+        <li>35+ programs delivered across OEMs and Tier-1 suppliers</li>
+        <li>Portfolio governance up to $8M–$10M</li>
+        <li>80+ engineers coordinated across USA, UAE and India</li>
+        <li>PMP® Certified</li>
+        <li>AI-enabled reporting and executive dashboards</li>
+      </ul>
+      <p>
+        My background combines engineering execution, governance, executive reporting, and AI-enabled decision
+        support across global automotive organizations — the same disciplines behind every command center on
+        this site.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CURRENT FOCUS ================= -->
+<section class="focus-banner" id="current-focus">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Current Focus</div>
+      <div class="focus-roles">
+        <span>Program Leadership</span>
+        <span>Technical Program Leadership</span>
+        <span>Portfolio Governance</span>
+        <span>Engineering Program Management</span>
+        <span>Product Development</span>
+        <span>Manufacturing Transformation</span>
+        <span>AI-Enabled Delivery</span>
+      </div>
+    </div>
+    <div class="focus-loc">
+      <div class="loc-label">Location</div>
+      <div class="loc-val">Pune, India</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Contact</div>
+      <h2>Let's talk about your next program.</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <svg class="c-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <div class="c-label">Email</div>
+        <a class="c-val" href="mailto:jaideepphatak16@gmail.com">jaideepphatak16@gmail.com</a>
+      </div>
+      <div class="contact-card">
+        <svg class="c-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 1 1 4 0v4M12 13v4"/></svg>
+        <div class="c-label">LinkedIn</div>
+        <a class="c-val" href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">linkedin.com/in/jaideepphatak</a>
+      </div>
+      <div class="contact-card">
+        <svg class="c-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <div class="c-label">Resume</div>
+        <a class="c-val" href="./resume/Jaideep_Phatak_Resume.pdf" target="_blank" rel="noopener">Download PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Jaideep Phatak</div>
+        <div class="footer-tag">Program &amp; Portfolio Leadership</div>
+        <div class="footer-tag">AI-Enabled Delivery Governance</div>
+        <div class="footer-tag">Executive Program Governance Demonstration</div>
+      </div>
+      <div class="footer-links">
+        <a href="#command-centers">Command Centers</a>
+        <a href="#about">About</a>
+        <a href="mailto:jaideepphatak16@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Jaideep Phatak. All rights reserved.</span>
+      <span>Pune, India</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+  (function(){
+    "use strict";
+
+    /* Sticky header shadow on scroll */
+    var header = document.getElementById('siteHeader');
+    var toTop = document.getElementById('toTop');
+    function onScroll(){
+      var y = window.scrollY || window.pageYOffset;
+      header.classList.toggle('scrolled', y > 8);
+      toTop.classList.toggle('visible', y > 480);
+    }
+    document.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+
+    /* Back to top */
+    toTop.addEventListener('click', function(){
+      window.scrollTo({ top:0, behavior:'smooth' });
+    });
+
+    /* Mobile nav toggle */
+    var navToggle = document.getElementById('navToggle');
+    var mobileMenu = document.getElementById('mobileMenu');
+    navToggle.addEventListener('click', function(){
+      var open = mobileMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        mobileMenu.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
