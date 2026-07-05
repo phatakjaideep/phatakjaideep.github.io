@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Executive Program Command Center</title>
+<style>
+  /* Typography uses the shared system-font stack per Brand Style Guide v1.1
+     Section 14.3, so this tool renders identically with zero network access. */
+  :root{
+    --eepcc-bg:#F8FAFC;
+    --eepcc-surface:#FFFFFF;
+    --eepcc-primary:#0A192F;
+    --eepcc-primary-soft:#1E293B;
+    --eepcc-text:#0F172A;
+    --eepcc-muted:#475569;
+    --eepcc-border:#E9EDF2;
+    --eepcc-border-strong:#94A3B8;
+    --green:#15803D; --green-soft:#DCFCE7;
+    --amber:#B45309; --amber-soft:#FEF3C7;
+    --red:#B91C1C; --red-soft:#FEE2E2;
+    --blue:#0369A1; --blue-soft:#E0F2FE;
+    --chart-1:#0A192F; --chart-2:#0369A1; --chart-3:#15803D;
+    --chart-4:#B45309; --chart-5:#94A3B8; --chart-6:#1E293B;
+    --font-display: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --font-label: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--eepcc-bg);
+    color:var(--eepcc-text);
+    font-family:var(--font-body);
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;margin:0;}
+  .mono{font-family:var(--font-mono);}
+  .eyebrow{
+    font-family:var(--font-body);
+    font-weight:500;
+    font-size:10.5px;
+    letter-spacing:0.13em;
+    text-transform:uppercase;
+    color:var(--eepcc-muted);
+  }
+  button{font-family:inherit;cursor:pointer;}
+  .container{max-width:1440px;margin:0 auto;padding:0 40px;}
+  @media (max-width:900px){.container{padding:0 20px;}}
+  svg text{font-family:var(--font-mono),monospace;}
+
+  /* ---------- Header ---------- */
+  .app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--eepcc-border);border-top:3px solid #D4891A;}
+  .header-row-a{
+    height:64px;display:flex;align-items:center;gap:28px;
+    max-width:1440px;margin:0 auto;padding:0 40px;
+  }
+  .portfolio-home-link{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--eepcc-muted);text-decoration:none;border-right:1px solid var(--eepcc-border);margin-right:8px;transition:color 150ms;}
+  .portfolio-home-link:hover{color:var(--eepcc-primary);}
+  .brand{display:flex;align-items:center;gap:10px;margin-right:8px;}
+  .brand-tile{
+    width:32px;height:32px;background:var(--eepcc-primary);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:var(--font-display);
+    font-weight:700;font-size:15px;border-radius:2px;
+  }
+  .compact-title{
+    display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap;
+    max-width:0;opacity:0;transition:max-width 320ms ease, opacity 220ms ease;
+  }
+  .compact-title.visible{max-width:520px;opacity:1;}
+  .compact-title .ct-name{font-family:var(--font-display);font-size:13.5px;font-weight:600;color:var(--eepcc-text);white-space:nowrap;}
+  .compact-title .ct-sep{color:var(--eepcc-border-strong);}
+  .compact-title .ct-id{font-family:var(--font-mono);font-size:11.5px;color:var(--eepcc-muted);white-space:nowrap;}
+  .header-row-a.compact-active .demo-badge{display:none;}
+  .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+  .brand-word{font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--eepcc-text);}
+  .brand-eyebrow{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--eepcc-muted);}
+  .tabs{display:flex;gap:24px;flex:1;}
+  .tab{
+    background:none;border:none;padding:10px 2px;font-size:14px;font-weight:500;
+    color:var(--eepcc-muted);border-bottom:2px solid transparent;transition:color 150ms;
+  }
+  .tab.active{color:var(--eepcc-primary);border-bottom-color:var(--eepcc-primary);}
+  .tab:hover{color:var(--eepcc-primary);}
+  .meeting-stamp{display:flex;flex-direction:column;align-items:flex-end;line-height:1.25;margin-right:8px;}
+  .demo-badge{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--eepcc-muted);background:#F1F5F9;border:1px solid var(--eepcc-border);border-radius:999px;padding:4px 10px;white-space:nowrap;margin-right:4px;}
+  .meeting-stamp .m1{font-size:12.5px;font-weight:500;color:var(--eepcc-text);}
+  .meeting-stamp .m2{font-size:10.5px;color:var(--eepcc-muted);letter-spacing:0.03em;}
+  .btn-primary{
+    background:var(--eepcc-primary);color:#fff;border:none;padding:9px 16px;
+    font-size:13px;font-weight:500;border-radius:2px;display:flex;align-items:center;gap:6px;
+    transition:background 150ms;
+  }
+  .btn-primary:hover{background:var(--eepcc-primary-soft);}
+  .btn-primary:disabled{opacity:0.6;cursor:default;}
+  .btn-outline{
+    background:#fff;color:var(--eepcc-primary);border:1px solid var(--eepcc-border-strong);
+    padding:9px 16px;font-size:13px;font-weight:500;border-radius:2px;transition:border-color 150ms,background 150ms;
+  }
+  .btn-outline:hover{background:var(--eepcc-bg);}
+  .btn-outline:disabled{opacity:0.6;cursor:default;}
+  .header-row-b{background:var(--eepcc-bg);border-top:1px solid var(--eepcc-border);}
+  .header-row-b-inner{
+    max-width:1440px;margin:0 auto;padding:18px 40px 0;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .header-b-left h1{font-size:24px;margin-top:4px;color:var(--eepcc-text);}
+  .meta-chips{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{
+    background:#fff;border:1px solid var(--eepcc-border);border-radius:2px;
+    padding:8px 14px;display:flex;align-items:center;gap:9px;min-width:104px;
+  }
+  .chip-icon{color:var(--eepcc-muted);flex-shrink:0;}
+  .chip-icon svg{width:15px;height:15px;}
+  .chip-text{display:flex;flex-direction:column;}
+  .chip-label{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--eepcc-muted);}
+  .chip-value{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--eepcc-text);margin-top:2px;}
+
+  /* ---------- Executive context bar ---------- */
+  .exec-context-bar{
+    max-width:1440px;margin:0 auto;padding:12px 40px 16px;
+    display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(15,23,42,0.05);margin-top:14px;
+  }
+  .exec-context-item{
+    display:flex;flex-direction:column;gap:2px;padding:0 22px 0 0;margin-right:22px;
+    border-right:1px solid rgba(15,23,42,0.08);
+  }
+  .exec-context-item:last-child{border-right:none;margin-right:0;padding-right:0;}
+  .exec-context-item .eci-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.09em;color:var(--eepcc-muted);}
+  .exec-context-item .eci-value{font-size:12.5px;font-weight:500;color:var(--eepcc-text);}
+
+  /* ---------- Layout ---------- */
+  main{max-width:1440px;margin:0 auto;padding:40px 40px 64px;}
+  @media (max-width:900px){main{padding:28px 20px 48px;}}
+  .section{margin-bottom:44px;opacity:0;transform:translateY(6px);animation:fadeUp 400ms ease forwards;}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:17px;flex-wrap:wrap;gap:8px;}
+  .section-head h2{font-size:20px;color:var(--eepcc-primary);}
+  .section-head.secondary h2{font-size:16px;color:var(--eepcc-primary-soft);font-weight:600;}
+  .section-sub{font-size:13px;color:var(--eepcc-muted);margin-top:2px;}
+
+  /* ---------- Card ---------- */
+  .card{
+    background:var(--eepcc-surface);border:1px solid var(--eepcc-border);border-radius:2px;
+    padding:24px;transition:border-color 200ms, box-shadow 200ms;
+    box-shadow:0 1px 2px rgba(15,23,42,0.03);
+  }
+  .card:hover{border-color:var(--eepcc-border-strong);box-shadow:0 10px 22px -14px rgba(15,23,42,0.16);}
+  .card-lg{padding:28px 32px;}
+  .card-hero{padding:28px 30px;box-shadow:0 2px 4px rgba(15,23,42,0.04), 0 16px 30px -22px rgba(15,23,42,0.18);border-color:#E4E9F0;}
+  .card-hero:hover{box-shadow:0 4px 10px rgba(15,23,42,0.05), 0 20px 36px -20px rgba(15,23,42,0.22);}
+  .card-secondary{box-shadow:none;border-color:#EEF1F5;}
+  .card-secondary:hover{box-shadow:0 6px 14px -12px rgba(15,23,42,0.12);}
+  .card-secondary h4{color:var(--eepcc-muted);font-weight:500;}
+
+  /* ---------- Pills ---------- */
+  .pill{
+    display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
+    letter-spacing:0.04em;text-transform:uppercase;padding:4px 9px;border-radius:2px;
+  }
+  .pill-green{background:var(--green-soft);color:var(--green);}
+  .pill-amber{background:var(--amber-soft);color:var(--amber);}
+  .pill-red{background:var(--red-soft);color:var(--red);}
+  .pill-blue{background:var(--blue-soft);color:var(--blue);}
+  .pill-navy{background:#E7EBF3;color:var(--eepcc-primary);}
+
+  /* ---------- Filter bar ---------- */
+  .filter-bar{
+    background:#fff;border:1px solid var(--eepcc-border);border-radius:2px;
+    padding:16px 20px;display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;
+  }
+  .filter-field{display:flex;flex-direction:column;gap:5px;min-width:150px;}
+  .filter-field label{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--eepcc-muted);}
+  .filter-field select, .filter-field input{
+    border:1px solid var(--eepcc-border);border-radius:2px;padding:8px 10px;font-size:13px;
+    font-family:var(--font-body);color:var(--eepcc-text);background:#fff;
+  }
+  .filter-field select:focus, .filter-field input:focus{outline:2px solid var(--eepcc-primary);outline-offset:1px;}
+
+  /* ---------- Executive Health Strip ---------- */
+  .health-strip{display:flex;gap:12px;flex-wrap:wrap;}
+  .health-chip{
+    flex:1;min-width:170px;display:flex;align-items:center;gap:10px;
+    background:#fff;border:1px solid var(--eepcc-border);border-radius:2px;padding:12px 16px;
+  }
+  .health-chip .hc-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .health-chip .hc-icon svg{width:15px;height:15px;}
+  .health-chip .hc-name{font-size:12.5px;font-weight:600;color:var(--eepcc-text);}
+  .health-chip .hc-label{font-size:11px;}
+
+  /* ---------- Headline metrics ---------- */
+  .headline-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:20px;}
+  @media (max-width:1000px){.headline-grid{grid-template-columns:1fr;}}
+  .gauge-wrap{display:flex;gap:24px;align-items:center;}
+  .gauge-info-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+  .info-icon{color:var(--eepcc-muted);cursor:help;position:relative;}
+  .info-icon:hover .tooltip{display:block;}
+  .tooltip{
+    display:none;position:absolute;right:0;top:22px;width:230px;background:var(--eepcc-primary);
+    color:#fff;font-size:11.5px;line-height:1.5;padding:10px 12px;border-radius:2px;z-index:20;
+  }
+  .gauge-num{font-family:var(--font-display);font-size:44px;font-weight:600;line-height:1;}
+  .gauge-sub{font-size:12px;color:var(--eepcc-muted);margin-top:4px;}
+  .component-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-top:18px;}
+  .component-row{display:flex;flex-direction:column;gap:4px;}
+  .component-row .crow-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--eepcc-muted);}
+  .bar-track{height:4px;background:var(--eepcc-border);border-radius:2px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:2px;}
+
+  .stat-trio{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;padding:14px 0;border-top:1px solid rgba(15,23,42,0.06);border-bottom:1px solid rgba(15,23,42,0.06);}
+  .stat-trio .st-item{display:flex;flex-direction:column;gap:2px;}
+  .stat-trio .st-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--eepcc-muted);}
+  .stat-trio .st-value{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--eepcc-text);}
+
+  .checklist-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid rgba(15,23,42,0.06);margin-top:4px;}
+  .checklist-row .cl-label{font-size:12.5px;color:var(--eepcc-text);font-weight:500;}
+  .checklist-row .cl-check{width:20px;height:20px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .checklist-row .cl-check svg{width:12px;height:12px;}
+
+  /* ---------- Priorities ---------- */
+  .priority-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:1000px){.priority-grid{grid-template-columns:1fr;}}
+  .priority-card{position:relative;overflow:hidden;}
+  .priority-num{
+    position:absolute;top:-14px;right:6px;font-family:var(--font-display);font-size:76px;
+    font-weight:700;color:#EEF2F7;line-height:1;z-index:0;
+  }
+  .priority-card > *{position:relative;z-index:1;}
+  .priority-top-row{display:flex;justify-content:space-between;align-items:center;}
+  .priority-card h3{font-size:16px;margin:6px 0 8px;color:var(--eepcc-text);}
+  .priority-why{font-size:13px;color:var(--eepcc-muted);margin-bottom:16px;}
+  .priority-meta{display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:var(--eepcc-text);}
+  .priority-meta .row{display:flex;align-items:center;gap:6px;}
+  .priority-meta svg{width:14px;height:14px;color:var(--eepcc-muted);}
+  .priority-link{margin-top:12px;font-size:11.5px;color:var(--eepcc-primary);}
+
+  /* ---------- Exec summary / KPI grid ---------- */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.kpi-grid{grid-template-columns:1fr;}}
+  .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .kpi-label{font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--eepcc-muted);}
+  .kpi-value{font-family:var(--font-display);font-size:34px;font-weight:600;margin-top:10px;color:var(--eepcc-text);}
+  .kpi-trend{display:flex;align-items:center;gap:5px;font-size:12px;margin-top:8px;}
+  .kpi-delta{font-size:11.5px;color:var(--eepcc-muted);margin-top:2px;}
+  .kpi-context{font-size:11.5px;color:var(--eepcc-muted);margin-top:8px;padding-top:8px;border-top:1px solid rgba(15,23,42,0.06);line-height:1.45;}
+  .kpi-spark{margin-top:10px;}
+
+  /* ---------- Decision backlog governance card ---------- */
+  .backlog-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+  .backlog-col{display:flex;flex-direction:column;gap:2px;}
+  .backlog-col .bnum{font-family:var(--font-mono);font-size:20px;font-weight:600;}
+  .backlog-col .blabel{font-size:10.5px;color:var(--eepcc-muted);text-transform:uppercase;letter-spacing:0.08em;}
+  .backlog-legend{display:flex;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(15,23,42,0.06);font-size:11px;color:var(--eepcc-muted);}
+  .backlog-legend span{display:flex;align-items:center;gap:5px;}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+
+  /* ---------- AI Briefing ---------- */
+  .briefing-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+  .briefing-title{display:flex;flex-direction:column;gap:2px;}
+  .briefing-title .bt1{font-size:16px;font-weight:600;font-family:var(--font-display);color:var(--eepcc-primary);}
+  .briefing-title .bt2{font-size:11.5px;color:var(--eepcc-muted);}
+  .briefing-row{display:flex;gap:14px;padding:15px 0;border-top:1px solid rgba(15,23,42,0.06);}
+  .briefing-row:first-of-type{border-top:none;}
+  .briefing-icon{
+    width:32px;height:32px;border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .briefing-icon svg{width:17px;height:17px;}
+  .briefing-body h4{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+  .briefing-body p{font-size:13.5px;color:var(--eepcc-text);margin:0;line-height:1.65;}
+
+  /* ---------- Risk heatmap ---------- */
+  .heatmap-wrap{display:flex;gap:8px;}
+  .heatmap-yaxis{display:flex;flex-direction:column-reverse;gap:6px;justify-content:space-between;padding-top:26px;}
+  .yaxis-item{height:92px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;width:78px;}
+  .yaxis-item .yn{font-family:var(--font-mono);font-size:12px;font-weight:600;}
+  .yaxis-item .yl{font-size:10px;color:var(--eepcc-muted);}
+  .heatmap-grid-area{flex:1;}
+  .heatmap-xaxis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px;}
+  .xaxis-item{text-align:center;}
+  .xaxis-item .xn{font-family:var(--font-mono);font-size:12px;font-weight:600;}
+  .xaxis-item .xl{font-size:10px;color:var(--eepcc-muted);}
+  .heatmap-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,92px);gap:6px;}
+  .heat-cell{border-radius:2px;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden;}
+  .heat-cell .hc-top{display:flex;justify-content:space-between;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;}
+  .heat-cell .hc-score{font-family:var(--font-mono);font-size:10px;opacity:0.75;}
+  .heat-chip-wrap{position:relative;max-width:100%;}
+  .heat-chip{
+    background:rgba(255,255,255,0.8);border:1px solid rgba(15,23,42,0.14);border-radius:2px;
+    padding:3px 6px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px;
+    max-width:100%;overflow:hidden;width:100%;line-height:1.25;
+  }
+  .heat-chip .hcn-name{font-size:9.5px;font-weight:600;font-family:var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .heat-chip .hcn-id{font-size:8.5px;font-family:var(--font-mono);opacity:0.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .heat-chip:hover{border-color:var(--eepcc-primary);}
+  .heat-chip.top-risk{background:#fff;border:1.5px solid var(--eepcc-primary);box-shadow:0 3px 10px -4px rgba(10,25,47,0.35);}
+  .heat-chip-tooltip{
+    display:none;position:absolute;bottom:calc(100% + 6px);left:0;width:190px;background:var(--eepcc-primary);
+    color:#fff;font-size:10.5px;line-height:1.5;padding:9px 10px;border-radius:2px;z-index:30;font-family:var(--font-body);
+  }
+  .heat-chip-tooltip .tt-row{display:flex;justify-content:space-between;gap:8px;margin-bottom:3px;}
+  .heat-chip-tooltip .tt-row:last-child{margin-bottom:0;}
+  .heat-chip-tooltip .tt-k{opacity:0.65;}
+  .heat-chip-wrap:hover .heat-chip-tooltip{display:block;}
+
+  /* ---------- Decision center ---------- */
+  .decision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:1000px){.decision-grid{grid-template-columns:1fr;}}
+  .decision-card{border-left:3px solid var(--eepcc-primary);position:relative;}
+  .decision-ribbon{
+    display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;
+    padding:4px 9px;border-radius:2px;margin-bottom:12px;
+  }
+  .decision-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .decision-id{font-size:11px;color:var(--eepcc-muted);}
+  .decision-card h3{font-size:15.5px;margin-bottom:14px;line-height:1.3;}
+  .decision-block{margin-bottom:10px;}
+  .decision-block .db-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--eepcc-muted);margin-bottom:2px;}
+  .decision-block .db-value{font-size:13px;color:var(--eepcc-text);}
+  .decision-impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;}
+  .decision-impact-grid .di-item{background:var(--eepcc-bg);border:1px solid var(--eepcc-border);border-radius:2px;padding:8px 8px;}
+  .decision-impact-grid .di-label{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--eepcc-muted);display:flex;align-items:center;gap:3px;}
+  .decision-impact-grid .di-label svg{width:10px;height:10px;flex-shrink:0;}
+  .decision-impact-grid .di-value{font-size:11.5px;font-weight:600;color:var(--eepcc-text);margin-top:3px;line-height:1.25;}
+  .decision-rec{
+    background:var(--eepcc-bg);border:1px solid var(--eepcc-border);border-radius:2px;
+    padding:10px 12px;font-size:12.5px;color:var(--eepcc-text);margin:0 0 16px;line-height:1.55;
+  }
+  .decision-actions{display:flex;gap:8px;}
+  .decision-actions button{flex:1;font-size:12.5px;padding:9px 10px;}
+
+  /* ---------- Budget ---------- */
+  .budget-tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:14px;}
+  @media (max-width:1100px){.budget-tiles{grid-template-columns:repeat(2,1fr);}}
+  .budget-tiles-secondary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:420px;margin-bottom:24px;}
+  .budget-tile{border:1px solid var(--eepcc-border);border-radius:2px;padding:16px 18px;}
+  .budget-tile.accent{border-left:3px solid var(--eepcc-primary);}
+  .budget-tile .bt-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--eepcc-muted);}
+  .budget-tile .bt-value{font-family:var(--font-mono);font-size:20px;font-weight:600;margin-top:6px;}
+  .budget-tile .bt-sub{font-size:11px;color:var(--eepcc-muted);margin-top:4px;}
+  .budget-charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+  @media (max-width:1000px){.budget-charts-row{grid-template-columns:1fr;}}
+  .chart-card h4{font-size:13px;font-weight:600;margin-bottom:14px;}
+  .legend-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--eepcc-muted);}
+  .legend-row span{display:flex;align-items:center;gap:5px;}
+  .breakdown-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+  .breakdown-row{display:flex;align-items:center;gap:10px;font-size:12.5px;}
+  .breakdown-row .br-cat{flex:1;}
+  .breakdown-row .br-amt{font-family:var(--font-mono);color:var(--eepcc-muted);}
+  .breakdown-row .br-pct{font-family:var(--font-mono);width:44px;text-align:right;color:var(--eepcc-text);font-weight:500;}
+  .donut-row{display:flex;align-items:center;gap:24px;}
+
+  /* ---------- Timeline ---------- */
+  .timeline-legend{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+  .timeline-legend-items{display:flex;gap:16px;font-size:11.5px;color:var(--eepcc-muted);}
+  .timeline-legend-items span{display:flex;align-items:center;gap:6px;}
+  .timeline-progress-track{height:5px;background:var(--eepcc-border);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+  .timeline-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--amber));border-radius:3px;}
+  .timeline-progress-label{font-size:11px;color:var(--eepcc-muted);margin-bottom:22px;}
+  .timeline-rail{position:relative;padding:14px 6px 10px;}
+  .timeline-line{position:absolute;top:34px;left:0;right:0;height:2px;background:var(--eepcc-border);}
+  .timeline-nodes{display:grid;grid-template-columns:repeat(7,1fr);position:relative;}
+  .tnode{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;cursor:pointer;padding:0 6px;}
+  .tnode-dot{
+    width:22px;height:22px;border-radius:50%;border:3px solid var(--eepcc-border-strong);background:#fff;
+    display:flex;align-items:center;justify-content:center;z-index:1;
+  }
+  .tnode-dot svg{width:11px;height:11px;}
+  .tnode .tn-code{font-family:var(--font-mono);font-size:10px;color:var(--eepcc-muted);margin-top:4px;}
+  .tnode .tn-name{font-size:12.5px;font-weight:600;margin-top:2px;line-height:1.25;}
+  .tnode .tn-var{margin-top:6px;}
+
+  /* ---------- Escalation table ---------- */
+  table.esc-table{width:100%;border-collapse:collapse;font-size:13px;}
+  table.esc-table thead th{
+    text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--eepcc-muted);padding:0 12px 10px;border-bottom:1px solid var(--eepcc-border);font-weight:500;
+  }
+  table.esc-table tbody td{padding:14px 12px;border-bottom:1px solid rgba(15,23,42,0.06);vertical-align:middle;}
+  table.esc-table tbody tr:last-child td{border-bottom:none;}
+  .owner-cell{display:flex;align-items:center;gap:10px;}
+  .avatar-fallback{
+    width:32px;height:32px;border-radius:50%;background:var(--eepcc-primary-soft);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:var(--font-display);flex-shrink:0;
+  }
+  .trend-cell{display:flex;align-items:center;gap:6px;}
+  .trend-cell svg{width:13px;height:13px;}
+
+  /* ---------- Insights metric row ---------- */
+  .insights-metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:1000px){.insights-metric-grid{grid-template-columns:1fr 1fr;}}
+  .gauge-card{display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .gauge-card .gc-label{font-size:12.5px;color:var(--eepcc-muted);margin-bottom:6px;}
+  .gauge-card .gc-target{font-size:11px;color:var(--eepcc-muted);margin-top:8px;}
+
+  .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media (max-width:1000px){.analytics-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Footer ---------- */
+  .app-footer{background:#fff;border-top:2px solid rgba(212,137,26,.4);}
+  .app-footer .container{
+    padding:26px 40px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:28px;
+  }
+  .footer-col{display:flex;flex-direction:column;gap:3px;min-width:180px;}
+  .footer-col.brand{flex-direction:row;align-items:center;gap:12px;}
+  .footer-brand-tile{
+    width:26px;height:26px;background:var(--eepcc-primary);color:#fff;border-radius:2px;
+    display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:12px;flex-shrink:0;
+  }
+  .footer-col.brand .fb-name{font-size:13px;font-weight:600;color:var(--eepcc-text);}
+  .footer-col.brand .fb-sub{font-size:11px;color:var(--eepcc-muted);margin-top:2px;}
+  .footer-col.signature{align-items:flex-start;}
+  .footer-col.meta{align-items:flex-end;text-align:right;}
+  .footer-line{font-size:11.5px;color:var(--eepcc-muted);line-height:1.5;}
+  .footer-line.strong{color:var(--eepcc-text);font-weight:600;font-size:12px;}
+  .footer-divider{width:100%;max-width:190px;height:1px;background:rgba(15,23,42,0.08);margin:8px 0;}
+  .footer-tagline{font-size:10px;letter-spacing:0.04em;color:var(--eepcc-muted);opacity:0.85;}
+
+  /* ---------- Overlays: dialog + sheet ---------- */
+  .overlay-bg{position:fixed;inset:0;background:rgba(10,25,47,0.45);z-index:100;display:flex;}
+  .overlay-bg[hidden]{display:none;}
+  .dialog-box{
+    margin:auto;background:#fff;width:440px;max-width:92vw;border-radius:2px;padding:28px;
+    border:1px solid var(--eepcc-border);
+  }
+  .sheet-box{
+    margin-left:auto;height:100%;background:#fff;width:400px;max-width:92vw;padding:28px;
+    border-left:1px solid var(--eepcc-border);overflow-y:auto;
+  }
+  .overlay-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+  .overlay-close{background:none;border:none;color:var(--eepcc-muted);padding:2px;}
+  .overlay-close svg{width:18px;height:18px;}
+  .ov-field{margin-bottom:14px;}
+  .ov-field .ov-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--eepcc-muted);margin-bottom:4px;}
+  .ov-field .ov-value{font-size:14px;color:var(--eepcc-text);}
+
+  /* ---------- Toasts ---------- */
+  #toastContainer{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+  .toast{
+    background:var(--eepcc-primary);color:#fff;padding:12px 16px;border-radius:2px;font-size:13px;
+    box-shadow:0 10px 24px -8px rgba(10,25,47,0.4);min-width:240px;
+    animation:toastIn 200ms ease;
+  }
+  @keyframes toastIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  [hidden]{display:none !important;}
+  ::selection{background:#DCE4F0;}
+  @media (prefers-reduced-motion: reduce){
+    .section{animation:none;opacity:1;transform:none;}
+    .card{transition:none;}
+  }
+
+  /* ---------- Brand Style Guide v1.1 — unified label voice (Section 14.3) ---------- */
+  .brand-eyebrow, .demo-badge, .chip-label, .exec-context-item .eci-label,
+  .filter-field label, .stat-trio .st-label, .kpi-label, .backlog-col .blabel,
+  .briefing-body h4, .heat-cell .hc-top, .decision-block .db-label,
+  .decision-impact-grid .di-label, .budget-tile .bt-label, .ov-field .ov-label,
+  table.esc-table thead th{
+    font-family:var(--font-label); font-weight:600; letter-spacing:.12em;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-row-a">
+    <a class="portfolio-home-link" href="https://phatakjaideep.github.io" target="_blank" rel="noopener noreferrer"><span style="font-size:11px">&#8592;</span> Portfolio Home</a>
+    <div class="brand">
+      <div class="brand-tile">E</div>
+    </div>
+    <div class="compact-title" id="compactTitle">
+      <span class="ct-name" id="compactTitleName"></span>
+      <span class="ct-sep">·</span>
+      <span class="ct-id" id="compactTitleId"></span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-view="command" data-testid="nav-command-center">Command Center</button>
+      <button class="tab" data-view="insights" data-testid="nav-program-insights">Program Insights</button>
+    </nav>
+    <div class="meeting-stamp">
+      <span class="m1">Executive Steering Committee</span>
+      <span class="m2">Week 28 · FY2026</span>
+    </div>
+    <span class="demo-badge">Executive Demonstration · Sample Data · Not Connected to Live Systems</span>
+    <button class="btn-primary" id="exportBtn" data-testid="export-pdf">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3M7 10l5 5 5-5M5 21h14"/></svg>
+      Export Pack
+    </button>
+  </div>
+</header>
+<div class="header-row-b">
+  <div class="header-row-b-inner">
+    <div class="header-b-left">
+      <div class="eyebrow" id="eyebrowText">COMMAND CENTER</div>
+      <h1 id="pageH1">Next Generation Vehicle Platform Development Program</h1>
+    </div>
+    <div class="meta-chips" id="metaChips"></div>
+  </div>
+  <div class="exec-context-bar" id="execContextBar" data-testid="exec-context-bar"></div>
+</div>
+
+<main>
+
+<!-- ============ COMMAND CENTER VIEW ============ -->
+<div id="view-command">
+
+  <!-- 1. Filter bar -->
+  <section class="section">
+    <div class="filter-bar" data-testid="filter-bar">
+      <div class="filter-field">
+        <label>Function</label>
+        <select data-testid="filter-function">
+          <option>All</option><option>Engineering</option><option>Manufacturing</option>
+          <option>Quality</option><option>Purchasing</option><option>Supply Chain</option><option>Finance</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label>Risk Level</label>
+        <select data-testid="filter-risk-level">
+          <option>All</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label>Status</label>
+        <select data-testid="filter-status">
+          <option>All</option><option>Open</option><option>In Progress</option><option>Mitigating</option><option>Closed</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label>Owner</label>
+        <select data-testid="filter-owner">
+          <option>All</option><option>A. Diaz</option><option>K. Thompson</option><option>J. Nakamura</option>
+          <option>S. Chen</option><option>M. Lindqvist</option><option>T. Vogel</option><option>L. Okafor</option><option>R. Patel</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label>Date Range</label>
+        <div style="display:flex;gap:6px;">
+          <input type="date" data-testid="filter-date-from" value="2025-04-01" />
+          <input type="date" data-testid="filter-date-to" value="2026-10-15" />
+        </div>
+      </div>
+      <button class="btn-outline" id="resetFilters" data-testid="filter-reset">Reset</button>
+    </div>
+  </section>
+
+  <!-- 2. Executive health strip -->
+  <section class="section">
+    <div class="section-head secondary"><h2>Executive Health Check</h2></div>
+    <div class="health-strip" id="healthStrip" data-testid="health-strip"></div>
+  </section>
+
+  <!-- 3. Headline metrics -->
+  <section class="section">
+    <div class="headline-grid">
+      <div class="card card-hero" id="confidenceCard" data-testid="program-confidence-card"></div>
+      <div class="card card-hero" id="sopCard" data-testid="sop-readiness-card"></div>
+      <div class="card card-hero" id="latencyCard" data-testid="decision-latency-card"></div>
+    </div>
+  </section>
+
+  <!-- 4. Executive priorities -->
+  <section class="section">
+    <div class="section-head"><h2>Executive Priorities</h2><span class="section-sub">What leadership must decide this week</span></div>
+    <div class="priority-grid" id="priorityGrid" data-testid="priority-grid"></div>
+  </section>
+
+  <!-- 5. Executive summary -->
+  <section class="section">
+    <div class="section-head"><h2>Executive Summary</h2><span class="section-sub">Program health at a glance</span></div>
+    <div class="kpi-grid" id="kpiGrid" data-testid="kpi-grid"></div>
+  </section>
+
+  <!-- 6. AI Executive Briefing -->
+  <section class="section">
+    <div class="card card-lg" data-testid="ai-briefing-card">
+      <div class="briefing-head">
+        <div class="briefing-title">
+          <span class="bt1">Chief Program Manager's Executive Update</span>
+          <span class="bt2 mono">AI-Assisted Executive Briefing</span>
+        </div>
+        <button class="btn-outline" id="regenerateBtn" data-testid="regenerate-briefing">
+          <span id="regenLabel">Regenerate</span>
+        </button>
+      </div>
+      <div id="briefingBody"></div>
+    </div>
+  </section>
+
+  <!-- 7. Risk Heatmap -->
+  <section class="section">
+    <div class="card card-lg" data-testid="risk-heatmap-card">
+      <div class="section-head" style="margin-bottom:20px;">
+        <h2 style="font-size:17px;">Risk Heatmap</h2>
+        <span class="section-sub">Probability × Impact — top risks outlined for quick scan</span>
+      </div>
+      <div class="heatmap-wrap" id="heatmapWrap"></div>
+    </div>
+  </section>
+
+  <!-- 8. Executive Decision Center -->
+  <section class="section">
+    <div class="section-head"><h2>Executive Decision Center</h2><span class="section-sub">Decisions requiring steering committee action</span></div>
+    <div class="decision-grid" id="decisionGrid" data-testid="decision-grid"></div>
+  </section>
+
+  <!-- 9. Budget Overview -->
+  <section class="section">
+    <div class="section-head secondary"><h2>Budget Overview</h2><span class="section-sub">Program financials vs. plan</span></div>
+    <div class="card card-secondary card-lg" data-testid="budget-card">
+      <div class="budget-tiles-secondary" id="budgetTilesSecondary"></div>
+      <div class="budget-tiles" id="budgetTiles"></div>
+      <div class="budget-charts-row">
+        <div class="chart-card">
+          <h4>Cumulative Burn</h4>
+          <div id="burnChart"></div>
+          <div class="legend-row">
+            <span><span class="dot" style="background:var(--chart-1)"></span>Planned</span>
+            <span><span class="dot" style="background:var(--chart-2)"></span>Actual</span>
+            <span><span class="dot" style="background:var(--chart-4)"></span>Forecast</span>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h4>Monthly Spend</h4>
+          <div id="monthlyChart"></div>
+          <div class="legend-row">
+            <span><span class="dot" style="background:var(--eepcc-border-strong)"></span>Planned</span>
+            <span><span class="dot" style="background:var(--chart-1)"></span>Actual</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>Cost Breakdown</h4>
+        <div class="donut-row">
+          <div id="donutChart"></div>
+          <div class="breakdown-list" id="breakdownList" style="flex:1;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Program Timeline -->
+  <section class="section">
+    <div class="section-head"><h2>Program Timeline</h2><span class="section-sub">Milestone status across the vehicle platform program</span></div>
+    <div class="card card-lg" data-testid="timeline-card">
+      <div class="timeline-legend">
+        <div class="timeline-legend-items">
+          <span><span class="dot" style="background:var(--green);"></span>Completed</span>
+          <span><span class="dot" style="background:var(--amber);"></span>In Progress</span>
+          <span><span class="dot" style="background:var(--eepcc-border-strong);"></span>Upcoming</span>
+        </div>
+        <span class="section-sub" id="timelineProgressText"></span>
+      </div>
+      <div class="timeline-progress-track"><div class="timeline-progress-fill" id="timelineProgressFill"></div></div>
+      <div class="timeline-rail">
+        <div class="timeline-line"></div>
+        <div class="timeline-nodes" id="timelineNodes"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Escalation Tracker -->
+  <section class="section">
+    <div class="section-head secondary"><h2>Escalation Tracker</h2><span class="section-sub">Active cross-functional escalations</span></div>
+    <div class="card card-secondary" data-testid="escalation-card" style="padding:8px 24px 20px;">
+      <table class="esc-table">
+        <thead><tr>
+          <th>Escalation</th><th>Escalation Owner</th><th>Function</th><th>Age</th><th>Days to Decision</th><th>Impact</th><th>Trend</th><th>Status</th>
+        </tr></thead>
+        <tbody id="escalationBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ PROGRAM INSIGHTS VIEW ============ -->
+<div id="view-insights" hidden>
+
+  <section class="section">
+    <div class="insights-metric-grid" id="insightsMetricGrid" data-testid="insights-metric-grid"></div>
+  </section>
+
+  <section class="section">
+    <div class="card card-lg" data-testid="ai-briefing-card-insights">
+      <div class="briefing-head">
+        <div class="briefing-title">
+          <span class="bt1">Chief Program Manager's Executive Update</span>
+          <span class="bt2 mono">AI-Assisted Executive Briefing</span>
+        </div>
+        <button class="btn-outline" id="regenerateBtn2">
+          <span id="regenLabel2">Regenerate</span>
+        </button>
+      </div>
+      <div id="briefingBody2"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head secondary"><h2>Program Analytics</h2><span class="section-sub">Trend view across schedule, risk and resourcing</span></div>
+    <div class="analytics-grid">
+      <div class="card card-secondary chart-card"><h4>Risk Exposure Trend</h4><div id="riskTrendChart"></div></div>
+      <div class="card card-secondary chart-card"><h4>Escalation Aging</h4><div id="escAgingChart"></div></div>
+      <div class="card card-secondary chart-card"><h4>Decision Response Time</h4><div id="decResponseChart"></div></div>
+      <div class="card card-secondary chart-card"><h4>Resource Utilization</h4><div id="resourceChart"></div></div>
+    </div>
+  </section>
+
+</div>
+
+</main>
+
+<footer class="app-footer">
+  <div class="container">
+    <div class="footer-col brand">
+      <div class="footer-brand-tile">E</div>
+      <div>
+        <div class="fb-name">Executive Program Command Center</div>
+        <div class="fb-sub">Next Generation Vehicle Platform Development Program</div>
+      </div>
+    </div>
+    <div class="footer-col signature">
+      <span class="footer-line strong">Created by Jaideep Phatak</span>
+      <span class="footer-line">Program &amp; Portfolio Leadership</span>
+      <span class="footer-line">AI-Enabled Delivery Governance</span>
+      <div class="footer-divider"></div>
+      <span class="footer-tagline">Executive Portfolio Operating System Demonstration</span>
+    </div>
+    <div class="footer-col meta">
+      <span class="footer-line strong">Demo Dataset</span>
+      <span class="footer-line">Prepared for Executive Steering Committee</span>
+      <span class="footer-line">Weekly Governance Review</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Milestone dialog -->
+<div class="overlay-bg" id="milestoneOverlay" hidden>
+  <div class="dialog-box" data-testid="milestone-dialog">
+    <div class="overlay-head">
+      <h2 style="font-size:17px;" id="msTitle"></h2>
+      <button class="overlay-close" id="msClose"></button>
+    </div>
+    <div class="ov-field"><div class="ov-label">Owner</div><div class="ov-value" id="msOwner"></div></div>
+    <div class="ov-field"><div class="ov-label">Planned Date</div><div class="ov-value mono" id="msPlanned"></div></div>
+    <div class="ov-field"><div class="ov-label">Forecast Date</div><div class="ov-value mono" id="msForecast"></div></div>
+    <div class="ov-field"><div class="ov-label">Variance</div><div class="ov-value" id="msVariance"></div></div>
+    <div class="ov-field"><div class="ov-label">Commentary</div><div class="ov-value" id="msComments" style="line-height:1.6;"></div></div>
+  </div>
+</div>
+
+<!-- Risk sheet -->
+<div class="overlay-bg" id="riskOverlay" hidden>
+  <div class="sheet-box" data-testid="risk-sheet">
+    <div class="overlay-head">
+      <div>
+        <div class="eyebrow" id="rkId"></div>
+        <h2 style="font-size:17px;margin-top:4px;" id="rkTitle"></h2>
+      </div>
+      <button class="overlay-close" id="rkClose"></button>
+    </div>
+    <div class="ov-field"><div class="ov-label">Owner</div><div class="ov-value" id="rkOwner"></div></div>
+    <div class="ov-field"><div class="ov-label">Status</div><div id="rkStatus"></div></div>
+    <div class="ov-field"><div class="ov-label">Probability</div><div class="ov-value" id="rkProb"></div></div>
+    <div class="ov-field"><div class="ov-label">Impact</div><div class="ov-value" id="rkImpact"></div></div>
+    <div class="ov-field"><div class="ov-label">Score</div><div class="ov-value mono" id="rkScore"></div></div>
+    <div class="ov-field"><div class="ov-label">Due</div><div class="ov-value mono" id="rkDue"></div></div>
+    <div class="ov-field"><div class="ov-label">Mitigation Plan</div><div class="ov-value" id="rkMitigation" style="line-height:1.6;"></div></div>
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script>
+/* =========================================================
+   ICON SET — hand-built inline SVGs, zero external dependency
+   ========================================================= */
+const ICONS = {
+  info: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><line x1="12" y1="7.4" x2="12" y2="7.5"/>',
+  user: '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="1.5"/><line x1="3.5" y1="9.5" x2="20.5" y2="9.5"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  "trending-up": '<polyline points="4,16 10,10 13,13 20,6"/><polyline points="14,6 20,6 20,12"/>',
+  "trending-down": '<polyline points="4,8 10,14 13,11 20,18"/><polyline points="14,18 20,18 20,12"/>',
+  minus: '<line x1="5" y1="12" x2="19" y2="12"/>',
+  "line-chart": '<polyline points="3,17 9,11 13,15 21,5"/>',
+  "alert-triangle": '<path d="M12 3 L22 20 H2 Z" stroke-linejoin="round"/><line x1="12" y1="9.5" x2="12" y2="14.2"/><line x1="12" y1="16.6" x2="12" y2="16.7"/>',
+  "clipboard-check": '<rect x="6" y="4" width="12" height="17" rx="1.5"/><rect x="9" y="2.3" width="6" height="3" rx="1"/><polyline points="9,13 11.2,15.2 15.2,10.2"/>',
+  "arrow-right": '<line x1="4" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/>',
+  "arrow-up-right": '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="9,7 17,7 17,15"/>',
+  "arrow-down-right": '<line x1="7" y1="7" x2="17" y2="17"/><polyline points="17,9 17,17 9,17"/>',
+  check: '<polyline points="4,12.5 9,17.5 20,6"/>',
+  "check-circle": '<circle cx="12" cy="12" r="9"/><polyline points="7.8,12.5 10.8,15.5 16.2,9"/>',
+  circle: '<circle cx="12" cy="12" r="8"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15.5,14"/>',
+  x: '<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+  shield: '<path d="M12 3 L19.5 6.2 V12 C19.5 16.8 16.3 19.8 12 21 C7.7 19.8 4.5 16.8 4.5 12 V6.2 Z" stroke-linejoin="round"/>',
+  "dollar-sign": '<line x1="12" y1="3" x2="12" y2="21"/><path d="M16.5 7.3c0-1.6-2-2.8-4.5-2.8s-4.5 1.2-4.5 2.8 1.8 2.2 4.5 2.7 4.5 1.2 4.5 2.8-2 2.8-4.5 2.8-4.5-1.2-4.5-2.8"/>',
+  users: '<circle cx="9" cy="8" r="3"/><path d="M3.2 20c0.7-3.3 3-5 5.8-5s5.1 1.7 5.8 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.3 20c0.4-2 1.6-3.4 3.3-4"/>',
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none"/>',
+  gauge: '<circle cx="12" cy="13" r="7.5"/><line x1="12" y1="13" x2="15.2" y2="9.4"/><line x1="7" y1="6" x2="8.2" y2="7.2"/><line x1="17" y1="6" x2="15.8" y2="7.2"/>'
+};
+function iconSvg(name, size=17, extra=""){
+  const body = ICONS[name] || ICONS.circle;
+  return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="${extra}">${body}</svg>`;
+}
+
+/* =========================================================
+   DATA — Next Generation Vehicle Platform Development Program (NGVP-01)
+   ========================================================= */
+const DATA = {
+  program: {
+    name: "Next Generation Vehicle Platform Development Program",
+    code: "PGM-001",
+    duration_months: 18,
+    budget_total: 3200000,
+    sponsor: "VP Engineering",
+    program_manager: "L. Okafor",
+    start: "2025-04-01",
+    sop: "2026-10-15",
+    segment: "Premium Electric SUV",
+    platform_arch: "NGVP Architecture",
+    cpm: "A. Wilson",
+    phase: "Validation & Industrialization",
+    steering_week: "Week 28 · FY2026"
+  },
+
+  healthIndicators: [
+    {name:"Engineering", status:"green", label:"On Track", icon:"check-circle"},
+    {name:"Manufacturing", status:"amber", label:"Attention", icon:"alert-triangle"},
+    {name:"Suppliers", status:"red", label:"At Risk", icon:"alert-triangle"},
+    {name:"Finance", status:"green", label:"Healthy", icon:"check-circle"}
+  ],
+
+  confidence: {
+    score: 82, level: "HIGH", trend: "improving", delta_mom: "+3 pts",
+    previous_month: 79, current_month: 82, target: 85,
+    components: [
+      {name:"Schedule Health", score:74, weight:20},
+      {name:"Budget Health", score:93, weight:15},
+      {name:"Milestone Performance", score:82, weight:20},
+      {name:"Open Risks", score:78, weight:15},
+      {name:"Escalation Load", score:76, weight:15},
+      {name:"Decision Backlog", score:88, weight:15}
+    ],
+    sparkline:[76,77,79,78,80,81,82]
+  },
+
+  sop_readiness: {
+    score: 87, confidence: "HIGH", pilot_build_complete: true,
+    components: [
+      {name:"Engineering Completion", score:92},
+      {name:"Supplier Tooling", score:71},
+      {name:"DV/PV Validation", score:84},
+      {name:"Manufacturing Readiness", score:95}
+    ]
+  },
+
+  decision_latency: {
+    current_avg_days: 8.2, target_days: 5.0, variance_pct: 64.0, trend: "improving",
+    history:[
+      {week:"W-6",avg_days:11.2},{week:"W-5",avg_days:10.4},{week:"W-4",avg_days:9.6},
+      {week:"W-3",avg_days:9.1},{week:"W-2",avg_days:8.7},{week:"W-1",avg_days:8.2}
+    ]
+  },
+
+  decision_aging: {
+    open:6, oldest_pending_days:18, average_age_days:7.3,
+    buckets:{lt5:3, "5_10":1, gt10:2}, status:"red"
+  },
+
+  priorities: [
+    {rank:1, title:"Approve Alternate Supplier", owner:"A. Diaz — VP Supply Chain", due:"Tomorrow",
+     why:"Tooling delay is now the critical-path blocker for SOP.", impact:"Protects SOP", linked_decision:"DEC-001"},
+    {rank:2, title:"Resolve Validation Capacity", owner:"K. Thompson — Quality Director", due:"This week",
+     why:"External lab needed to hold the vehicle validation gate on plan.", impact:"Avoids $450K delay", linked_decision:"DEC-002"},
+    {rank:3, title:"Approve Tooling Investment", owner:"T. Vogel — CFO", due:"Jul 12",
+     why:"Unlocks redundant stator line before pilot cutover.", impact:"Reduces supplier risk", linked_decision:"DEC-005"}
+  ],
+
+  kpis: {
+    overall_health:       {value:"On Track", status:"green", trend:"up",   delta:"+2 pts MoM",   trend_label:"Improving",     trend_status:"green", sparkline:[72,74,75,77,79,80,82], context:"Program remains on track for October SOP despite supplier headwinds."},
+    schedule_health:      {value:"At Risk",  status:"amber", trend:"down", delta:"-4 pts MoM",   trend_label:"Deteriorating", trend_status:"red",   sparkline:[82,80,78,76,74,72,70], context:"Prototype build slipped 4 days due to a tooling delay."},
+    budget_health:        {value:93,         status:"green", trend:"up",   delta:"+1 pt MoM",    trend_label:"Stable",        trend_status:"green", sparkline:[90,91,91,92,92,93,93], context:"Forecast remains within the approved funding envelope."},
+    milestone_completion: {value:78,         status:"green", trend:"up",   delta:"+6% MoM",      trend_label:"Improving",     trend_status:"green", sparkline:[60,63,67,70,72,75,78], context:"Design Freeze and Prototype Build both closed on plan."},
+    open_risks:           {value:8,          status:"amber", trend:"up",   delta:"+1 this week",  trend_label:"Deteriorating", trend_status:"amber", sparkline:[5,6,6,7,7,8,8], context:"Three supplier-related risks require active mitigation."},
+    open_escalations:     {value:4,          status:"red",   trend:"up",   delta:"+1 this week",  trend_label:"Deteriorating", trend_status:"red",   sparkline:[2,2,3,3,3,3,4], context:"Two escalations are awaiting executive approval."},
+    decisions_required:   {value:6,          status:"amber", trend:"flat", delta:"No change",     trend_label:"Stable",        trend_status:"amber", sparkline:[5,6,6,6,7,6,6], context:"Average decision age improving over the past four weeks."}
+  },
+  kpiOrder: ["overall_health","schedule_health","budget_health","milestone_completion","open_risks","open_escalations","decisions_required"],
+  kpiLabels: {
+    overall_health:"Overall Program Health", schedule_health:"Schedule Health", budget_health:"Budget Health",
+    milestone_completion:"Milestone Completion", open_risks:"Open Risks", open_escalations:"Open Escalations",
+    decisions_required:"Decisions Required"
+  },
+  kpiSuffix: {milestone_completion:"%", budget_health:"", open_risks:"", open_escalations:"", decisions_required:""},
+
+  milestones: [
+    {id:"MLS-001", name:"Concept Approval", status:"Complete", owner:"S. Chen — Chief Engineer", planned:"2025-05-15", forecast:"2025-05-12", variance_days:-3, comments:"Concept approved with steering committee endorsement across engineering and design."},
+    {id:"MLS-002", name:"Engineering Design Freeze", status:"Complete", owner:"S. Chen — Chief Engineer", planned:"2025-08-20", forecast:"2025-08-25", variance_days:5, comments:"Platform architecture and vehicle design frozen ahead of the cross-functional review; minor slip absorbed without schedule impact."},
+    {id:"MLS-003", name:"Prototype Vehicle Build", status:"Complete", owner:"M. Lindqvist — Manufacturing", planned:"2025-11-10", forecast:"2025-11-14", variance_days:4, comments:"Prototype vehicles built across all trim lines for engineering validation."},
+    {id:"MLS-004", name:"Production Tooling Release", status:"Delayed", owner:"A. Diaz — Purchasing", planned:"2026-02-28", forecast:"2026-03-18", variance_days:18, comments:"Tier-1 stator winding supplier slippage on tooling release. Secondary source PPAP qualification underway."},
+    {id:"MLS-005", name:"Pilot Vehicle Build", status:"Upcoming", owner:"M. Lindqvist — Manufacturing", planned:"2026-05-15", forecast:"2026-05-29", variance_days:14, comments:"Pilot vehicle build scope under review to protect SOP and downstream industrialization."},
+    {id:"MLS-006", name:"DV/PV Validation", status:"Upcoming", owner:"K. Thompson — Quality", planned:"2026-08-01", forecast:"2026-08-05", variance_days:4, comments:"Homologation and durability sign-off contingent on added external lab capacity."},
+    {id:"MLS-007", name:"SOP Launch", status:"Upcoming", owner:"L. Okafor — Program Manager", planned:"2026-10-15", forecast:"2026-10-22", variance_days:7, comments:"Forecast variance contained within launch readiness window."}
+  ],
+
+  risks: [
+    {id:"RSK-001", title:"Supplier Tooling Delay", shortName:"Supplier Tooling", owner:"A. Diaz", function:"Purchasing", probability:4, impact:5, status:"Open", mitigation:"Qualify secondary supplier; expedite PPAP submission; weekly supplier governance.", due:"2026-03-15"},
+    {id:"RSK-002", title:"Critical Component Shortage", shortName:"Component Shortage", owner:"J. Nakamura", function:"Supply Chain", probability:3, impact:5, status:"Mitigating", mitigation:"Strategic buffer build; allocate inventory to pilot production first.", due:"2026-04-10"},
+    {id:"RSK-003", title:"Vehicle Test Capacity Constraints", shortName:"Test Capacity", owner:"K. Thompson", function:"Quality", probability:4, impact:4, status:"Open", mitigation:"Engage external lab; add second shift in the validation center.", due:"2026-03-30"},
+    {id:"RSK-004", title:"Controls Calibration Delay", shortName:"Calibration", owner:"R. Patel", function:"Engineering", probability:3, impact:4, status:"Open", mitigation:"Add calibration sprint; freeze non-critical feature scope.", due:"2026-04-20"},
+    {id:"RSK-005", title:"Manufacturing Line Ramp Risk", shortName:"Plant Readiness", owner:"M. Lindqvist", function:"Manufacturing", probability:2, impact:5, status:"Mitigating", mitigation:"Phased ramp plan with buffer shifts ahead of pilot cutover.", due:"2026-05-01"},
+    {id:"RSK-006", title:"Regulatory Homologation Timing", shortName:"Homologation", owner:"K. Thompson", function:"Quality", probability:2, impact:4, status:"Open", mitigation:"Pre-file with regulatory body; align test data package early.", due:"2026-06-15"},
+    {id:"RSK-007", title:"Currency / FX Cost Pressure", shortName:"FX Exposure", owner:"T. Vogel", function:"Finance", probability:4, impact:2, status:"Mitigating", mitigation:"Hedge Q3 commitments; renegotiate supplier FX clause.", due:"2026-06-01"},
+    {id:"RSK-008", title:"Cross-Functional Resourcing Gap", shortName:"Resourcing Gap", owner:"L. Okafor", function:"Engineering", probability:3, impact:2, status:"Open", mitigation:"Approve contractor budget; reprioritize program staffing.", due:"2026-04-05"}
+  ],
+  topRiskIds: ["RSK-001","RSK-003","RSK-002"],
+
+  escalations: [
+    {id:"E-101", title:"Tooling Vendor Delay", owner:"A. Diaz", function:"Purchasing", age_days:12, daysToDecision:2, impact:"High", required_decision:"Approve Alternate Supplier", status:"Open", trend:"Escalated"},
+    {id:"E-102", title:"Critical Resource Gap", owner:"R. Patel", function:"Engineering", age_days:8, daysToDecision:4, impact:"Medium", required_decision:"Approve Contractor Budget", status:"Open", trend:"Stable"},
+    {id:"E-103", title:"Quality Validation Delay", owner:"K. Thompson", function:"Quality", age_days:5, daysToDecision:6, impact:"Medium", required_decision:"Approve Additional Lab Capacity", status:"In Progress", trend:"Closing"},
+    {id:"E-104", title:"Logistics Lane Disruption", owner:"J. Nakamura", function:"Supply Chain", age_days:3, daysToDecision:9, impact:"Low", required_decision:"Approve Air Freight Allowance", status:"In Progress", trend:"New"}
+  ],
+
+  decisions: [
+    {id:"DEC-001", issue:"Primary tooling supplier for the stator winding line cannot meet the SOP schedule.", title:"Approve Secondary Supplier", impact:"Protects SOP timing", owner:"A. Diaz — VP Supply Chain", needed_by:"Jun 28", recommendation:"Approve alternate supplier PPAP qualification budget ($180K).", severity:"high", age_days:18, stage:"Ready for Steering Committee", status:"Escalated", cost:"+$180K", schedule:"Protects SOP", risk:"High Reduction"},
+    {id:"DEC-002", issue:"Internal DV/PV validation capacity is insufficient to hold the validation gate on plan.", title:"Authorize DV/PV Test Capacity", impact:"Avoids DV/PV validation delay", owner:"K. Thompson — Quality Director", needed_by:"Jul 2", recommendation:"Approve external laboratory spend ($95K).", severity:"high", age_days:11, stage:"Finance Review", status:"Pending", cost:"+$95K", schedule:"Avoids 2-week slip", risk:"Medium Reduction"},
+    {id:"DEC-003", issue:"An additional validation cycle is needed before pilot cutover to de-risk the DV/PV gate.", title:"Approve DV/PV Validation Gate", impact:"De-risks DV/PV validation timeline", owner:"R. Patel — Engineering Lead", needed_by:"Jul 8", recommendation:"Approve additional DV/PV validation cycle before pilot cutover.", severity:"medium", age_days:6, stage:"Engineering Review", status:"Pending", cost:"+$60K", schedule:"Protects validation gate", risk:"Medium Reduction"},
+    {id:"DEC-004", issue:"A manufacturing ramp staffing plan is required to protect the pilot production start date.", title:"Approve Manufacturing Ramp Plan", impact:"Protects pilot production start", owner:"M. Lindqvist — Manufacturing Director", needed_by:"Jul 10", recommendation:"Approve phased line-ramp staffing plan ($140K).", severity:"medium", age_days:4, stage:"Under Review", status:"Pending", cost:"+$140K", schedule:"Protects pilot start", risk:"Medium Reduction"},
+    {id:"DEC-005", issue:"Tier-2 stator winding capacity is constrained without additional tooling investment.", title:"Approve Tooling Investment Uplift", impact:"Unlocks Tier-2 stator winding capacity", owner:"T. Vogel — CFO", needed_by:"Jul 12", recommendation:"Approve incremental $220K tooling investment for redundant stator line.", severity:"medium", age_days:3, stage:"Awaiting Approval", status:"Pending", cost:"+$220K", schedule:"Unlocks Tier-2 capacity", risk:"Low Reduction"},
+    {id:"DEC-006", issue:"Late engineering change requests risk further schedule churn ahead of SOP.", title:"Ratify Change-Control Freeze Window", impact:"Prevents late requirement churn", owner:"S. Chen — Chief Engineer", needed_by:"Jul 15", recommendation:"Ratify CCB decision to lock scope 12 weeks pre-SOP.", severity:"low", age_days:2, stage:"Under Review", status:"Pending", cost:"$0", schedule:"Prevents late churn", risk:"Low Reduction"}
+  ],
+
+  budget: {
+    approved: 3200000, committed: 2700000, actual: 2100000, forecast_at_completion: 3100000, remaining: 1100000,
+    forecast_accuracy: 97,
+    breakdown: [
+      {category:"Engineering", amount:980}, {category:"Manufacturing", amount:620}, {category:"Testing", amount:410},
+      {category:"Supplier Development", amount:380}, {category:"Tooling", amount:470}, {category:"Program Management", amount:240}
+    ],
+    monthly_spend: [
+      {month:"Apr'25",planned:110,actual:105},{month:"May'25",planned:140,actual:132},{month:"Jun'25",planned:165,actual:170},
+      {month:"Jul'25",planned:180,actual:176},{month:"Aug'25",planned:195,actual:201},{month:"Sep'25",planned:220,actual:230},
+      {month:"Oct'25",planned:210,actual:206},{month:"Nov'25",planned:225,actual:219},{month:"Dec'25",planned:190,actual:184},
+      {month:"Jan'26",planned:240,actual:248},{month:"Feb'26",planned:270,actual:278}
+    ]
+  },
+
+  insights: {
+    spi: 0.94, cpi: 1.02, milestone_rate: 0.78, avg_decision_response: 8.2,
+    risk_exposure_trend: [
+      {month:"Sep",exposure:4.2},{month:"Oct",exposure:4.6},{month:"Nov",exposure:5.1},
+      {month:"Dec",exposure:4.9},{month:"Jan",exposure:5.4},{month:"Feb",exposure:4.8}
+    ],
+    escalation_aging: [
+      {bucket:"0-3d",count:1},{bucket:"4-7d",count:1},{bucket:"8-14d",count:2},{bucket:"15+d",count:0}
+    ],
+    decision_response_days: [
+      {month:"Oct",avg_days:11.4},{month:"Nov",avg_days:10.1},{month:"Dec",avg_days:9.3},
+      {month:"Jan",avg_days:8.7},{month:"Feb",avg_days:8.2}
+    ],
+    resource_utilization: [
+      {function:"Engineering",utilization:92},{function:"Manufacturing",utilization:78},{function:"Quality",utilization:96},
+      {function:"Purchasing",utilization:85},{function:"Supply Chain",utilization:81},{function:"Program Mgmt",utilization:74}
+    ]
+  },
+
+  briefingA: {
+    model: "claude-sonnet-4-5-20250929",
+    sections: [
+      {heading:"Observation", text:"The Next Generation Vehicle Platform Development Program is tracking to an October 2026 SOP, with SOP confidence at 87% and overall program confidence at 82/100. Milestone completion climbed to 78%, up six points this month, and budget health remains strong at 93/100. A supplier tooling delay on the stator winding line has pushed Milestone MLS-004 out 18 days and is now the critical-path risk to SOP, with limited DV/PV validation lab capacity a compounding constraint heading into Q3."},
+      {heading:"Business Impact", text:"Continued slippage on the tooling delay threatens the October 2026 SOP date directly, and the constrained validation lab capacity puts the DV/PV gate at risk of a further two-week delay if not addressed this cycle."},
+      {heading:"Recommendation", text:"Approve secondary supplier PPAP qualification funding ($180K), authorize external validation lab capacity ($95K), and ratify the $220K tooling investment for the redundant stator line."},
+      {heading:"Expected Outcome", text:"Secondary supplier LOI executed, validation lab capacity contracted, and pilot production scope locked with steering committee sign-off within the next reporting cycle."}
+    ]
+  },
+  briefingB: {
+    model: "claude-sonnet-4-5-20250929",
+    sections: [
+      {heading:"Observation", text:"Program confidence held at 82/100 this week as the platform program continues toward its October 2026 SOP, with engineering and manufacturing readiness both trending ahead of the DV/PV validation workstream. The decision backlog is aging — the oldest open decision has sat for 18 days."},
+      {heading:"Business Impact", text:"Further delay on the alternate supplier approval directly threatens the SOP-critical path through pilot production; budget health remains strong at 93/100, giving room to fund the proposed tooling and lab-capacity investments without threatening the $3.2M approved envelope."},
+      {heading:"Recommendation", text:"Clear the two decisions older than 10 days first — secondary supplier approval and additional test capacity authorization — then proceed to the manufacturing ramp plan."},
+      {heading:"Expected Outcome", text:"Decision aging reduced below the five-day target on at least two open items, with a firmed forecast date on the Production Tooling Release milestone."}
+    ]
+  }
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+function statusColor(s){ return {green:"var(--green)", amber:"var(--amber)", red:"var(--red)", blue:"var(--blue)"}[s] || "var(--eepcc-muted)"; }
+function scoreBand(score){
+  if(score>=90) return {label:"Excellent", color:"var(--green)", pill:"green"};
+  if(score>=75) return {label:"Stable", color:"var(--blue)", pill:"blue"};
+  if(score>=60) return {label:"Needs Attention", color:"var(--amber)", pill:"amber"};
+  return {label:"Executive Intervention Required", color:"var(--red)", pill:"red"};
+}
+function fmtCurrencyM(n){
+  const sign=n<0?"-":""; const abs=Math.abs(n);
+  if(abs>=1000000) return sign+"$"+(abs/1000000).toFixed(2)+"M";
+  if(abs>=1000) return sign+"$"+Math.round(abs/1000)+"K";
+  return sign+"$"+Math.round(abs);
+}
+function fmtDate(iso){
+  const d = new Date(iso+"T00:00:00");
+  const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return d.getDate()+" "+MONTHS[d.getMonth()]+" "+d.getFullYear();
+}
+function toast(msg){
+  const c = $("#toastContainer");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(()=>{ el.style.transition="opacity 250ms"; el.style.opacity="0"; setTimeout(()=>el.remove(),260); }, 3000);
+}
+
+/* ---- SVG chart primitives ---- */
+function sparkline(data, w=120, h=32, color="#0A192F"){
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = (max-min)||1;
+  const step = w/(data.length-1);
+  const pts = data.map((v,i)=>`${(i*step).toFixed(1)},${(h-4-((v-min)/range)*(h-8)).toFixed(1)}`).join(" ");
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function lineChart(data, key, w=460, h=170, color="#0A192F", labelKey=null){
+  const vals = data.map(d=>d[key]);
+  const min = Math.min(...vals)*0.9, max = Math.max(...vals)*1.08;
+  const range = (max-min)||1;
+  const padL=6, padR=6, padT=10, padB=22;
+  const iw = w-padL-padR, ih = h-padT-padB;
+  const step = iw/(data.length-1);
+  const pts = data.map((d,i)=>[padL+i*step, padT+ih-((d[key]-min)/range)*ih]);
+  const path = pts.map((p,i)=> (i===0?"M":"L")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const dots = pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${color}"/>`).join("");
+  const labels = labelKey ? data.map((d,i)=>`<text x="${pts[i][0].toFixed(1)}" y="${h-6}" font-size="9.5" fill="#94A3B8" text-anchor="middle">${d[labelKey]}</text>`).join("") : "";
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}${labels}
+  </svg>`;
+}
+
+function groupedBarChart(data, k1, k2, w=460, h=180, c1="#94A3B8", c2="#0A192F", labelKey){
+  const max = Math.max(...data.map(d=>Math.max(d[k1],d[k2])))*1.15;
+  const padB=22, padT=8;
+  const ih = h-padT-padB;
+  const groupW = w/data.length;
+  const barW = groupW*0.28;
+  let bars="";
+  data.forEach((d,i)=>{
+    const gx = i*groupW + groupW/2;
+    const b1h = (d[k1]/max)*ih, b2h = (d[k2]/max)*ih;
+    bars += `<rect x="${(gx-barW-2).toFixed(1)}" y="${(padT+ih-b1h).toFixed(1)}" width="${barW.toFixed(1)}" height="${b1h.toFixed(1)}" fill="${c1}" rx="1"/>`;
+    bars += `<rect x="${(gx+2).toFixed(1)}" y="${(padT+ih-b2h).toFixed(1)}" width="${barW.toFixed(1)}" height="${b2h.toFixed(1)}" fill="${c2}" rx="1"/>`;
+    bars += `<text x="${gx.toFixed(1)}" y="${h-6}" font-size="9.5" fill="#94A3B8" text-anchor="middle">${d[labelKey]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">${bars}</svg>`;
+}
+
+function barChart(data, key, labelKey, w=380, h=170, color="#0A192F"){
+  const max = Math.max(...data.map(d=>d[key]))*1.2 || 1;
+  const padB=22, padT=8;
+  const ih = h-padT-padB;
+  const groupW = w/data.length;
+  const barW = groupW*0.5;
+  let bars="";
+  data.forEach((d,i)=>{
+    const bh = (d[key]/max)*ih;
+    const x = i*groupW + (groupW-barW)/2;
+    bars += `<rect x="${x.toFixed(1)}" y="${(padT+ih-bh).toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" fill="${color}" rx="1"/>`;
+    bars += `<text x="${(x+barW/2).toFixed(1)}" y="${h-6}" font-size="9.5" fill="#94A3B8" text-anchor="middle">${d[labelKey]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">${bars}</svg>`;
+}
+
+function hBarChart(data, key, labelKey, w=440, h=190, color="#0369A1", max=100){
+  const rowH = h/data.length;
+  let rows="";
+  data.forEach((d,i)=>{
+    const y = i*rowH;
+    const bw = (d[key]/max)*(w-100);
+    rows += `<text x="0" y="${(y+rowH/2+4).toFixed(1)}" font-size="11.5" fill="#0F172A">${d[labelKey]}</text>`;
+    rows += `<rect x="98" y="${(y+rowH*0.28).toFixed(1)}" width="${(w-104).toFixed(1)}" height="${(rowH*0.44).toFixed(1)}" fill="#E2E8F0" rx="1"/>`;
+    rows += `<rect x="98" y="${(y+rowH*0.28).toFixed(1)}" width="${bw.toFixed(1)}" height="${(rowH*0.44).toFixed(1)}" fill="${color}" rx="1"/>`;
+    rows += `<text x="${(102+bw).toFixed(1)}" y="${(y+rowH/2+4).toFixed(1)}" font-size="10.5" fill="#475569">${d[key]}%</text>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">${rows}</svg>`;
+}
+
+function areaBurnChart(data, w=460, h=190){
+  const max = Math.max(...data.map(d=>d.planned), ...data.map(d=>d.actual))*1.1;
+  const padL=4,padR=4,padT=10,padB=22;
+  const iw=w-padL-padR, ih=h-padT-padB;
+  const step = iw/(data.length-1);
+  const yOf = v => padT+ih-(v/max)*ih;
+  const plannedPts = data.map((d,i)=>[padL+i*step, yOf(d.planned)]);
+  const actualPts = data.map((d,i)=>[padL+i*step, yOf(d.actual)]);
+  const areaPath = "M"+plannedPts.map(p=>p.join(",")).join(" L")+` L${(padL+iw).toFixed(1)},${(padT+ih).toFixed(1)} L${padL},${(padT+ih).toFixed(1)} Z`;
+  const plannedLine = "M"+plannedPts.map(p=>p.join(",")).join(" L");
+  const actualLine = "M"+actualPts.map(p=>p.join(",")).join(" L");
+  const labels = data.map((d,i)=> i%2===0 ? `<text x="${plannedPts[i][0].toFixed(1)}" y="${h-6}" font-size="9" fill="#94A3B8" text-anchor="middle">${d.month}</text>` : "").join("");
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">
+    <path d="${areaPath}" fill="#0A192F" opacity="0.12"/>
+    <path d="${plannedLine}" fill="none" stroke="#0A192F" stroke-width="1.6"/>
+    <path d="${actualLine}" fill="none" stroke="#0369A1" stroke-width="2"/>
+    ${labels}
+  </svg>`;
+}
+
+function donutChart(data, colors, size=140){
+  const total = data.reduce((s,d)=>s+d.amount,0);
+  const r=52, cx=size/2, cy=size/2, circ=2*Math.PI*r;
+  let offsetAcc=0, circles="";
+  data.forEach((d,i)=>{
+    const frac = d.amount/total;
+    const dash = frac*circ;
+    circles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="20"
+      stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}" stroke-dashoffset="${(-offsetAcc).toFixed(2)}"
+      transform="rotate(-90 ${cx} ${cy})"/>`;
+    offsetAcc += dash;
+  });
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${circles}
+    <circle cx="${cx}" cy="${cy}" r="30" fill="#fff"/>
+    <text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="16" font-weight="600" fill="#0F172A">$${(total/1000).toFixed(2)}M</text>
+    <text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="9" fill="#94A3B8">TOTAL</text>
+  </svg>`;
+}
+
+function fullRingGauge(pct, size=132, color="#15803D"){
+  const r=(size/2)-10, cx=size/2, cy=size/2, circ=2*Math.PI*r;
+  const dash = (pct/100)*circ;
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#E2E8F0" stroke-width="10"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round"
+      stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>
+  </svg>`;
+}
+
+function semiGauge(pct, size=160, color="#15803D"){
+  const r=(size/2)-14, cx=size/2, cy=size/2;
+  const circ = Math.PI*r;
+  const dash = (pct/100)*circ;
+  return `<svg viewBox="0 0 ${size} ${size/2+14}" width="${size}" height="${size/2+14}">
+    <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="#E2E8F0" stroke-width="12" stroke-linecap="round"/>
+    <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
+      stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}"/>
+  </svg>`;
+}
+
+function smallRadial(pct, size=110, color="#0369A1"){
+  const r=(size/2)-12, cx=size/2, cy=size/2;
+  const circ = Math.PI*1.5*r;
+  const dash = Math.min(pct,1.4)/1.4*circ;
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+    <path d="M ${cx-r*0.78} ${cy+r*0.78} A ${r} ${r} 0 1 1 ${cx+r*0.78} ${cy+r*0.78}" fill="none" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+    <path d="M ${cx-r*0.78} ${cy+r*0.78} A ${r} ${r} 0 1 1 ${cx+r*0.78} ${cy+r*0.78}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round"
+      stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}"/>
+  </svg>`;
+}
+
+/* =========================================================
+   RENDER: Header context bar + health strip
+   ========================================================= */
+function renderMetaChips(){
+  const p = DATA.program;
+  const chips = [
+    {icon:"target", label:"Program ID", value:p.code},
+    {icon:"clock", label:"Program Phase", value:p.phase},
+    {icon:"calendar", label:"Steering Committee", value:p.steering_week},
+    {icon:"user", label:"Executive Sponsor", value:p.sponsor}
+  ];
+  $("#metaChips").innerHTML = chips.map(c=>`
+    <div class="chip">
+      <span class="chip-icon">${iconSvg(c.icon,15)}</span>
+      <span class="chip-text"><span class="chip-label">${c.label}</span><span class="chip-value">${c.value}</span></span>
+    </div>
+  `).join("");
+}
+function renderExecContext(){
+  const p = DATA.program;
+  const items = [
+    {label:"Vehicle Segment", value:p.segment},
+    {label:"Platform", value:p.platform_arch},
+    {label:"Duration", value:p.duration_months+" Months"},
+    {label:"Budget", value:fmtCurrencyM(p.budget_total)},
+    {label:"SOP Target", value:fmtDate(p.sop)},
+    {label:"Chief Program Manager", value:p.cpm}
+  ];
+  $("#execContextBar").innerHTML = items.map(it=>`
+    <div class="exec-context-item"><span class="eci-label">${it.label}</span><span class="eci-value">${it.value}</span></div>
+  `).join("");
+}
+function renderHealthStrip(){
+  $("#healthStrip").innerHTML = DATA.healthIndicators.map(h=>`
+    <div class="health-chip" data-testid="health-${h.name.toLowerCase()}">
+      <div class="hc-icon" style="background:${h.status==='green'?'var(--green-soft)':h.status==='red'?'var(--red-soft)':'var(--amber-soft)'};color:${statusColor(h.status)};">${iconSvg(h.icon,15)}</div>
+      <div>
+        <div class="hc-name">${h.name}</div>
+        <div class="hc-label" style="color:${statusColor(h.status)};">${h.label}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   RENDER: Headline metrics
+   ========================================================= */
+function renderConfidence(){
+  const c = DATA.confidence;
+  const band = scoreBand(c.score);
+  const ringColor = band.color;
+  const barColor = s => s>=80 ? "var(--green)" : s>=65 ? "var(--amber)" : "var(--red)";
+  $("#confidenceCard").innerHTML = `
+    <div class="gauge-info-row">
+      <span class="eyebrow">Program Confidence</span>
+      <span class="info-icon">${iconSvg("info",15)}
+        <span class="tooltip">Weighted average of Schedule (20%), Budget (15%), Milestone Performance (20%), Open Risks (15%), Escalation Load (15%), and Decision Backlog (15%).</span>
+      </span>
+    </div>
+    <div class="gauge-wrap">
+      <div style="position:relative;width:132px;height:132px;flex-shrink:0;">
+        ${fullRingGauge(c.score,132,ringColor)}
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div class="gauge-num">${c.score}</div>
+          <div style="font-size:11px;color:var(--eepcc-muted);">/ 100</div>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div class="gauge-sub">Will We Succeed?</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+          <span class="pill pill-${band.pill}">${band.label}</span>
+          <span style="font-size:12px;color:var(--green);font-weight:500;">${c.delta_mom} MoM</span>
+        </div>
+        <div style="margin-top:10px;">${sparkline(c.sparkline,140,30,ringColor)}</div>
+      </div>
+    </div>
+    <div class="stat-trio">
+      <div class="st-item"><span class="st-label">Confidence Level</span><span class="st-value" style="color:${ringColor};">${band.label}</span></div>
+      <div class="st-item"><span class="st-label">Previous Month</span><span class="st-value">${c.previous_month}</span></div>
+      <div class="st-item"><span class="st-label">Current Month</span><span class="st-value">${c.current_month}</span></div>
+      <div class="st-item"><span class="st-label">Target</span><span class="st-value">${c.target}</span></div>
+    </div>
+    <div class="component-grid">
+      ${c.components.map(comp=>`
+        <div class="component-row">
+          <div class="crow-top"><span>${comp.name}</span><span class="mono">${comp.score}</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${comp.score}%;background:${barColor(comp.score)};"></div></div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderSOP(){
+  const s = DATA.sop_readiness;
+  const sBand = scoreBand(s.score);
+  const gaugeColor = sBand.color;
+  const barColor = v => v>=85 ? "var(--green)" : v>=70 ? "var(--amber)" : "var(--red)";
+  $("#sopCard").innerHTML = `
+    <span class="eyebrow">SOP Readiness</span>
+    <div style="display:flex;flex-direction:column;align-items:center;margin-top:8px;">
+      <div style="position:relative;">${semiGauge(s.score,150,gaugeColor)}
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px;">
+          <div class="gauge-num" style="font-size:32px;">${s.score}%</div>
+        </div>
+      </div>
+      <div class="gauge-sub" style="margin-top:2px;">SOP Confidence</div>
+      <span class="pill pill-${sBand.pill}" style="margin-top:8px;">${sBand.label}</span>
+    </div>
+    <div class="checklist-row">
+      <span class="cl-label">Pilot Vehicle Build Complete</span>
+      <span class="cl-check">${iconSvg("check",12)}</span>
+    </div>
+    <div style="margin-top:14px;display:flex;flex-direction:column;gap:11px;">
+      ${s.components.map(comp=>`
+        <div class="component-row">
+          <div class="crow-top"><span>${comp.name}</span><span class="mono">${comp.score}%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${comp.score}%;background:${barColor(comp.score)};"></div></div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderLatency(){
+  const l = DATA.decision_latency;
+  const onTarget = l.current_avg_days <= l.target_days;
+  $("#latencyCard").innerHTML = `
+    <span class="eyebrow">Executive Decision Latency</span>
+    <div class="gauge-sub" style="margin-top:6px;">How Fast Do We Decide?</div>
+    <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px;">
+      <span class="gauge-num" style="font-size:38px;">${l.current_avg_days}</span>
+      <span style="font-size:13px;color:var(--eepcc-muted);">days avg</span>
+    </div>
+    <span class="pill pill-${onTarget?'green':'amber'}" style="margin-top:8px;">${onTarget?'ON TARGET':'ABOVE TARGET'}</span>
+    <div style="margin-top:16px;">${lineChart(l.history,"avg_days",300,120,"var(--eepcc-primary)","week")}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(15,23,42,0.06);font-size:11.5px;">
+      <div><div class="eyebrow" style="font-size:9.5px;">Target</div><div class="mono">&lt;${l.target_days.toFixed(1)}d</div></div>
+      <div><div class="eyebrow" style="font-size:9.5px;">Variance</div><div class="mono" style="color:var(--amber);">+${l.variance_pct.toFixed(0)}%</div></div>
+      <div><div class="eyebrow" style="font-size:9.5px;">Trend</div><div style="color:var(--green);font-weight:500;">Improving</div></div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   RENDER: Priorities
+   ========================================================= */
+function renderPriorities(){
+  $("#priorityGrid").innerHTML = DATA.priorities.map(p=>`
+    <div class="card card-hero priority-card" data-testid="priority-card-${p.rank}">
+      <div class="priority-num">0${p.rank}</div>
+      <div class="priority-top-row">
+        <div class="eyebrow">Priority ${p.rank}</div>
+        <span class="pill pill-green">${p.impact}</span>
+      </div>
+      <h3>${p.title}</h3>
+      <div class="priority-why">${p.why}</div>
+      <div class="priority-meta">
+        <div class="row">${iconSvg("user",14)}<span>${p.owner}</span></div>
+        <div class="row">${iconSvg("calendar",14)}<span>${p.due}</span></div>
+      </div>
+      <div class="priority-link mono">Linked decision → ${p.linked_decision}</div>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   RENDER: KPI grid
+   ========================================================= */
+function renderKPIs(){
+  const statusLabel = {green:"On Track", blue:"Stable", amber:"Watch", red:"Critical"};
+  const cards = DATA.kpiOrder.map(key=>{
+    const k = DATA.kpis[key];
+    const arrow = k.trend==="up" ? "trending-up" : k.trend==="down" ? "trending-down" : "minus";
+    return `
+      <div class="card" data-testid="kpi-card-${key}">
+        <div class="kpi-top">
+          <span class="kpi-label">${DATA.kpiLabels[key]}</span>
+          <span class="pill pill-${k.status}">${statusLabel[k.status]||k.status}</span>
+        </div>
+        <div class="kpi-value">${k.value}${DATA.kpiSuffix[key]||''}</div>
+        <div class="kpi-trend" style="color:${statusColor(k.trend_status)};">
+          ${iconSvg(arrow,14)}<span>${k.trend_label}</span>
+        </div>
+        <div class="kpi-delta">${k.delta}</div>
+        <div class="kpi-spark">${sparkline(k.sparkline,120,32,statusColor(k.trend_status))}</div>
+        <div class="kpi-context">${k.context}</div>
+      </div>
+    `;
+  }).join("");
+
+  const aging = DATA.decision_aging;
+  const backlogCard = `
+    <div class="card" data-testid="kpi-card-decision-backlog">
+      <div class="kpi-top">
+        <span class="kpi-label">Decision Backlog</span>
+        <span class="pill pill-${aging.status}">Governance</span>
+      </div>
+      <div class="backlog-cols">
+        <div class="backlog-col"><span class="bnum">${aging.open}</span><span class="blabel">Open</span></div>
+        <div class="backlog-col"><span class="bnum" style="color:var(--red);">${aging.oldest_pending_days}d</span><span class="blabel">Oldest</span></div>
+        <div class="backlog-col"><span class="bnum" style="color:var(--amber);">${aging.average_age_days}d</span><span class="blabel">Avg Age</span></div>
+      </div>
+      <div class="backlog-legend">
+        <span><span class="dot" style="background:var(--green);"></span>&lt;5d: ${aging.buckets.lt5}</span>
+        <span><span class="dot" style="background:var(--amber);"></span>5–10d: ${aging.buckets["5_10"]}</span>
+        <span><span class="dot" style="background:var(--red);"></span>&gt;10d: ${aging.buckets.gt10}</span>
+      </div>
+      <div class="kpi-context">Average age improving over the past four weeks of steering review.</div>
+    </div>
+  `;
+  $("#kpiGrid").innerHTML = cards + backlogCard;
+}
+
+/* =========================================================
+   RENDER: AI Briefing
+   ========================================================= */
+const briefingIcons = [
+  {icon:"line-chart", color:"var(--eepcc-primary)", soft:"#E7EBF3"},
+  {icon:"trending-up", color:"var(--green)", soft:"var(--green-soft)"},
+  {icon:"alert-triangle", color:"var(--red)", soft:"var(--red-soft)"},
+  {icon:"clipboard-check", color:"var(--amber)", soft:"var(--amber-soft)"},
+  {icon:"arrow-right", color:"var(--blue)", soft:"var(--blue-soft)"}
+];
+function renderBriefing(briefing, targetId){
+  $(targetId).innerHTML = briefing.sections.map((s,i)=>`
+    <div class="briefing-row">
+      <div class="briefing-icon" style="background:${briefingIcons[i].soft};color:${briefingIcons[i].color};">${iconSvg(briefingIcons[i].icon,17)}</div>
+      <div class="briefing-body">
+        <h4 style="color:${briefingIcons[i].color};">${s.heading}</h4>
+        <p>${s.text}</p>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   RENDER: Risk heatmap
+   ========================================================= */
+const impactLabels = {5:"Severe",4:"Major",3:"Moderate",2:"Minor",1:"Minimal"};
+const probLabels = {1:"Rare",2:"Unlikely",3:"Possible",4:"Likely",5:"Almost Certain"};
+function cellLevel(score){
+  if(score>=16) return {level:"Critical", bg:"var(--red-soft)", fg:"var(--red)"};
+  if(score>=10) return {level:"High", bg:"var(--amber-soft)", fg:"var(--amber)"};
+  if(score>=5) return {level:"Medium", bg:"#FEF9C3", fg:"#854D0E"};
+  return {level:"Low", bg:"var(--green-soft)", fg:"var(--green)"};
+}
+function initials(name){ return name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase(); }
+function renderHeatmap(){
+  const yaxis = [5,4,3,2,1].map(i=>`<div class="yaxis-item"><span class="yn mono">${i}</span><span class="yl">${impactLabels[i]}</span></div>`).join("");
+  const xaxis = [1,2,3,4,5].map(p=>`<div class="xaxis-item"><span class="xn mono">${p}</span><span class="xl">${probLabels[p]}</span></div>`).join("");
+  let cells = "";
+  for(let impact=5; impact>=1; impact--){
+    for(let prob=1; prob<=5; prob++){
+      const score = prob*impact;
+      const style = cellLevel(score);
+      const risksHere = DATA.risks.filter(r=>r.probability===prob && r.impact===impact);
+      cells += `<div class="heat-cell" style="background:${style.bg};color:${style.fg};">
+        <div class="hc-top"><span>${style.level}</span></div>
+        <div class="hc-score">score ${score}</div>
+        ${risksHere.map(r=>{
+          const isTop = DATA.topRiskIds.includes(r.id);
+          const showInitials = score>=10;
+          const idLine = showInitials ? `${r.id} · ${initials(r.owner)}` : r.id;
+          const statusColorName = r.status==="Open" ? "red" : r.status==="Mitigating" ? "amber" : "green";
+          return `<div class="heat-chip-wrap">
+            <button class="heat-chip${isTop?' top-risk':''}" data-risk="${r.id}">
+              <span class="hcn-name">${r.shortName}</span>
+              <span class="hcn-id">${idLine}</span>
+            </button>
+            <div class="heat-chip-tooltip">
+              <div class="tt-row"><span class="tt-k">Owner</span><span>${r.owner}</span></div>
+              <div class="tt-row"><span class="tt-k">Status</span><span style="color:${statusColorName==='red'?'#FCA5A5':statusColorName==='amber'?'#FCD34D':'#86EFAC'};text-transform:capitalize;">${r.status}</span></div>
+              <div class="tt-row"><span class="tt-k">Due</span><span>${fmtDate(r.due)}</span></div>
+              <div class="tt-row" style="display:block;margin-top:5px;"><span class="tt-k" style="display:block;margin-bottom:2px;">Mitigation</span><span>${r.mitigation}</span></div>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    }
+  }
+  $("#heatmapWrap").innerHTML = `
+    <div class="heatmap-yaxis">${yaxis}</div>
+    <div class="heatmap-grid-area">
+      <div class="heatmap-xaxis">${xaxis}</div>
+      <div class="heatmap-grid">${cells}</div>
+    </div>
+  `;
+  $$(".heat-chip").forEach(btn=>btn.addEventListener("click", ()=>openRiskSheet(btn.dataset.risk)));
+}
+
+/* =========================================================
+   RENDER: Decision center
+   ========================================================= */
+const stageStyles = {
+  "Ready for Steering Committee": {bg:"var(--green-soft)", fg:"var(--green)"},
+  "Finance Review": {bg:"var(--blue-soft)", fg:"var(--blue)"},
+  "Engineering Review": {bg:"var(--blue-soft)", fg:"var(--blue)"},
+  "Under Review": {bg:"#E7EBF3", fg:"var(--eepcc-primary)"},
+  "Awaiting Approval": {bg:"var(--amber-soft)", fg:"var(--amber)"}
+};
+const decisionStatusStyle = {
+  "Ready": {bg:"var(--green-soft)", fg:"var(--green)"},
+  "Pending": {bg:"var(--amber-soft)", fg:"var(--amber)"},
+  "Escalated": {bg:"var(--red-soft)", fg:"var(--red)"}
+};
+function renderDecisions(){
+  $("#decisionGrid").innerHTML = DATA.decisions.map(d=>{
+    const st = decisionStatusStyle[d.status] || {bg:"#E7EBF3", fg:"var(--eepcc-primary)"};
+    return `
+    <div class="card decision-card" data-testid="decision-card-${d.id}">
+      <div class="decision-ribbon" style="background:${st.bg};color:${st.fg};">${d.status} · ${d.stage}</div>
+      <div class="decision-top">
+        <span class="pill pill-${d.severity==='high'?'red':d.severity==='medium'?'amber':'green'}">${d.severity}</span>
+        <span class="decision-id mono">${d.id}</span>
+      </div>
+      <div class="decision-block"><div class="db-label">Issue</div><div class="db-value" style="font-weight:600;font-size:14px;color:var(--eepcc-text);">${d.issue}</div></div>
+      <div class="decision-block"><div class="db-label">Business Impact</div><div class="db-value">${d.impact}</div></div>
+      <div class="decision-block"><div class="db-label">Recommendation</div><div class="db-value">${d.recommendation}</div></div>
+      <div class="decision-block"><div class="db-label">Decision Required</div><div class="db-value" style="font-weight:600;">${d.title}</div></div>
+      <div class="decision-block"><div class="db-label">Owner</div><div class="db-value">${d.owner}</div></div>
+      <div class="decision-block"><div class="db-label">Decision Needed By</div><div class="db-value mono">${d.needed_by}</div></div>
+      <div class="decision-impact-grid">
+        <div class="di-item"><div class="di-label">${iconSvg("dollar-sign",10)} Cost</div><div class="di-value">${d.cost}</div></div>
+        <div class="di-item"><div class="di-label">${iconSvg("calendar",10)} Schedule</div><div class="di-value">${d.schedule}</div></div>
+        <div class="di-item"><div class="di-label">${iconSvg("shield",10)} Risk</div><div class="di-value">${d.risk}</div></div>
+      </div>
+      <div class="decision-actions">
+        <button class="btn-primary" data-approve="${d.id}">Approve</button>
+        <button class="btn-outline" data-defer="${d.id}">Defer</button>
+      </div>
+    </div>
+  `;}).join("");
+  $$("[data-approve]").forEach(b=>b.addEventListener("click",()=>{
+    const d = DATA.decisions.find(x=>x.id===b.dataset.approve);
+    toast(`Approved: ${d.title}`);
+  }));
+  $$("[data-defer]").forEach(b=>b.addEventListener("click",()=>{
+    const d = DATA.decisions.find(x=>x.id===b.dataset.defer);
+    toast(`Deferred: ${d.title}`);
+  }));
+}
+
+/* =========================================================
+   RENDER: Budget
+   ========================================================= */
+function renderBudget(){
+  const b = DATA.budget;
+  const variancePct = ((b.forecast_at_completion-b.approved)/b.approved*100);
+  const utilization = (b.actual/b.approved*100);
+  $("#budgetTiles").innerHTML = `
+    <div class="budget-tile accent"><div class="bt-label">Approved</div><div class="bt-value">${fmtCurrencyM(b.approved)}</div></div>
+    <div class="budget-tile"><div class="bt-label">Committed</div><div class="bt-value">${fmtCurrencyM(b.committed)}</div></div>
+    <div class="budget-tile"><div class="bt-label">Actual</div><div class="bt-value">${fmtCurrencyM(b.actual)}</div></div>
+    <div class="budget-tile"><div class="bt-label">Forecast at Completion</div><div class="bt-value">${fmtCurrencyM(b.forecast_at_completion)}</div>
+      <div class="bt-sub" style="color:${variancePct>=0?'var(--red)':'var(--green)'};">${variancePct>=0?'+':''}${variancePct.toFixed(1)}% vs Approved</div></div>
+    <div class="budget-tile"><div class="bt-label">Remaining</div><div class="bt-value">${fmtCurrencyM(b.remaining)}</div></div>
+  `;
+  $("#budgetTilesSecondary").innerHTML = `
+    <div class="budget-tile"><div class="bt-label">Budget Utilization</div><div class="bt-value">${utilization.toFixed(0)}%</div><div class="bt-sub">Actual vs. approved envelope</div></div>
+    <div class="budget-tile"><div class="bt-label">Forecast Accuracy</div><div class="bt-value">${b.forecast_accuracy}%</div><div class="bt-sub">Trailing 3-month portfolio metric</div></div>
+  `;
+  $("#burnChart").innerHTML = areaBurnChart(b.monthly_spend.map(m=>({month:m.month,planned:m.planned,actual:m.actual})));
+  $("#monthlyChart").innerHTML = groupedBarChart(b.monthly_spend,"planned","actual",380,180,"#94A3B8","#0A192F","month");
+  const colorsHex = ["#0A192F","#0369A1","#15803D","#B45309","#94A3B8","#1E293B"];
+  $("#donutChart").innerHTML = donutChart(b.breakdown, colorsHex, 150);
+  const total = b.breakdown.reduce((s,d)=>s+d.amount,0);
+  $("#breakdownList").innerHTML = b.breakdown.map((d,i)=>`
+    <div class="breakdown-row">
+      <span class="dot" style="background:${colorsHex[i]};"></span>
+      <span class="br-cat">${d.category}</span>
+      <span class="br-amt">$${d.amount}K</span>
+      <span class="br-pct">${((d.amount/total)*100).toFixed(0)}%</span>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   RENDER: Timeline
+   ========================================================= */
+function renderTimeline(){
+  const completed = DATA.milestones.filter(m=>m.status==="Complete").length;
+  const inProgress = DATA.milestones.filter(m=>m.status==="In Progress"||m.status==="Delayed").length;
+  const total = DATA.milestones.length;
+  const progressPct = ((completed + inProgress*0.5) / total) * 100;
+  $("#timelineProgressFill").style.width = progressPct.toFixed(0)+"%";
+  $("#timelineProgressText").textContent = `Program maturity: ${progressPct.toFixed(0)}% (${completed} of ${total} milestones complete)`;
+
+  $("#timelineNodes").innerHTML = DATA.milestones.map(m=>{
+    const iconName = m.status==="Complete" ? "check" : m.status==="Delayed" ? "alert-triangle" : m.status==="In Progress" ? "clock" : "circle";
+    const borderColor = m.status==="Complete" ? "var(--green)" : m.status==="Delayed" ? "var(--red)" : m.status==="In Progress" ? "var(--amber)" : "var(--eepcc-border-strong)";
+    const pillColor = m.status==="Complete" ? "green" : m.status==="Delayed" ? "red" : m.status==="In Progress" ? "amber" : "navy";
+    const varColor = m.variance_days > 0 ? "red" : m.variance_days < 0 ? "green" : "navy";
+    const varLabel = m.variance_days===0 ? "On plan" : (m.variance_days>0?`+${m.variance_days}d variance`:`${m.variance_days}d`);
+    return `<div class="tnode" data-milestone="${m.id}">
+      <div class="tnode-dot" style="border-color:${borderColor};color:${borderColor};">${iconSvg(iconName,11)}</div>
+      <div class="tn-code mono">${m.id} · ${fmtDate(m.planned)}</div>
+      <div class="tn-name">${m.name}</div>
+      <span class="pill pill-${pillColor}" style="margin-top:2px;">${m.status}</span>
+      <span class="pill pill-${varColor} tn-var">${varLabel}</span>
+    </div>`;
+  }).join("");
+  $$("[data-milestone]").forEach(el=>el.addEventListener("click",()=>openMilestoneDialog(el.dataset.milestone)));
+}
+
+/* =========================================================
+   RENDER: Escalations
+   ========================================================= */
+const trendMeta = {
+  "New": {icon:"circle", color:"var(--blue)"},
+  "Stable": {icon:"minus", color:"var(--amber)"},
+  "Escalated": {icon:"arrow-up-right", color:"var(--red)"},
+  "Closing": {icon:"arrow-down-right", color:"var(--green)"}
+};
+function renderEscalations(){
+  $("#escalationBody").innerHTML = DATA.escalations.map(e=>{
+    const ageColor = e.age_days>=10 ? "red" : e.age_days>=6 ? "amber" : "green";
+    const impactColor = e.impact==="High" ? "red" : e.impact==="Medium" ? "amber" : "green";
+    const statusColorName = e.status==="Open" ? "red" : e.status==="In Progress" ? "amber" : "green";
+    const statusText = e.status;
+    const decColor = e.daysToDecision<=3 ? "red" : e.daysToDecision<=6 ? "amber" : "green";
+    const tm = trendMeta[e.trend];
+    return `<tr data-testid="escalation-row-${e.id}">
+      <td><div style="font-weight:500;">${e.title}</div><div class="mono" style="font-size:11px;color:var(--eepcc-muted);">${e.id}</div></td>
+      <td><div class="owner-cell"><div class="avatar-fallback">${initials(e.owner)}</div><span>${e.owner}</span></div></td>
+      <td>${e.function}</td>
+      <td style="color:var(--${ageColor});font-weight:500;" class="mono">${e.age_days}d</td>
+      <td style="color:var(--${decColor});font-weight:500;" class="mono">${e.daysToDecision}d</td>
+      <td><span class="pill pill-${impactColor}">${e.impact}</span></td>
+      <td><span class="trend-cell" style="color:${tm.color};">${iconSvg(tm.icon,13)}${e.trend}</span></td>
+      <td><span class="pill pill-${statusColorName}">${statusText}</span></td>
+    </tr>`;
+  }).join("");
+}
+
+/* =========================================================
+   RENDER: Insights page
+   ========================================================= */
+function radialGaugeCard(label, value, target, fmt, statusOk){
+  const color = statusOk ? "var(--green)" : "var(--amber)";
+  return `
+    <div class="card gauge-card" data-testid="gauge-${label.replace(/\\s+/g,'-').toLowerCase()}">
+      <span class="gc-label">${label}</span>
+      <div style="position:relative;">
+        ${smallRadial(value/(target*1.3), 116, color)}
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <span class="gauge-num" style="font-size:26px;">${fmt}</span>
+        </div>
+      </div>
+      <span class="pill pill-${statusOk?'green':'amber'}">${statusOk?'On Target':'Watch'}</span>
+      <div class="gc-target mono">Target: ${target}</div>
+    </div>
+  `;
+}
+function renderInsightsMetrics(){
+  const ins = DATA.insights;
+  const html = [
+    radialGaugeCard("SPI", ins.spi, 1.0, ins.spi.toFixed(2), ins.spi>=1.0),
+    radialGaugeCard("CPI", ins.cpi, 1.0, ins.cpi.toFixed(2), ins.cpi>=1.0),
+    radialGaugeCard("Milestone Achievement", ins.milestone_rate*100, 100, Math.round(ins.milestone_rate*100)+"%", ins.milestone_rate>=0.85),
+    radialGaugeCard("Avg Decision Response", ins.avg_decision_response, 5.0, ins.avg_decision_response+"d", ins.avg_decision_response<=5.0)
+  ].join("");
+  $("#insightsMetricGrid").innerHTML = html;
+}
+function renderAnalytics(){
+  $("#riskTrendChart").innerHTML = lineChart(DATA.insights.risk_exposure_trend,"exposure",300,170,"#B91C1C","month");
+  $("#escAgingChart").innerHTML = barChart(DATA.insights.escalation_aging,"count","bucket",300,170,"#0A192F");
+  $("#decResponseChart").innerHTML = lineChart(DATA.insights.decision_response_days,"avg_days",300,170,"#0A192F","month");
+  $("#resourceChart").innerHTML = hBarChart(DATA.insights.resource_utilization,"utilization","function",420,190,"#0369A1",100);
+}
+
+/* =========================================================
+   Overlays
+   ========================================================= */
+function openMilestoneDialog(id){
+  const m = DATA.milestones.find(x=>x.id===id);
+  $("#msTitle").textContent = `${m.id} · ${m.name}`;
+  $("#msOwner").textContent = m.owner;
+  $("#msPlanned").textContent = fmtDate(m.planned);
+  $("#msForecast").textContent = fmtDate(m.forecast);
+  const varColor = m.variance_days>0 ? "var(--red)" : m.variance_days<0 ? "var(--green)" : "var(--eepcc-text)";
+  $("#msVariance").innerHTML = `<span style="color:${varColor};font-family:var(--font-mono);">${m.variance_days>0?'+':''}${m.variance_days} days</span>`;
+  $("#msComments").textContent = m.comments;
+  $("#milestoneOverlay").hidden = false;
+}
+function openRiskSheet(id){
+  const r = DATA.risks.find(x=>x.id===id);
+  $("#rkId").textContent = r.id;
+  $("#rkTitle").textContent = r.title;
+  $("#rkOwner").textContent = `${r.owner} · ${r.function}`;
+  const statusColorName = r.status==="Open" ? "red" : r.status==="Mitigating" ? "amber" : "green";
+  $("#rkStatus").innerHTML = `<span class="pill pill-${statusColorName}">${r.status}</span>`;
+  $("#rkProb").textContent = `${r.probability} — ${probLabels[r.probability]}`;
+  $("#rkImpact").textContent = `${r.impact} — ${impactLabels[r.impact]}`;
+  $("#rkScore").textContent = r.probability*r.impact;
+  $("#rkDue").textContent = fmtDate(r.due);
+  $("#rkMitigation").textContent = r.mitigation;
+  $("#riskOverlay").hidden = false;
+}
+$("#msClose").innerHTML = iconSvg("x",18);
+$("#rkClose").innerHTML = iconSvg("x",18);
+$("#msClose").addEventListener("click",()=>$("#milestoneOverlay").hidden=true);
+$("#rkClose").addEventListener("click",()=>$("#riskOverlay").hidden=true);
+$("#milestoneOverlay").addEventListener("click",e=>{ if(e.target.id==="milestoneOverlay") e.target.hidden=true; });
+$("#riskOverlay").addEventListener("click",e=>{ if(e.target.id==="riskOverlay") e.target.hidden=true; });
+
+/* =========================================================
+   Nav / tabs
+   ========================================================= */
+$$(".tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    $$(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    const view = tab.dataset.view;
+    $("#view-command").hidden = view!=="command";
+    $("#view-insights").hidden = view!=="insights";
+    $("#eyebrowText").textContent = view==="command" ? "COMMAND CENTER" : "PROGRAM INSIGHTS";
+  });
+});
+
+/* Export + Reset + Regenerate */
+$("#exportBtn").addEventListener("click",()=> toast("Export queued. Steering pack will be delivered."));
+$("#resetFilters").addEventListener("click",()=>{
+  $$(".filter-bar select").forEach(s=>s.selectedIndex=0);
+  $('[data-testid="filter-date-from"]').value = "2025-04-01";
+  $('[data-testid="filter-date-to"]').value = "2026-10-15";
+  toast("Filters reset");
+});
+function regenerate(bodyId, labelId, btnId){
+  const btn = $(btnId);
+  const label = $(labelId);
+  btn.disabled = true;
+  label.textContent = "Regenerating…";
+  setTimeout(()=>{
+    const useB = label.dataset.toggle !== "1";
+    renderBriefing(useB ? DATA.briefingB : DATA.briefingA, bodyId);
+    label.dataset.toggle = useB ? "1" : "0";
+    label.textContent = "Regenerate";
+    btn.disabled = false;
+    toast("Briefing regenerated.");
+  }, 900);
+}
+$("#regenerateBtn").addEventListener("click",()=>regenerate("#briefingBody","#regenLabel","#regenerateBtn"));
+$("#regenerateBtn2").addEventListener("click",()=>regenerate("#briefingBody2","#regenLabel2","#regenerateBtn2"));
+
+/* =========================================================
+   INIT
+   ========================================================= */
+renderMetaChips();
+renderExecContext();
+renderHealthStrip();
+renderConfidence();
+renderSOP();
+renderLatency();
+renderPriorities();
+renderKPIs();
+renderBriefing(DATA.briefingA, "#briefingBody");
+renderBriefing(DATA.briefingA, "#briefingBody2");
+renderHeatmap();
+renderDecisions();
+renderBudget();
+renderTimeline();
+renderEscalations();
+renderInsightsMetrics();
+renderAnalytics();
+
+/* =========================================================
+   Scroll-triggered compact title (shows once the rich header
+   scrolls out from under the sticky nav bar)
+   ========================================================= */
+$("#compactTitleName").textContent = DATA.program.name;
+$("#compactTitleId").textContent = DATA.program.code;
+(function(){
+  const headerRowB = document.querySelector(".header-row-b");
+  const headerRowA = document.querySelector(".header-row-a");
+  const compactTitle = document.getElementById("compactTitle");
+  if(!headerRowB || !headerRowA || !compactTitle) return;
+  const stickyHeight = document.querySelector(".app-header").offsetHeight;
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        compactTitle.classList.remove("visible");
+        headerRowA.classList.remove("compact-active");
+      } else {
+        compactTitle.classList.add("visible");
+        headerRowA.classList.add("compact-active");
+      }
+    });
+  }, {root:null, rootMargin:`-${stickyHeight}px 0px 0px 0px`, threshold:0});
+  observer.observe(headerRowB);
+})();
+</script>
+</body>
+</html>
