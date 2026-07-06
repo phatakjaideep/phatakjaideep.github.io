@@ -72,7 +72,7 @@
   h1,h2,h3{ font-family:var(--display); font-weight:800; color:var(--ink); letter-spacing:-.01em; }
   h2{ font-size:clamp(26px,3.2vw,36px); line-height:1.2; }
   h3{ font-size:19px; line-height:1.35; }
-  p{ color:var(--ink-soft); }
+  p{ color:var(--ink-soft); text-align:justify; text-align-last:left; }
 
   .section{ padding:88px 0; }
   .section-alt{ background:var(--navy-2); }
@@ -234,6 +234,7 @@
   .why-list li{
     display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--line);
   }
+  .why-list li > div{ text-align:justify; text-align-last:left; }
   .why-list li:first-child{ padding-top:0; }
   .why-list .why-dot{ width:6px; height:6px; margin-top:9px; background:var(--amber); flex-shrink:0; }
   .why-list strong{ display:block; color:var(--ink); font-size:14.5px; margin-bottom:3px; }
