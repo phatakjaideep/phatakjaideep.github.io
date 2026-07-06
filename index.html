@@ -202,6 +202,27 @@
   @media (max-width: 880px){ .highlight-grid{ grid-template-columns:repeat(2,1fr); } }
   @media (max-width: 520px){ .highlight-grid{ grid-template-columns:1fr; } }
 
+  /* ---------- Meet the Builder ---------- */
+  .builder-layout{ display:grid; grid-template-columns:.85fr 1.15fr; gap:56px; align-items:center; }
+  .builder-portrait{ display:flex; justify-content:center; }
+  .builder-portrait img{
+    width:100%; max-width:400px; height:auto; border-radius:var(--radius);
+    box-shadow:0 24px 60px -28px rgba(0,0,0,.6);
+  }
+  .builder-copy h2{ margin-bottom:18px; }
+  .builder-copy p{ font-size:16px; margin-bottom:16px; }
+  .builder-copy p:last-of-type{ margin-bottom:30px; }
+  @media (max-width: 880px){
+    .builder-layout{ grid-template-columns:1fr; gap:32px; }
+    .builder-portrait{ order:-1; }
+    .builder-portrait img{ max-width:300px; margin:0 auto; }
+  }
+
+  /* ---------- Scroll reveal (progressive enhancement; safe if JS unavailable) ---------- */
+  .reveal{ transition:opacity .6s ease, transform .6s ease; }
+  .reveal.reveal-init{ opacity:0; transform:translateY(16px); }
+  .reveal.reveal-init.in-view{ opacity:1; transform:translateY(0); }
+
   /* ---------- Why section ---------- */
   .why-layout{ display:grid; grid-template-columns:.9fr 1.1fr; gap:64px; align-items:start; }
   .why-list{ display:flex; flex-direction:column; gap:0; }
@@ -387,8 +408,8 @@
     <div>
       <div class="hero-kicker">Executive Portfolio</div>
       <h1>Jaideep Phatak</h1>
-      <div class="subline">Program &amp; Portfolio Leadership</div>
-      <div class="subline">AI-Enabled Delivery Governance</div>
+      <div class="subline">Executive Program Operating Systems</div>
+      <div class="subline">Governance You Can See.<br>Not Just Describe.</div>
       <p class="hero-intro">
         The command centers on this site demonstrate how I approach executive program governance—the
         reporting structures, decision support, and operating cadence that keep complex cross-functional
@@ -459,6 +480,38 @@
         <rect x="56" y="352" width="368" height="12" rx="2" fill="#16233A"/>
         <rect x="56" y="352" width="230" height="12" rx="2" fill="#D4891A" opacity=".85"/>
       </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MEET THE BUILDER ================= -->
+<section class="section" id="meet-the-builder">
+  <div class="wrap builder-layout">
+    <div class="builder-portrait reveal">
+      <img src="./assets/jaideep-executive-caricature.png"
+           alt="Illustrated executive caricature of Jaideep Phatak surrounded by symbols of his program leadership career — a portfolio dashboard, program roadmap, PMP badge, and landmarks representing his work across the USA, UAE and India.">
+    </div>
+    <div class="builder-copy reveal">
+      <div class="eyebrow">Meet the Builder</div>
+      <h2>Why These Command Centers Exist</h2>
+      <p>
+        The command centers on this site are not reproductions of proprietary company dashboards. They
+        are original executive operating systems designed to demonstrate how governance can become
+        visual, measurable, and decision-driven.
+      </p>
+      <p>
+        Every dashboard, workflow, AI assistant, and reporting framework was built from first principles
+        based on experience leading global engineering programs across automotive, engineering, and
+        product development organizations.
+      </p>
+      <p>
+        These demonstrations are intended to show not only what I have delivered—but how I think, how I
+        structure execution, and how I help leadership make better decisions.
+      </p>
+      <a href="#command-centers" class="btn btn-primary">
+        Explore Command Centers
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -830,6 +883,27 @@
         navToggle.setAttribute('aria-expanded', 'false');
       });
     });
+  })();
+</script>
+
+<!-- Progressive-enhancement scroll reveal for the "Meet the Builder" section only.
+     Kept separate from the main script so existing functionality is untouched. -->
+<script>
+  (function(){
+    "use strict";
+    if(!('IntersectionObserver' in window)) return;
+    var revealEls = document.querySelectorAll('.reveal');
+    if(!revealEls.length) return;
+    revealEls.forEach(function(el){ el.classList.add('reveal-init'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15 });
+    revealEls.forEach(function(el){ io.observe(el); });
   })();
 </script>
 
