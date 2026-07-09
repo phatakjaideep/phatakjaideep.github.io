@@ -420,6 +420,73 @@
 
   ::selection{ background:var(--amber-soft); color:var(--ink); }
   :focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+
+  /* ---------- AI Governance Toolkit (roadmap / placeholder section) ---------- */
+  .toolkit-head{ max-width:720px; margin-bottom:48px; }
+  .toolkit-head p{ font-size:16px; }
+
+  .toolkit-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:22px; align-items:stretch;
+  }
+  .toolkit-category-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px 26px; display:flex; flex-direction:column; gap:14px;
+    transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  .toolkit-category-card:hover{
+    border-color:var(--line-strong);
+    box-shadow:0 18px 40px -24px rgba(0,0,0,.55);
+  }
+  .toolkit-cat-icon{
+    width:44px; height:44px; border:1px solid var(--line-strong); border-radius:var(--radius);
+    display:flex; align-items:center; justify-content:center; color:var(--amber);
+    background:var(--amber-soft); flex-shrink:0;
+  }
+  .toolkit-cat-icon svg{ width:22px; height:22px; }
+  .toolkit-category-card h3{ margin-top:2px; }
+  .toolkit-cat-positioning{
+    font-size:13.5px; font-style:italic; color:var(--ink-soft); text-align:justify; text-align-last:left;
+    padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:2px;
+  }
+  .toolkit-tools{ display:flex; flex-direction:column; }
+  .toolkit-tool-row{
+    display:flex; gap:12px; padding:16px 0; border-top:1px solid var(--line);
+  }
+  .toolkit-tool-row:first-child{ border-top:none; padding-top:0; }
+  .toolkit-tool-icon{
+    width:30px; height:30px; flex-shrink:0; margin-top:1px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); border-radius:6px; background:var(--navy-2); color:var(--amber-bright);
+  }
+  .toolkit-tool-icon svg{ width:15px; height:15px; }
+  .toolkit-tool-body{ flex:1; min-width:0; }
+  .toolkit-tool-name{
+    font-family:var(--display); font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:4px;
+  }
+  .toolkit-tool-desc{
+    font-size:12.5px; line-height:1.55; color:var(--ink-faint); text-align:justify; text-align-last:left; margin-bottom:10px;
+  }
+  .coming-soon-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--label); font-size:10px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--ink-faint); border:1px solid var(--line-strong); background:var(--navy-2);
+    padding:4px 10px; border-radius:100px; cursor:default; user-select:none;
+  }
+  .coming-soon-badge::before{
+    content:""; width:5px; height:5px; border-radius:50%; background:var(--amber); flex-shrink:0;
+  }
+  .toolkit-footnote{
+    margin-top:40px; padding-top:28px; border-top:1px solid var(--line);
+    font-size:13.5px; font-style:italic; color:var(--ink-faint); text-align:center;
+  }
+
+  @media (max-width: 980px){
+    .toolkit-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width: 600px){
+    .toolkit-grid{ grid-template-columns:1fr; gap:20px; }
+    .toolkit-category-card{ padding:26px 22px; }
+  }
 </style>
 </head>
 <body>
@@ -808,6 +875,214 @@
       </article>
 
     </div>
+  </div>
+</section>
+
+<!-- ================= AI GOVERNANCE TOOLKIT (ROADMAP) ================= -->
+<section class="section ai-toolkit-section" id="ai-governance-toolkit" aria-labelledby="ai-toolkit-heading">
+  <div class="wrap">
+    <div class="section-head toolkit-head">
+      <div class="eyebrow">Platform Roadmap</div>
+      <h2 id="ai-toolkit-heading">AI Governance Toolkit</h2>
+      <p>
+        Practical AI tools designed for executives, program managers, and PMOs to reduce reporting
+        effort, improve decision quality, and accelerate program governance. These focused AI
+        assistants transform meeting notes, project data, and governance information into
+        executive-ready insights in minutes.
+      </p>
+    </div>
+
+    <div class="toolkit-grid">
+
+      <!-- Category 1: Executive Decision Making -->
+      <article class="toolkit-category-card">
+        <div class="toolkit-cat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M14.6 9.4l-2.1 5.2-5.2 2.1 2.1-5.2 5.2-2.1z"/>
+          </svg>
+        </div>
+        <h3>Executive Decision Making</h3>
+        <p class="toolkit-cat-positioning">For leaders who need better decisions, not more data.</p>
+
+        <div class="toolkit-tools">
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 2v6h6"/><path d="M8 13h8M8 17h8M8 9h3"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Executive Brief Generator</div>
+              <p class="toolkit-tool-desc">Create concise executive-ready summaries from project updates, meeting notes, or status reports.</p>
+              <span class="coming-soon-badge" aria-label="Executive Brief Generator status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Risk Prioritizer</div>
+              <p class="toolkit-tool-desc">Identify which risks deserve executive attention first based on impact, urgency, and dependencies.</p>
+              <span class="coming-soon-badge" aria-label="Risk Prioritizer status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Decision Latency Calculator</div>
+              <p class="toolkit-tool-desc">Measure approval delays and decision cycle times that slow program execution.</p>
+              <span class="coming-soon-badge" aria-label="Decision Latency Calculator status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Category 2: Program Governance -->
+      <article class="toolkit-category-card">
+        <div class="toolkit-cat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 10l9-6 9 6"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9"/><path d="M3 21h18"/>
+          </svg>
+        </div>
+        <h3>Program Governance</h3>
+        <p class="toolkit-cat-positioning">Strengthen governance without adding bureaucracy.</p>
+
+        <div class="toolkit-tools">
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="6" y="4" width="12" height="17" rx="2"/>
+                <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">RAID Analyzer</div>
+              <p class="toolkit-tool-desc">Extract risks, assumptions, issues, and dependencies from project information.</p>
+              <span class="coming-soon-badge" aria-label="RAID Analyzer status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M3 12h4l2-7 4 14 2-7h6"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Program Health Score</div>
+              <p class="toolkit-tool-desc">Assess delivery, financial, stakeholder, and execution health in one governance view.</p>
+              <span class="coming-soon-badge" aria-label="Program Health Score status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="9"/><path d="M8 12l2.5 2.5L16 9"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Stage Gate Checker</div>
+              <p class="toolkit-tool-desc">Validate readiness before major gate reviews, steering committees, or approval milestones.</p>
+              <span class="coming-soon-badge" aria-label="Stage Gate Checker status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Category 3: Communication -->
+      <article class="toolkit-category-card">
+        <div class="toolkit-cat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 5h16v11H8l-4 4V5z"/>
+          </svg>
+        </div>
+        <h3>Communication</h3>
+        <p class="toolkit-cat-positioning">Improve stakeholder communication with less manual effort.</p>
+
+        <div class="toolkit-tools">
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="9" cy="8" r="3"/>
+                <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+                <circle cx="17" cy="9" r="2.4"/>
+                <path d="M15.5 14.2c2.4.4 4.5 2.5 4.5 5.8"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Stakeholder Update Generator</div>
+              <p class="toolkit-tool-desc">Generate tailored updates for executives, sponsors, customers, and delivery teams.</p>
+              <span class="coming-soon-badge" aria-label="Stakeholder Update Generator status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Status Report Writer</div>
+              <p class="toolkit-tool-desc">Turn project updates into polished weekly or monthly executive status reports.</p>
+              <span class="coming-soon-badge" aria-label="Status Report Writer status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Category 4: Intelligence -->
+      <article class="toolkit-category-card">
+        <div class="toolkit-cat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 3a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.8A3 3 0 0 0 7 18h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/>
+            <path d="M15 3a3 3 0 0 1 3 3v1a3 3 0 0 1 1 5.8A3 3 0 0 1 17 18h-2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
+          </svg>
+        </div>
+        <h3>Intelligence</h3>
+        <p class="toolkit-cat-positioning">Transform project information into actionable insight.</p>
+
+        <div class="toolkit-tools">
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Meeting Analyzer</div>
+              <p class="toolkit-tool-desc">Extract decisions, actions, owners, risks, and follow-ups from meeting transcripts or minutes.</p>
+              <span class="coming-soon-badge" aria-label="Meeting Analyzer status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+          <div class="toolkit-tool-row">
+            <div class="toolkit-tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="4" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="16" y="3" width="4" height="17"/>
+              </svg>
+            </div>
+            <div class="toolkit-tool-body">
+              <div class="toolkit-tool-name">Dashboard Generator</div>
+              <p class="toolkit-tool-desc">Convert project data into leadership-ready dashboards with key metrics and visual summaries.</p>
+              <span class="coming-soon-badge" aria-label="Dashboard Generator status: Coming soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <p class="toolkit-footnote">More AI governance tools are currently in development. New toolkits will be added as the platform evolves.</p>
   </div>
 </section>
 
