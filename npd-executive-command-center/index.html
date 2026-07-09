@@ -36,13 +36,9 @@
     --shadow:       0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
     --shadow-sm:    0 1px 3px rgba(0,0,0,0.07);
     --shadow-md:    0 4px 24px rgba(0,0,0,0.10);
-    --font-display: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    --font-label: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono: "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--bg); color: var(--text-primary); font-size: 13.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text-primary); font-size: 13.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   a { color: var(--accent2); text-decoration: none; }
 
   /* ── LAYOUT ──────────────────────────────────────────────────── */
@@ -63,7 +59,6 @@
   #sidebar-header {
     padding: 18px 16px 14px;
     border-bottom: 1px solid rgba(255,255,255,0.09);
-    border-top: 3px solid #D4891A;
   }
   #sidebar-header .logo {
     font-size: 13.5px;
@@ -114,14 +109,11 @@
   }
   .nav-item .icon {
     width: 17px;
-    height: 17px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    font-size: 12px;
     flex-shrink: 0;
     opacity: 0.8;
   }
-  .nav-item .icon svg { width: 15px; height: 15px; stroke-width: 1.75; }
   .nav-item.active .icon { opacity: 1; }
   .nav-badge {
     margin-left: auto;
@@ -137,7 +129,7 @@
   }
   #sidebar-footer {
     padding: 14px 16px;
-    border-top: 2px solid rgba(212,137,26,.4);
+    border-top: 1px solid rgba(255,255,255,0.09);
     flex-shrink: 0;
   }
   .footer-name { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.75); margin-bottom: 2px; }
@@ -308,7 +300,7 @@
   }
   .tbl tr:last-child td { border-bottom: none; }
   .tbl tr:hover td { background: #F7F9FC; }
-  .tbl .mono { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent2); }
+  .tbl .mono { font-family: 'Consolas', 'SF Mono', monospace; font-size: 11.5px; color: var(--accent2); }
 
   /* ── SCORE CIRCLES ───────────────────────────────────────────── */
   .score-circle {
@@ -496,8 +488,7 @@
   .modal { background: var(--surface); border-radius: 10px; width: 520px; max-width: 95vw; max-height: 88vh; overflow-y: auto; box-shadow: 0 12px 48px rgba(0,0,0,0.22); }
   .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .modal-title { font-size: 15px; font-weight: 700; }
-  .modal-close { cursor: pointer; font-size: 18px; color: var(--text-muted); border: none; background: none; padding: 0 2px; display: inline-flex; align-items: center; }
-  .modal-close svg { width: 16px; height: 16px; }
+  .modal-close { cursor: pointer; font-size: 18px; color: var(--text-muted); border: none; background: none; padding: 0 2px; }
   .modal-body { padding: 20px; }
   .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
   .btn { padding: 7px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid; transition: opacity 0.15s; }
@@ -550,8 +541,7 @@
   .side-panel.open { right: 0; }
   .sp-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--accent); color: #fff; flex-shrink: 0; }
   .sp-title  { font-size: 13.5px; font-weight: 700; }
-  .sp-close  { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 18px; cursor: pointer; padding: 0 4px; display: inline-flex; align-items: center; }
-  .sp-close svg { width: 16px; height: 16px; }
+  .sp-close  { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 18px; cursor: pointer; padding: 0 4px; }
   .sp-body   { flex: 1; overflow-y: auto; padding: 16px; }
   .sp-section{ margin-bottom: 16px; }
   .sp-label  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 6px; }
@@ -696,19 +686,6 @@
     .row2, .row3 { grid-template-columns: 1fr; }
     .ldr-body { grid-template-columns: 1fr; }
   }
-
-  /* ---------- Brand Style Guide v1.1 — shared display voice (Section 14.3) ---------- */
-  #sidebar-header .logo, .footer-name, #topbar .page-title, .card-title,
-  .section-title, .modal-title{
-    font-family:var(--font-display);
-  }
-
-  /* ---------- Brand Style Guide v1.1 — unified label voice (Section 14.3) ---------- */
-  .nav-label, .kpi-label, .tbl th, .ai-insight .ai-tag, .cs-label, .sp-label,
-  .sc-summary-title, .ac-col-header, .ldr-impact-label, .grp-section-title,
-  .grp-rec-title, .story-num, .story-q{
-    font-family:var(--font-label); font-weight:600; letter-spacing:.12em;
-  }
 </style>
 </head>
 <body>
@@ -728,41 +705,41 @@
     </div>
     <div class="nav-group">
       <div class="nav-label">Overview</div>
-      <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> Executive Dashboard</div>
-      <div class="nav-item" onclick="showPage('portfolio')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span> Program Portfolio</div>
+      <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">▦</span> Executive Dashboard</div>
+      <div class="nav-item" onclick="showPage('portfolio')"><span class="icon">◈</span> Program Portfolio</div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Program Management</div>
-      <div class="nav-item" onclick="showPage('stage-gate')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 9-8 9-8-9z"/></svg></span> Stage-Gate Tracker</div>
-      <div class="nav-item" onclick="showPage('apqp')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l2.5 2.5L16 9"/></svg></span> APQP / PPAP Readiness</div>
-      <div class="nav-item" onclick="showPage('gate-review')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.3 5.7 20.8l1.7-6.9L2 9.2l7.1-.6z"/></svg></span> Gate Review Intelligence <span class="nav-badge">3</span></div>
+      <div class="nav-item" onclick="showPage('stage-gate')"><span class="icon">◇</span> Stage-Gate Tracker</div>
+      <div class="nav-item" onclick="showPage('apqp')"><span class="icon">☑</span> APQP / PPAP Readiness</div>
+      <div class="nav-item" onclick="showPage('gate-review')"><span class="icon">★</span> Gate Review Intelligence <span class="nav-badge">3</span></div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Governance</div>
-      <div class="nav-item" onclick="showPage('action-center')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span> My Action Center <span class="nav-badge">12</span></div>
-      <div class="nav-item" onclick="showPage('decisions')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></span> Leadership Decisions <span class="nav-badge">6</span></div>
-      <div class="nav-item" onclick="showPage('steering')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Steering Committee</div>
+      <div class="nav-item" onclick="showPage('action-center')"><span class="icon">✅</span> My Action Center <span class="nav-badge">12</span></div>
+      <div class="nav-item" onclick="showPage('decisions')"><span class="icon">⚡</span> Leadership Decisions <span class="nav-badge">6</span></div>
+      <div class="nav-item" onclick="showPage('steering')"><span class="icon">🎯</span> Steering Committee</div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Engineering</div>
-      <div class="nav-item" onclick="showPage('plm')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span> Product Lifecycle (PLM)</div>
-      <div class="nav-item" onclick="showPage('ecm')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span> Eng. Change Mgmt <span class="nav-badge">8</span></div>
-      <div class="nav-item" onclick="showPage('design-freeze')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span> Design Freeze</div>
+      <div class="nav-item" onclick="showPage('plm')"><span class="icon">⚙</span> Product Lifecycle (PLM)</div>
+      <div class="nav-item" onclick="showPage('ecm')"><span class="icon">✏</span> Eng. Change Mgmt <span class="nav-badge">8</span></div>
+      <div class="nav-item" onclick="showPage('design-freeze')"><span class="icon">❄</span> Design Freeze</div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Quality & Ops</div>
-      <div class="nav-item" onclick="showPage('audit')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></span> Audit Readiness</div>
-      <div class="nav-item" onclick="showPage('escalations')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></span> OEM Escalations <span class="nav-badge">3</span></div>
-      <div class="nav-item" onclick="showPage('bottlenecks')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></span> Workflow Bottlenecks</div>
+      <div class="nav-item" onclick="showPage('audit')"><span class="icon">📋</span> Audit Readiness</div>
+      <div class="nav-item" onclick="showPage('escalations')"><span class="icon">🚨</span> OEM Escalations <span class="nav-badge">3</span></div>
+      <div class="nav-item" onclick="showPage('bottlenecks')"><span class="icon">📊</span> Workflow Bottlenecks</div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Risk & Finance</div>
-      <div class="nav-item" onclick="showPage('risk')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 9v5"/><circle cx="12" cy="17" r=".5"/></svg></span> Risk Heatmap</div>
+      <div class="nav-item" onclick="showPage('risk')"><span class="icon">⚠</span> Risk Heatmap</div>
       <div class="nav-item" onclick="showPage('budget')"><span class="icon">₹</span> Budget & Resources</div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Stakeholders</div>
-      <div class="nav-item" onclick="showPage('customer')"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span> Customer / OEM View</div>
+      <div class="nav-item" onclick="showPage('customer')"><span class="icon">◯</span> Customer / OEM View</div>
     </div>
   </nav>
   <div id="sidebar-footer">
@@ -1028,7 +1005,7 @@
 <div class="side-panel" id="ecr-panel">
   <div class="sp-header">
     <span class="sp-title" id="sp-ecr-title">ECR Detail</span>
-    <button class="sp-close" onclick="closeECRPanel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <button class="sp-close" onclick="closeECRPanel()">✕</button>
   </div>
   <div class="sp-body" id="sp-ecr-body"></div>
 </div>
@@ -1040,7 +1017,7 @@
       <span class="modal-title" id="grp-title">Gate Review Package</span>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="grp-print-btn" onclick="window.print()">🖨 Print / Export PDF</button>
-        <button class="modal-close" onclick="closeModal('gatePackage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        <button class="modal-close" onclick="closeModal('gatePackage')">✕</button>
       </div>
     </div>
     <div class="modal-body" id="grp-body" style="overflow-y:auto;max-height:76vh"></div>
@@ -1051,7 +1028,7 @@
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">Add New Risk</span>
-      <button class="modal-close" onclick="closeModal('newRisk')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="modal-close" onclick="closeModal('newRisk')">✕</button>
     </div>
     <div class="modal-body">
       <label>Program</label>
@@ -1084,7 +1061,7 @@
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">Schedule Gate Review</span>
-      <button class="modal-close" onclick="closeModal('gateReview')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="modal-close" onclick="closeModal('gateReview')">✕</button>
     </div>
     <div class="modal-body">
       <label>Program</label>
@@ -1114,7 +1091,7 @@
   <div class="modal" style="width:680px">
     <div class="modal-header">
       <span class="modal-title" id="detail-title">Program Detail</span>
-      <button class="modal-close" onclick="closeModal('programDetail')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="modal-close" onclick="closeModal('programDetail')">✕</button>
     </div>
     <div class="modal-body" id="detail-body"></div>
     <div class="modal-footer">
@@ -3553,6 +3530,477 @@ function renderAIInsights() {
     </div>`).join('');
 }
 renderAIInsights();
+</script>
+
+<style>
+/* ================= Executive Decision Assistant ================= */
+#eda-fab{
+  position:fixed; bottom:24px; right:24px; z-index:99990;
+  display:flex; align-items:center; gap:8px;
+  background:#1A3A5C; color:#fff; border:none; cursor:pointer;
+  padding:13px 20px 13px 16px; border-radius:999px;
+  font-family:'IBM Plex Sans','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13.5px; font-weight:600; letter-spacing:.01em;
+  box-shadow:0 10px 28px -6px rgba(0,0,0,.4);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+#eda-fab:hover{ transform:translateY(-2px); box-shadow:0 14px 32px -6px rgba(0,0,0,.48); background:#254D77; }
+#eda-fab svg{ width:17px; height:17px; color:#A15C07; flex-shrink:0; }
+#eda-fab .eda-fab-full{ display:inline; }
+#eda-fab .eda-fab-short{ display:none; }
+
+#eda-overlay{
+  position:fixed; inset:0; background:rgba(8,12,20,.38); z-index:99991;
+  opacity:0; pointer-events:none; transition:opacity .22s ease;
+}
+#eda-overlay.eda-open{ opacity:1; pointer-events:auto; }
+
+#eda-panel{
+  position:fixed; top:0; right:-440px; width:412px; max-width:92vw; height:100%;
+  background:#FFFFFF; z-index:99992;
+  box-shadow:-14px 0 40px -10px rgba(0,0,0,.35);
+  display:flex; flex-direction:column;
+  transition:right .28s cubic-bezier(.4,0,.2,1);
+  font-family:'IBM Plex Sans','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:#0D1B2A;
+}
+#eda-panel.eda-open{ right:0; }
+
+.eda-head{
+  background:#1A3A5C; color:#fff; padding:20px 22px 18px; flex-shrink:0;
+  border-bottom:3px solid #A15C07;
+}
+.eda-head-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.eda-head-title{ display:flex; align-items:center; gap:9px; }
+.eda-head-title svg{ width:19px; height:19px; color:#A15C07; flex-shrink:0; }
+.eda-head-title h2{ font-size:15.5px; font-weight:700; margin:0; letter-spacing:.01em; }
+.eda-head-sub{ font-size:12px; color:rgba(255,255,255,.68); margin-top:6px; padding-left:28px; }
+.eda-close{
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#fff;
+  width:28px; height:28px; border-radius:7px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-close:hover{ background:rgba(255,255,255,.18); }
+.eda-close svg{ width:14px; height:14px; }
+
+.eda-body{ flex:1; overflow-y:auto; padding:18px 20px 12px; background:#F4F6F9; }
+.eda-chips-label{
+  font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#7A8FA6; margin:2px 0 10px;
+}
+.eda-chips{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.eda-chip{
+  text-align:left; background:#FFFFFF; border:1px solid #E4E8EE; color:#0D1B2A;
+  padding:10px 13px; border-radius:9px; font-size:13px; font-family:'IBM Plex Sans','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+  line-height:1.4;
+}
+.eda-chip:hover{ border-color:#A15C07; background:#FFF8EC; }
+.eda-chip-fixed{
+  background:#FFF8EC; border-color:rgba(0,0,0,.06); font-weight:600;
+}
+.eda-chips + .eda-chips-label{ margin-top:2px; }
+
+.eda-info p{ color:#0D1B2A; line-height:1.55; margin-bottom:10px; }
+.eda-info p:last-child{ margin-bottom:0; }
+.eda-info ul{ margin:0 0 10px; padding-left:16px; color:#3D5066; }
+.eda-info li{ margin-bottom:4px; line-height:1.45; }
+
+.eda-msg{ margin-bottom:16px; }
+.eda-msg-user{
+  background:#1A3A5C; color:#fff; padding:10px 14px; border-radius:10px 10px 3px 10px;
+  font-size:13.5px; max-width:88%; margin-left:auto; line-height:1.45;
+}
+.eda-msg-user-wrap{ display:flex; margin-bottom:14px; }
+.eda-msg-user-wrap{ justify-content:flex-end; }
+
+.eda-answer{
+  background:#FFFFFF; border:1px solid #E4E8EE; border-radius:10px;
+  padding:15px 16px 13px; font-size:13px;
+}
+.eda-answer.eda-oos{ border-left:3px solid #7A8FA6; }
+.eda-block{ margin-bottom:11px; }
+.eda-block:last-of-type{ margin-bottom:0; }
+.eda-label{
+  display:block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#A15C07; margin-bottom:5px;
+}
+.eda-answer p{ margin:0; color:#0D1B2A; line-height:1.5; }
+.eda-answer ul{ margin:0; padding-left:16px; color:#3D5066; }
+.eda-answer li{ margin-bottom:4px; line-height:1.45; }
+.eda-conf{
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+  font-size:11px; font-weight:700; letter-spacing:.03em; padding:4px 10px; border-radius:100px;
+}
+.eda-conf-high{ background:#DCFCE7; color:#15803D; }
+.eda-conf-medium{ background:#FEF3C7; color:#B45309; }
+.eda-conf-low{ background:#FEE2E2; color:#B91C1C; }
+.eda-oos p{ color:#3D5066; }
+
+.eda-foot{
+  border-top:1px solid #E4E8EE; padding:12px 16px; background:#FFFFFF; flex-shrink:0;
+}
+.eda-foot-row{ display:flex; gap:8px; }
+.eda-input{
+  flex:1; border:1px solid #E4E8EE; border-radius:8px; padding:10px 12px; font-size:13px;
+  font-family:'IBM Plex Sans','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:#0D1B2A; background:#F4F6F9;
+}
+.eda-input:focus{ outline:none; border-color:#A15C07; }
+.eda-send{
+  background:#1A3A5C; color:#fff; border:none; border-radius:8px; width:40px; flex-shrink:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-send:hover{ background:#254D77; }
+.eda-send svg{ width:16px; height:16px; }
+.eda-reset{
+  background:none; border:none; color:#7A8FA6; font-size:11px; cursor:pointer;
+  margin-top:8px; text-decoration:underline; padding:0;
+}
+.eda-reset:hover{ color:#0D1B2A; }
+
+@media (max-width:640px){
+  #eda-panel{ width:100%; max-width:100%; right:-100%; }
+  #eda-fab{ bottom:16px; right:16px; padding:13px 16px; }
+  #eda-fab .eda-fab-full{ display:none; }
+  #eda-fab .eda-fab-short{ display:inline; }
+}
+</style>
+
+<script>
+/* ================= Executive Decision Assistant ================= */
+(function(){
+  const ASSISTANT = {
+  "assistantName": "Executive Decision Assistant",
+  "scope": "This assistant only answers questions using data available in this Command Center.",
+  "pageType": "NPD Executive Command Center",
+  "fixedQuestions": [
+    "\u2b50 Give me a tour of this Command Center",
+    "\ud83d\udccb What is included in this dashboard?"
+  ],
+  "suggestedQuestions": [
+    "Summarize launch readiness",
+    "Can this product move to the next Gate?",
+    "What launch risks remain?",
+    "What is delaying SOP readiness?",
+    "Which customer or manufacturing issue needs attention?",
+    "What should leadership resolve before approval?"
+  ],
+  "qa": [
+    {
+      "question": "\u2b50 Give me a tour of this Command Center",
+      "type": "info",
+      "match": [
+        "tour",
+        "walkthrough",
+        "guide me",
+        "show me around"
+      ],
+      "intro": "Welcome to the NPD Executive Command Center. This Command Center has been designed to help launch leadership track stage-gate progress, assess launch readiness, manage OEM relationships, and decide whether a program is ready to advance to its next Gate.",
+      "bullets": [
+        "Executive Dashboard",
+        "Program Portfolio",
+        "Stage-Gate Tracker",
+        "APQP / PPAP Readiness",
+        "Gate Review Intelligence",
+        "Leadership Decisions",
+        "Risk Heatmap",
+        "OEM Escalations",
+        "Budget & Resources"
+      ],
+      "closing": "If you'd like to dive deeper, ask about any individual section or select one of the suggested questions."
+    },
+    {
+      "question": "\ud83d\udccb What is included in this dashboard?",
+      "type": "info",
+      "match": [
+        "what is included",
+        "included in this dashboard",
+        "what does this dashboard",
+        "dashboard include"
+      ],
+      "intro": "This Command Center brings together the following sections:",
+      "bullets": [
+        "<strong>Executive Dashboard</strong> &mdash; portfolio-wide launch readiness at a glance",
+        "<strong>Program Portfolio</strong> &mdash; all 8 programs with gate status, OEM, and SOP dates",
+        "<strong>Stage-Gate Tracker</strong> &mdash; gate progression from RFQ through SOP",
+        "<strong>APQP / PPAP Readiness</strong> &mdash; APQP score, PPAP status, and DFMEA status by program",
+        "<strong>Gate Review Intelligence</strong> &mdash; readiness scoring ahead of each Gate Review",
+        "<strong>Leadership Decisions</strong> &mdash; decisions awaiting executive sign-off",
+        "<strong>Steering Committee</strong> &mdash; steering-ready reporting view",
+        "<strong>Risk Heatmap</strong> &mdash; probability-by-impact view of open program risks",
+        "<strong>OEM Escalations</strong> &mdash; open customer escalations by severity and age",
+        "<strong>Budget &amp; Resources</strong> &mdash; budget, spend, and manufacturing/supplier readiness",
+        "<strong>Customer / OEM View</strong> &mdash; per-customer program status and satisfaction"
+      ],
+      "closing": "Select a section on the dashboard or ask a suggested question to explore further."
+    },
+    {
+      "question": "Summarize launch readiness",
+      "match": [
+        "summarize",
+        "launch readiness",
+        "readiness",
+        "overall"
+      ],
+      "summary": "Portfolio launch readiness is mixed across 8 programs &mdash; manufacturing readiness averages 68% and is the most common gate blocker, with two programs currently Blocked or requiring Rework.",
+      "evidence": [
+        "Gate status across the portfolio: 3 Approved, 2 Conditionally Approved, 2 Rework Required, 1 Blocked",
+        "Manufacturing readiness averages 68% and is the #1 portfolio-level constraint",
+        "PPAP documentation incomplete for EV Chassis (PGM-001) and Aluminum Forging (PGM-008), both with SOP dates in September 2026",
+        "Budget variance remains within +10% tolerance across the portfolio &mdash; no financial escalation required"
+      ],
+      "recommendation": "Focus recovery effort on PGM-005 (Blocked) and the two Rework Required programs ahead of their SOP dates.",
+      "confidence": "High"
+    },
+    {
+      "question": "Can this product move to the next Gate?",
+      "match": [
+        "next gate",
+        "move to the next gate",
+        "gate review",
+        "can this product"
+      ],
+      "summary": "Three Gate Reviews are scheduled within the next 14 days; Forged Crankshaft Localization is closest to approval but has one open item.",
+      "evidence": [
+        "Forged Crankshaft Localization (PGM-002): Conditionally Approved &mdash; dimensional sign-off from Tata Motors still outstanding",
+        "EV Chassis Component (PGM-001): Rework Required &mdash; PFMEA not finalized, Gate 5 hold recommended",
+        "Aluminum Forging (PGM-008): Rework Required &mdash; press capacity constraint unresolved"
+      ],
+      "recommendation": "Hold Gate 5 for EV Chassis until PFMEA is closed; clear the Tata Motors dimensional sign-off to close PGM-002.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "What launch risks remain?",
+      "match": [
+        "launch risk",
+        "risks remain",
+        "risk",
+        "risks"
+      ],
+      "summary": "Open risk is concentrated in engineering, supplier, and compliance categories on the portfolio's three highest-risk programs.",
+      "evidence": [
+        "PGM-005 Aerospace Forged Bracket: 9 open risks, including an escalated AS9100 compliance gap",
+        "PGM-008 Aluminum Forging: 8 open risks, including an escalated press-capacity constraint",
+        "PGM-001 EV Chassis: 7 open risks, including an escalated battery bracket tolerance mismatch",
+        "Manufacturing readiness remains the #1 portfolio-level constraint at 68% average"
+      ],
+      "recommendation": "Escalate the 3 flagged risks on PGM-005 to the program director &mdash; SOP is 8 months out but compliance gaps remain unresolved.",
+      "confidence": "High"
+    },
+    {
+      "question": "What is delaying SOP readiness?",
+      "match": [
+        "delaying sop",
+        "sop readiness",
+        "delaying",
+        "delay"
+      ],
+      "summary": "SOP readiness is delayed primarily by manufacturing and supplier readiness gaps, not by budget.",
+      "evidence": [
+        "Manufacturing readiness is the most common gate blocker, averaging 68% across the portfolio",
+        "PGM-005: manufacturing readiness only 32%, supplier readiness 40%",
+        "PGM-008: press capacity constrained; supplier readiness 55%",
+        "Budget variance remains within +10% tolerance &mdash; not a driver of delay"
+      ],
+      "recommendation": "Direct plant and supply chain leadership to close the manufacturing/supplier readiness gap on PGM-005 and PGM-008 first &mdash; the highest-leverage action to protect SOP.",
+      "confidence": "High"
+    },
+    {
+      "question": "Which customer or manufacturing issue needs attention?",
+      "match": [
+        "customer",
+        "manufacturing issue",
+        "needs attention",
+        "oem"
+      ],
+      "summary": "Ashok Leyland's Commercial Vehicle Axle program has the most urgent customer-facing issue &mdash; supplier readiness sits below the customer's threshold.",
+      "evidence": [
+        "ESC-004: Supplier readiness at 62%, below Ashok Leyland's threshold; flagged by customer SQE, High severity, 15 days open",
+        "Customer satisfaction status: Concern; next review scheduled 2026-07-02",
+        "Manufacturing readiness for PGM-004 (CV Axle) is 55%, among the lowest in the portfolio"
+      ],
+      "recommendation": "Convene the supplier readiness review before the next Ashok Leyland customer review to prevent a satisfaction downgrade.",
+      "confidence": "High"
+    },
+    {
+      "question": "What should leadership resolve before approval?",
+      "match": [
+        "resolve",
+        "before approval",
+        "leadership resolve"
+      ],
+      "summary": "Leadership should resolve the EV Chassis PFMEA gap and the Aluminum Forging press-capacity constraint before their next gate reviews.",
+      "evidence": [
+        "PGM-001 EV Chassis: Gate 5 hold recommended until PFMEA is closed",
+        "PGM-008 Aluminum Forging: recovery plan needed with an 8-week SOP buffer",
+        "PGM-004 Commercial Vehicle Axle: escalate supplier readiness to VP Supply Chain",
+        "3 Gate Reviews fall within the next 14 days across the portfolio"
+      ],
+      "recommendation": "Sequence executive attention as: EV Chassis PFMEA closure, then Aluminum Forging recovery plan, then CV Axle supplier escalation.",
+      "confidence": "High"
+    }
+  ],
+  "fallback": "I can only answer using the data available in this Command Center. This question is outside the current dashboard context."
+};
+
+  function edaNormalize(s){ return (s||"").toLowerCase().replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim(); }
+
+  
+
+  function edaFindAnswer(question){
+    const q = edaNormalize(question);
+    if(!q) return null;
+    for(const qa of ASSISTANT.qa){
+      if(edaNormalize(qa.question) === q) return qa;
+    }
+    let best=null, bestScore=0;
+    ASSISTANT.qa.forEach(function(qa){
+      let score=0;
+      qa.match.forEach(function(k){ if(q.indexOf(k)!==-1) score++; });
+      if(score>bestScore){ bestScore=score; best=qa; }
+    });
+    return bestScore>0 ? best : null;
+  }
+
+  function edaEsc(s){
+    const d=document.createElement('div'); d.textContent=s; return d.innerHTML;
+  }
+
+  function edaRenderAnswer(qa){
+    if(!qa){
+      return '<div class="eda-answer eda-oos"><div class="eda-block"><span class="eda-label">Out of Scope</span>'+
+        '<p>'+edaEsc(ASSISTANT.fallback)+'</p></div></div>';
+    }
+    if(qa.type === 'info'){
+      const bullets = qa.bullets.map(function(b){ return '<li>'+b+'</li>'; }).join('');
+      return '<div class="eda-answer eda-info">'+
+        '<p>'+qa.intro+'</p>'+
+        '<ul>'+bullets+'</ul>'+
+        '<p>'+qa.closing+'</p>'+
+        '</div>';
+    }
+    const evidence = qa.evidence.map(function(e){ return '<li>'+e+'</li>'; }).join('');
+    const confClass = 'eda-conf-'+qa.confidence.toLowerCase();
+    return '<div class="eda-answer">'+
+      '<div class="eda-block"><span class="eda-label">Executive Summary</span><p>'+qa.summary+'</p></div>'+
+      '<div class="eda-block"><span class="eda-label">Evidence from Dashboard</span><ul>'+evidence+'</ul></div>'+
+      '<div class="eda-block"><span class="eda-label">Recommendation</span><p>'+qa.recommendation+'</p></div>'+
+      '<span class="eda-conf '+confClass+'">Confidence: '+qa.confidence+'</span>'+
+      '</div>';
+  }
+
+  function edaBuildUI(){
+    const fab = document.createElement('button');
+    fab.id = 'eda-fab';
+    fab.type = 'button';
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+      '<span class="eda-fab-full">Executive Decision Assistant</span><span class="eda-fab-short">Assistant</span>';
+    document.body.appendChild(fab);
+
+    const overlay = document.createElement('div');
+    overlay.id = 'eda-overlay';
+    document.body.appendChild(overlay);
+
+    const panel = document.createElement('div');
+    panel.id = 'eda-panel';
+    panel.innerHTML =
+      '<div class="eda-head">'+
+        '<div class="eda-head-top">'+
+          '<div class="eda-head-title">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+            '<h2>Executive Decision Assistant</h2>'+
+          '</div>'+
+          '<button class="eda-close" id="eda-close" type="button" aria-label="Close">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<div class="eda-head-sub">Grounded in this Command Center\u2019s dashboard data</div>'+
+      '</div>'+
+      '<div class="eda-body" id="eda-body">'+
+        '<div class="eda-chips" id="eda-fixed-chips"></div>'+
+        '<div class="eda-chips-label">Suggested Questions</div>'+
+        '<div class="eda-chips" id="eda-chips"></div>'+
+        '<div id="eda-thread"></div>'+
+      '</div>'+
+      '<div class="eda-foot">'+
+        '<div class="eda-foot-row">'+
+          '<input class="eda-input" id="eda-input" type="text" placeholder="Ask a question about this dashboard\u2026" />'+
+          '<button class="eda-send" id="eda-send" type="button" aria-label="Send">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<button class="eda-reset" id="eda-reset" type="button">Reset conversation</button>'+
+      '</div>';
+    document.body.appendChild(panel);
+
+    const fixedChipsEl = document.getElementById('eda-fixed-chips');
+    ASSISTANT.fixedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip eda-chip-fixed';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      fixedChipsEl.appendChild(chip);
+    });
+
+    const chipsEl = document.getElementById('eda-chips');
+    ASSISTANT.suggestedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      chipsEl.appendChild(chip);
+    });
+
+    function edaOpen(){
+      panel.classList.add('eda-open');
+      overlay.classList.add('eda-open');
+    }
+    function edaClose(){
+      panel.classList.remove('eda-open');
+      overlay.classList.remove('eda-open');
+    }
+    fab.addEventListener('click', edaOpen);
+    overlay.addEventListener('click', edaClose);
+    document.getElementById('eda-close').addEventListener('click', edaClose);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') edaClose(); });
+
+    document.getElementById('eda-reset').addEventListener('click', function(){
+      document.getElementById('eda-thread').innerHTML = '';
+    });
+
+    const inputEl = document.getElementById('eda-input');
+    document.getElementById('eda-send').addEventListener('click', function(){
+      if(inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+    inputEl.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+
+    window.edaAsk = edaAsk;
+    function edaAsk(question){
+      const thread = document.getElementById('eda-thread');
+      const userWrap = document.createElement('div');
+      userWrap.className = 'eda-msg-user-wrap';
+      userWrap.innerHTML = '<div class="eda-msg-user">'+edaEsc(question)+'</div>';
+      thread.appendChild(userWrap);
+
+      const qa = edaFindAnswer(question);
+      const answerWrap = document.createElement('div');
+      answerWrap.className = 'eda-msg';
+      answerWrap.innerHTML = edaRenderAnswer(qa);
+      thread.appendChild(answerWrap);
+
+      const body = document.getElementById('eda-body');
+      body.scrollTop = body.scrollHeight;
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', edaBuildUI);
+  } else {
+    edaBuildUI();
+  }
+})();
 </script>
 </body>
 </html>

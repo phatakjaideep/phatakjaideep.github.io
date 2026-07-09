@@ -281,7 +281,53 @@
   .cc-launch svg{ width:14px; height:14px; transition:transform .15s ease; }
   .cc-card:hover .cc-launch svg{ transform:translateX(3px); }
 
+  .cc-eda-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    align-self:flex-start; margin-top:-4px;
+    font-family:var(--label); font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--amber-bright); border:1px solid rgba(212,137,26,.35); background:rgba(212,137,26,.08);
+    padding:5px 10px 5px 8px; border-radius:100px;
+  }
+  .cc-eda-badge svg{ width:12px; height:12px; flex-shrink:0; }
+
   @media (max-width: 780px){ .cc-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- AI-Powered Executive Decision Support (homepage) ---------- */
+  .eda-promo{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:48px clamp(24px,4vw,56px);
+  }
+  .eda-promo-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:start; }
+  .eda-promo p{ margin-bottom:14px; }
+  .eda-promo-examples{
+    list-style:none; margin:18px 0 0; padding:20px 22px; border-left:2px solid var(--amber);
+    background:rgba(212,137,26,.06); border-radius:0 6px 6px 0;
+  }
+  .eda-promo-examples li{
+    font-family:var(--sans); font-size:14px; color:var(--ink); line-height:1.7;
+    padding-left:14px; position:relative;
+  }
+  .eda-promo-examples li::before{
+    content:"—"; position:absolute; left:0; color:var(--amber);
+  }
+  .eda-promo-side{
+    border:1px solid var(--line-strong); border-radius:var(--radius); background:var(--navy-2);
+    padding:28px 26px;
+  }
+  .eda-promo-side .eda-side-label{
+    font-family:var(--label); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  .eda-promo-side .eda-side-label svg{ width:14px; height:14px; }
+  .eda-side-row{
+    display:flex; gap:12px; padding:14px 0; border-top:1px solid var(--line);
+  }
+  .eda-side-row:first-of-type{ border-top:none; padding-top:0; }
+  .eda-side-row svg{ width:18px; height:18px; color:var(--amber-bright); flex-shrink:0; margin-top:2px; }
+  .eda-side-row h4{ font-family:var(--display); font-weight:700; font-size:14px; color:var(--ink); margin-bottom:3px; }
+  .eda-side-row p{ font-size:13px; color:var(--ink-soft); text-align:left; margin:0; }
+
+  @media (max-width: 900px){ .eda-promo-grid{ grid-template-columns:1fr; gap:32px; } }
 
   /* ---------- How I think ---------- */
   .think-list{ display:flex; flex-direction:column; }
@@ -571,6 +617,68 @@
   </div>
 </section>
 
+<!-- ================= AI-POWERED EXECUTIVE DECISION SUPPORT ================= -->
+<section class="section" id="decision-support">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">AI-Powered Executive Decision Support</div>
+      <h2>Every command center includes an Executive Decision Assistant.</h2>
+    </div>
+    <div class="eda-promo">
+      <div class="eda-promo-grid">
+        <div>
+          <p>
+            The command centers on this site are more than interactive dashboards. Each one includes an
+            Executive Decision Assistant, scoped specifically to the governance model, metrics, risks, and
+            executive reporting logic of that command center.
+          </p>
+          <p>
+            Rather than simply browsing dashboards, visitors can ask executive questions directly:
+          </p>
+          <ul class="eda-promo-examples">
+            <li>What is the biggest program risk?</li>
+            <li>Should leadership approve this Gate Review?</li>
+            <li>Which initiative needs executive attention first?</li>
+            <li>What is driving schedule variance?</li>
+          </ul>
+          <p style="margin-top:18px;">
+            The assistant answers using only the information contained within that command center &mdash;
+            demonstrating how decision support can stay grounded in structured program data rather than
+            open-ended conversation.
+          </p>
+        </div>
+        <div class="eda-promo-side">
+          <div class="eda-side-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/><path d="M19 15l.9 2.3L22 18l-2.1.7L19 21l-.9-2.3L16 18l2.1-.7L19 15z"/></svg>
+            Executive Decision Assistant
+          </div>
+          <div class="eda-side-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></svg>
+            <div>
+              <h4>Scoped to the dashboard</h4>
+              <p>Every answer is grounded in that command center's own metrics, risks, decisions, and milestones.</p>
+            </div>
+          </div>
+          <div class="eda-side-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <div>
+              <h4>Structured for executives</h4>
+              <p>Responses follow an executive format: summary, evidence, recommendation, and confidence.</p>
+            </div>
+          </div>
+          <div class="eda-side-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+            <div>
+              <h4>Bounded by design</h4>
+              <p>Out-of-scope questions are declined rather than answered generically.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= FEATURED COMMAND CENTERS ================= -->
 <section class="section" id="command-centers">
   <div class="wrap">
@@ -589,6 +697,10 @@
           </svg>
         </div>
         <h3>Program Command Center</h3>
+        <div class="cc-eda-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>
+          Executive Decision Assistant Included
+        </div>
         <p class="desc">
           A steering-committee view for complex delivery: health, milestones, actions, financial
           oversight, open decisions, and leadership-ready reporting in one place.
@@ -614,6 +726,10 @@
           </svg>
         </div>
         <h3>Engineering Control Tower</h3>
+        <div class="cc-eda-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>
+          Executive Decision Assistant Included
+        </div>
         <p class="desc">
           A technical delivery view across milestones, risks, resources, and actions for engineering
           teams and cross-regional execution.
@@ -641,6 +757,10 @@
           </svg>
         </div>
         <h3>NPD Launch Command Center</h3>
+        <div class="cc-eda-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>
+          Executive Decision Assistant Included
+        </div>
         <p class="desc">
           A launch-readiness view across stage gates, APQP status, OEM reporting, manufacturing
           readiness, and product development milestones.
@@ -667,6 +787,10 @@
           </svg>
         </div>
         <h3>Portfolio Command Center</h3>
+        <div class="cc-eda-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>
+          Executive Decision Assistant Included
+        </div>
         <p class="desc">
           A portfolio-level view connecting financial performance, customer programs, strategic
           priorities, capacity signals, and AI-assisted insights.

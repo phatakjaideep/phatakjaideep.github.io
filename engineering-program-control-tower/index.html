@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Engineering Program Control Tower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -13,19 +15,15 @@
   --bg:#F1F5F9; --card:#FFFFFF;
   --text:#0F172A; --text2:#475569; --muted:#94A3B8; --border:#E2E8F0;
   --green:#059669; --amber:#D97706; --amber2:#F59E0B; --rose:#DC2626; --sky:#2563EB; --slate:#64748B;
-  --font-display: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --font-label: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
   background:var(--bg); color:var(--text);
-  font-family:var(--font-body); font-weight:400;
+  font-family:'IBM Plex Sans',sans-serif; font-weight:400;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3,.font-display{font-family:var(--font-display); letter-spacing:-0.01em;}
+h1,h2,h3,.font-display{font-family:'Chivo',sans-serif; letter-spacing:-0.01em;}
 .tabular{font-variant-numeric:tabular-nums;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit; cursor:pointer;}
@@ -37,18 +35,17 @@ input,select,textarea{font-family:inherit;}
   background:var(--navy); color:#fff;
   display:flex; align-items:center; justify-content:space-between;
   padding:12px 24px; gap:16px;
-  border-top:3px solid #D4891A;
 }
 .brand{display:flex; align-items:center; gap:10px;}
 .brand-mark{
   width:32px; height:32px; border-radius:6px;
   background:linear-gradient(135deg,#2563EB,#0A1F44);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-weight:700; font-size:14px; color:#fff;
+  font-family:'Chivo',sans-serif; font-weight:700; font-size:14px; color:#fff;
   border:1px solid rgba(255,255,255,.25);
 }
 .brand-text{display:flex; flex-direction:column; line-height:1.2;}
-.brand-title{font-family:var(--font-display); font-weight:700; font-size:15.5px;}
+.brand-title{font-family:'Chivo',sans-serif; font-weight:700; font-size:15.5px;}
 .brand-sub{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#93A5C4; margin-top:1px;}
 .header-right{display:flex; align-items:center; gap:14px;}
 .portfolio-home-link{display:flex; align-items:center; gap:9px; padding:8px 14px; font-size:12px; font-weight:600; color:rgba(255,255,255,.55); text-decoration:none; border-right:1px solid rgba(255,255,255,.15); margin-right:6px; transition:color .15s;}
@@ -104,7 +101,7 @@ main{max-width:1800px; margin:0 auto; padding:26px 28px 4px 28px;}
 }
 .kpi-top{display:flex; align-items:center; justify-content:space-between; color:var(--muted);}
 .kpi-label{font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--text2); font-weight:600;}
-.kpi-value{font-size:1.85rem; font-weight:700; font-family:var(--font-display);}
+.kpi-value{font-size:1.85rem; font-weight:700; font-family:'Chivo',sans-serif;}
 .kpi-caption{font-size:11.5px; color:var(--muted);}
 
 /* ---------- badges ---------- */
@@ -133,8 +130,7 @@ main{max-width:1800px; margin:0 auto; padding:26px 28px 4px 28px;}
 .btn-ghost:hover{color:var(--text);}
 .btn-sm{height:30px; padding:0 12px; font-size:11.5px;}
 .btn-danger{color:var(--rose);}
-.icon-btn{padding:5px; border-radius:5px; border:1px solid transparent; background:transparent; color:var(--text2); display:inline-flex; align-items:center; justify-content:center;}
-.icon-btn svg{width:15px; height:15px;}
+.icon-btn{padding:5px; border-radius:5px; border:1px solid transparent; background:transparent; color:var(--text2);}
 .icon-btn:hover{background:#F1F5F9; color:var(--text);}
 
 /* ---------- tables ---------- */
@@ -179,7 +175,7 @@ tbody tr.overdue-row:hover{background:#FFE4E6;}
   background:#fff; border-radius:6px; padding:22px; width:100%; max-width:560px;
   max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
-.modal-title{font-size:1.05rem; font-weight:700; margin:0 0 16px 0; font-family:var(--font-display);}
+.modal-title{font-size:1.05rem; font-weight:700; margin:0 0 16px 0; font-family:'Chivo',sans-serif;}
 .modal-footer{display:flex; justify-content:flex-end; gap:10px; margin-top:20px;}
 
 /* ---------- toast ---------- */
@@ -273,7 +269,7 @@ select.filter-select{height:36px; padding:0 12px; border:1px solid var(--border)
 .link-out:hover{text-decoration:underline;}
 .stat-tile{background:#F8FAFC; border:1px solid var(--border); border-radius:6px; padding:14px 16px;}
 .stat-label{font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:600;}
-.stat-value{font-size:1.15rem; font-weight:700; margin-top:4px; font-family:var(--font-display);}
+.stat-value{font-size:1.15rem; font-weight:700; margin-top:4px; font-family:'Chivo',sans-serif;}
 .meta-badges{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
 .section-heading{font-size:13px; font-weight:700; margin:22px 0 12px 0; color:var(--text); text-transform:uppercase; letter-spacing:.08em; padding-top:4px; border-top:1px solid #F1F5F9;}
 .section-heading:first-child{margin-top:0; padding-top:0; border-top:none;}
@@ -322,7 +318,7 @@ select.filter-select{height:36px; padding:0 12px; border:1px solid var(--border)
 .trend-card{display:flex; align-items:center; gap:12px; padding:16px 18px;}
 .trend-icon{width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
 .trend-label{font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:600;}
-.trend-value{font-size:1rem; font-weight:700; font-family:var(--font-display);}
+.trend-value{font-size:1rem; font-weight:700; font-family:'Chivo',sans-serif;}
 
 /* ---------- days badge (upcoming milestones) ---------- */
 .days-badge{font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;}
@@ -330,22 +326,15 @@ select.filter-select{height:36px; padding:0 12px; border:1px solid var(--border)
 /* ---------- footer ---------- */
 #app-footer{
   max-width:1800px; margin:32px auto 0 auto; padding:18px 28px 24px 28px;
-  text-align:center; color:var(--muted); border-top:2px solid rgba(212,137,26,.4);
+  text-align:center; color:var(--muted); border-top:1px solid var(--border);
   opacity:.9;
 }
 .footer-line1{font-size:12.5px; font-weight:600; color:var(--text2);}
 .footer-line2{font-size:11.5px; color:var(--muted); margin-top:3px;}
 .footer-line3{font-size:10px; color:#B6C0CE; margin-top:10px; letter-spacing:.04em;}
-/* ---------- Brand Style Guide v1.1 — unified label voice (Section 14.3) ---------- */
-.brand-sub, .header-snapshot-label, .card-title, .kpi-label, thead th,
-.form-field label, .stat-label, .section-heading, .decision-field-label,
-.insight-label, .demo-badge, .decision-owner-label, .hero-gauge-caption, .trend-label{
-  font-family:var(--font-label); font-weight:600; letter-spacing:.12em;
-}
 </style>
 </head>
 <body>
-
 <div id="app-header">
   <a class="portfolio-home-link" href="https://phatakjaideep.github.io" target="_blank" rel="noopener noreferrer"><span style="font-size:11px">&#8592;</span> Portfolio Home</a>
   <div class="brand">
@@ -633,8 +622,8 @@ function healthGaugeSvg(health,tier,size){
     +'<circle cx="70" cy="70" r="'+r+'" fill="none" stroke="#E2E8F0" stroke-width="10"/>'
     +'<circle cx="70" cy="70" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="10" stroke-linecap="round" '
       +'stroke-dasharray="'+c.toFixed(2)+'" stroke-dashoffset="'+offset.toFixed(2)+'" transform="rotate(-90 70 70)"/>'
-    +'<text x="70" y="64" text-anchor="middle" font-size="28" font-weight="700" fill="#0F172A" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif">'+health+'</text>'
-    +'<text x="70" y="85" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="'+color+'" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-weight="600">'+tier.toUpperCase()+'</text>'
+    +'<text x="70" y="64" text-anchor="middle" font-size="28" font-weight="700" fill="#0F172A" font-family="Chivo,sans-serif">'+health+'</text>'
+    +'<text x="70" y="85" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="'+color+'" font-family="IBM Plex Sans,sans-serif" font-weight="600">'+tier.toUpperCase()+'</text>'
     +'</svg>';
 }
 function factorBreakdown(h){
@@ -701,10 +690,10 @@ function barChartVertical(data,opts){
     const y = H-padB-h;
     const label = d.label.length>maxChars ? d.label.slice(0,maxChars-1)+'…' : d.label;
     const labelEl = rotate
-      ? '<text x="'+cx.toFixed(1)+'" y="'+(H-padB+14).toFixed(1)+'" text-anchor="end" font-size="'+labelFontSize+'" fill="var(--text2)" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" transform="rotate(-38 '+cx.toFixed(1)+' '+(H-padB+14).toFixed(1)+')">'+escapeHtml(label)+'</text>'
-      : '<text x="'+cx.toFixed(1)+'" y="'+(H-padB+17).toFixed(1)+'" text-anchor="middle" font-size="'+labelFontSize+'" fill="var(--text2)" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif">'+escapeHtml(label)+'</text>';
+      ? '<text x="'+cx.toFixed(1)+'" y="'+(H-padB+14).toFixed(1)+'" text-anchor="end" font-size="'+labelFontSize+'" fill="var(--text2)" font-family="IBM Plex Sans" transform="rotate(-38 '+cx.toFixed(1)+' '+(H-padB+14).toFixed(1)+')">'+escapeHtml(label)+'</text>'
+      : '<text x="'+cx.toFixed(1)+'" y="'+(H-padB+17).toFixed(1)+'" text-anchor="middle" font-size="'+labelFontSize+'" fill="var(--text2)" font-family="IBM Plex Sans">'+escapeHtml(label)+'</text>';
     return '<g><rect x="'+(cx-barW/2).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+(d.color||'var(--blue)')+'"><title>'+escapeHtml(d.label)+': '+d.value+(opts.suffix||'')+'</title></rect>'
-      +'<text x="'+cx.toFixed(1)+'" y="'+(y-7).toFixed(1)+'" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif"'+halo+'>'+d.value+(opts.suffix||'')+'</text>'
+      +'<text x="'+cx.toFixed(1)+'" y="'+(y-7).toFixed(1)+'" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)" font-family="IBM Plex Sans"'+halo+'>'+d.value+(opts.suffix||'')+'</text>'
       +labelEl+'</g>';
   }).join('');
   let refLines='';
@@ -712,7 +701,7 @@ function barChartVertical(data,opts){
     refLines=opts.refLines.map(function(rl){
       const y=H-padB-((rl.value/max)*(H-padT-padB));
       return '<line x1="'+padL+'" y1="'+y.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y.toFixed(1)+'" stroke="'+rl.color+'" stroke-dasharray="4,3" stroke-width="1.4"/>'
-        +'<text x="'+(W-6)+'" y="'+(y-5).toFixed(1)+'" text-anchor="end" font-size="10.5" font-weight="600" fill="'+rl.color+'" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif"'+halo+'>'+rl.label+'</text>';
+        +'<text x="'+(W-6)+'" y="'+(y-5).toFixed(1)+'" text-anchor="end" font-size="10.5" font-weight="600" fill="'+rl.color+'" font-family="IBM Plex Sans"'+halo+'>'+rl.label+'</text>';
     }).join('');
   }
   return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;aspect-ratio:'+W+'/'+H+';display:block">'
@@ -728,9 +717,9 @@ function barChartHorizontal(data){
     const y=i*rowH+5;
     const w = Math.max(2,(d.value/max)*(W-labelW-48));
     const label = d.label.length>16 ? d.label.slice(0,15)+'…' : d.label;
-    return '<g><text x="0" y="'+(y+15)+'" font-size="12.5" fill="var(--text2)" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif">'+escapeHtml(label)+'</text>'
+    return '<g><text x="0" y="'+(y+15)+'" font-size="12.5" fill="var(--text2)" font-family="IBM Plex Sans">'+escapeHtml(label)+'</text>'
       +'<rect x="'+labelW+'" y="'+y+'" width="'+w+'" height="18" rx="3" fill="'+(d.color||'var(--blue)')+'"><title>'+escapeHtml(d.label)+': '+d.value+'</title></rect>'
-      +'<text x="'+(labelW+w+8)+'" y="'+(y+14)+'" font-size="12.5" fill="var(--text)" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-weight="700">'+d.value+'</text></g>';
+      +'<text x="'+(labelW+w+8)+'" y="'+(y+14)+'" font-size="12.5" fill="var(--text)" font-family="IBM Plex Sans" font-weight="700">'+d.value+'</text></g>';
   }).join('');
   return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;aspect-ratio:'+W+'/'+H+';display:block">'+rows+'</svg>';
 }
@@ -1113,8 +1102,8 @@ function pagePortfolio(){
       +'<td class="cell-muted">'+fmtDate(p.start_date)+'</td>'
       +'<td class="cell-muted">'+fmtDate(p.target_launch_date)+'</td>'
       +'<td onclick="event.stopPropagation()">'
-        +'<button class="icon-btn" data-action="edit" data-kind="project" data-id="'+p.id+'" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="project" data-id="'+p.id+'" data-label="'+escapeHtml(p.name)+'" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="project" data-id="'+p.id+'" title="Edit">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="project" data-id="'+p.id+'" data-label="'+escapeHtml(p.name)+'" title="Delete">🗑</button>'
       +'</td></tr>';
   }).join('');
 
@@ -1125,8 +1114,8 @@ function pagePortfolio(){
       +'<div><div style="font-weight:700;font-size:15px">'+escapeHtml(p.name)+'</div>'
       +'<div class="cell-muted" style="margin-top:2px">'+escapeHtml(p.business_unit)+'</div></div>'
       +'<div onclick="event.stopPropagation()">'
-        +'<button class="icon-btn" data-action="edit" data-kind="project" data-id="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="project" data-id="'+p.id+'" data-label="'+escapeHtml(p.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="project" data-id="'+p.id+'">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="project" data-id="'+p.id+'" data-label="'+escapeHtml(p.name)+'">🗑</button>'
       +'</div></div>'
       +'<div class="cell-muted" style="margin:10px 0">PM: '+escapeHtml(p.program_manager)+' • '+escapeHtml(p.customer)+'</div>'
       +'<div class="meta-badges">'+phaseBadge(p.phase)+statusBadge(p.status)+healthBadge(h)+'</div>'
@@ -1200,7 +1189,7 @@ function pageWorkspace(id){
     +'</div>'
     +'<div class="card row-gap">'
       +'<div class="grid grid-2">'
-        +'<div><div style="font-size:1.3rem;font-weight:700;font-family:var(--font-display)">'+escapeHtml(p.name)+'</div>'
+        +'<div><div style="font-size:1.3rem;font-weight:700;font-family:Chivo,sans-serif">'+escapeHtml(p.name)+'</div>'
         +'<div class="cell-muted" style="margin-top:4px">'+escapeHtml(p.business_unit)+' • '+escapeHtml(p.customer)+'</div>'
         +'<div class="cell-muted" style="margin-top:4px">PM: '+escapeHtml(p.program_manager)+'</div>'
         +'<div class="meta-badges">'+phaseBadge(p.phase)+statusBadge(p.status)+'</div></div>'
@@ -1230,8 +1219,8 @@ function milestoneTable(list, showProject){
       +'<td class="cell-muted">'+(m.actual_date?fmtDate(m.actual_date):'—')+'</td>'
       +'<td>'+milestoneStatusBadge(m.status)+'</td>'
       +'<td>'
-        +'<button class="icon-btn" data-action="edit" data-kind="milestone" data-id="'+m.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="milestone" data-id="'+m.id+'" data-label="'+escapeHtml(m.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="milestone" data-id="'+m.id+'">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="milestone" data-id="'+m.id+'" data-label="'+escapeHtml(m.name)+'">🗑</button>'
       +'</td></tr>';
   }).join('');
   return '<table><thead><tr><th>ID</th><th>Milestone</th>'+(showProject?'<th>Project</th>':'')+'<th>Owner</th><th>Planned</th><th>Actual</th><th>Status</th><th>Actions</th></tr></thead>'
@@ -1256,8 +1245,8 @@ function riskTable(list, showProject){
       +'<td>'+riskLevelBadge(level)+'</td>'
       +'<td class="cell-muted">'+fmtDate(r.due_date)+'</td>'
       +'<td>'
-        +'<button class="icon-btn" data-action="edit" data-kind="risk" data-id="'+r.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="risk" data-id="'+r.id+'" data-label="'+escapeHtml(r.title)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="risk" data-id="'+r.id+'">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="risk" data-id="'+r.id+'" data-label="'+escapeHtml(r.title)+'">🗑</button>'
       +'</td></tr>';
   }).join('');
   return '<table><thead><tr><th>ID</th><th>Risk</th>'+(showProject?'<th>Project</th>':'')+'<th>Owner</th><th>P</th><th>I</th><th>Score</th><th>Level</th><th>Due</th><th>Actions</th></tr></thead>'
@@ -1277,8 +1266,8 @@ function actionTable(list, showProject){
       +'<td>'+actionStatusBadge(a.status).replace('__ID__',a.id)+'</td>'
       +'<td class="cell-muted">'+fmtDate(a.due_date)+(overdue?' <span style="color:var(--rose);font-weight:700">(overdue)</span>':'')+'</td>'
       +'<td>'
-        +'<button class="icon-btn" data-action="edit" data-kind="action" data-id="'+a.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="action" data-id="'+a.id+'" data-label="'+escapeHtml(a.title)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="action" data-id="'+a.id+'">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="action" data-id="'+a.id+'" data-label="'+escapeHtml(a.title)+'">🗑</button>'
       +'</td></tr>';
   }).join('');
   return '<table><thead><tr><th>ID</th><th>Action</th>'+(showProject?'<th>Project</th>':'')+'<th>Owner</th><th>Department</th><th>Priority</th><th>Status</th><th>Due</th><th>Actions</th></tr></thead>'
@@ -1300,8 +1289,8 @@ function resourceTable(list){
         +'<div class="progress-track"><div class="progress-fill" style="width:'+Math.min(100,u)+'%;background:'+color+'"></div></div>'
         +'<span class="tabular" style="font-size:12px;font-weight:700;color:'+color+';white-space:nowrap">'+u+'%'+(over>0?' <span style="font-weight:500;color:var(--muted)">(+'+over+' hrs/wk)</span>':'')+'</span></div></td>'
       +'<td>'
-        +'<button class="icon-btn" data-action="edit" data-kind="resource" data-id="'+r.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="resource" data-id="'+r.id+'" data-label="'+escapeHtml(r.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>'
+        +'<button class="icon-btn" data-action="edit" data-kind="resource" data-id="'+r.id+'">✎</button>'
+        +'<button class="icon-btn btn-danger" data-action="delete" data-kind="resource" data-id="'+r.id+'" data-label="'+escapeHtml(r.name)+'">🗑</button>'
       +'</td></tr>';
   }).join('');
   return '<table><thead><tr><th>Resource</th><th>Function</th><th>Project</th><th>Available h/wk</th><th>Assigned h/wk</th><th>Utilization</th><th>Actions</th></tr></thead>'
@@ -1576,7 +1565,7 @@ function pageExecutive(qProjectId){
     + decisionsSection
     +'<div class="card">'
       +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'
-        +'<div><div style="font-size:1.4rem;font-weight:700;font-family:var(--font-display)">'+escapeHtml(p.name)+'</div>'
+        +'<div><div style="font-size:1.4rem;font-weight:700;font-family:Chivo,sans-serif">'+escapeHtml(p.name)+'</div>'
         +'<div class="cell-muted" style="margin-top:4px">'+escapeHtml(p.business_unit)+' • '+escapeHtml(p.customer)+' • PM: '+escapeHtml(p.program_manager)+'</div>'
         +'<div class="meta-badges">'+phaseBadge(p.phase)+statusBadge(p.status)+'</div></div>'
       +'</div>'
@@ -1775,6 +1764,473 @@ document.addEventListener('change', function(e){
    INIT
 ========================================================= */
 render();
+</script>
+
+<style>
+/* ================= Executive Decision Assistant ================= */
+#eda-fab{
+  position:fixed; bottom:24px; right:24px; z-index:99990;
+  display:flex; align-items:center; gap:8px;
+  background:#0A1F44; color:#fff; border:none; cursor:pointer;
+  padding:13px 20px 13px 16px; border-radius:999px;
+  font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; font-weight:600; letter-spacing:.01em;
+  box-shadow:0 10px 28px -6px rgba(0,0,0,.4);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+#eda-fab:hover{ transform:translateY(-2px); box-shadow:0 14px 32px -6px rgba(0,0,0,.48); background:#15346B; }
+#eda-fab svg{ width:17px; height:17px; color:#D97706; flex-shrink:0; }
+#eda-fab .eda-fab-full{ display:inline; }
+#eda-fab .eda-fab-short{ display:none; }
+
+#eda-overlay{
+  position:fixed; inset:0; background:rgba(8,12,20,.38); z-index:99991;
+  opacity:0; pointer-events:none; transition:opacity .22s ease;
+}
+#eda-overlay.eda-open{ opacity:1; pointer-events:auto; }
+
+#eda-panel{
+  position:fixed; top:0; right:-440px; width:412px; max-width:92vw; height:100%;
+  background:#FFFFFF; z-index:99992;
+  box-shadow:-14px 0 40px -10px rgba(0,0,0,.35);
+  display:flex; flex-direction:column;
+  transition:right .28s cubic-bezier(.4,0,.2,1);
+  font-family:'IBM Plex Sans',sans-serif; color:#0F172A;
+}
+#eda-panel.eda-open{ right:0; }
+
+.eda-head{
+  background:#0A1F44; color:#fff; padding:20px 22px 18px; flex-shrink:0;
+  border-bottom:3px solid #D97706;
+}
+.eda-head-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.eda-head-title{ display:flex; align-items:center; gap:9px; }
+.eda-head-title svg{ width:19px; height:19px; color:#D97706; flex-shrink:0; }
+.eda-head-title h2{ font-size:15.5px; font-weight:700; margin:0; letter-spacing:.01em; }
+.eda-head-sub{ font-size:12px; color:rgba(255,255,255,.68); margin-top:6px; padding-left:28px; }
+.eda-close{
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#fff;
+  width:28px; height:28px; border-radius:7px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-close:hover{ background:rgba(255,255,255,.18); }
+.eda-close svg{ width:14px; height:14px; }
+
+.eda-body{ flex:1; overflow-y:auto; padding:18px 20px 12px; background:#F1F5F9; }
+.eda-chips-label{
+  font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#94A3B8; margin:2px 0 10px;
+}
+.eda-chips{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.eda-chip{
+  text-align:left; background:#FFFFFF; border:1px solid #E2E8F0; color:#0F172A;
+  padding:10px 13px; border-radius:9px; font-size:13px; font-family:'IBM Plex Sans',sans-serif; cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+  line-height:1.4;
+}
+.eda-chip:hover{ border-color:#D97706; background:#FEF3C7; }
+.eda-chip-fixed{
+  background:#FEF3C7; border-color:rgba(0,0,0,.06); font-weight:600;
+}
+.eda-chips + .eda-chips-label{ margin-top:2px; }
+
+.eda-info p{ color:#0F172A; line-height:1.55; margin-bottom:10px; }
+.eda-info p:last-child{ margin-bottom:0; }
+.eda-info ul{ margin:0 0 10px; padding-left:16px; color:#475569; }
+.eda-info li{ margin-bottom:4px; line-height:1.45; }
+
+.eda-msg{ margin-bottom:16px; }
+.eda-msg-user{
+  background:#0A1F44; color:#fff; padding:10px 14px; border-radius:10px 10px 3px 10px;
+  font-size:13.5px; max-width:88%; margin-left:auto; line-height:1.45;
+}
+.eda-msg-user-wrap{ display:flex; margin-bottom:14px; }
+.eda-msg-user-wrap{ justify-content:flex-end; }
+
+.eda-answer{
+  background:#FFFFFF; border:1px solid #E2E8F0; border-radius:10px;
+  padding:15px 16px 13px; font-size:13px;
+}
+.eda-answer.eda-oos{ border-left:3px solid #94A3B8; }
+.eda-block{ margin-bottom:11px; }
+.eda-block:last-of-type{ margin-bottom:0; }
+.eda-label{
+  display:block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#D97706; margin-bottom:5px;
+}
+.eda-answer p{ margin:0; color:#0F172A; line-height:1.5; }
+.eda-answer ul{ margin:0; padding-left:16px; color:#475569; }
+.eda-answer li{ margin-bottom:4px; line-height:1.45; }
+.eda-conf{
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+  font-size:11px; font-weight:700; letter-spacing:.03em; padding:4px 10px; border-radius:100px;
+}
+.eda-conf-high{ background:#DCFCE7; color:#15803D; }
+.eda-conf-medium{ background:#FEF3C7; color:#B45309; }
+.eda-conf-low{ background:#FEE2E2; color:#B91C1C; }
+.eda-oos p{ color:#475569; }
+
+.eda-foot{
+  border-top:1px solid #E2E8F0; padding:12px 16px; background:#FFFFFF; flex-shrink:0;
+}
+.eda-foot-row{ display:flex; gap:8px; }
+.eda-input{
+  flex:1; border:1px solid #E2E8F0; border-radius:8px; padding:10px 12px; font-size:13px;
+  font-family:'IBM Plex Sans',sans-serif; color:#0F172A; background:#F1F5F9;
+}
+.eda-input:focus{ outline:none; border-color:#D97706; }
+.eda-send{
+  background:#0A1F44; color:#fff; border:none; border-radius:8px; width:40px; flex-shrink:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-send:hover{ background:#15346B; }
+.eda-send svg{ width:16px; height:16px; }
+.eda-reset{
+  background:none; border:none; color:#94A3B8; font-size:11px; cursor:pointer;
+  margin-top:8px; text-decoration:underline; padding:0;
+}
+.eda-reset:hover{ color:#0F172A; }
+
+@media (max-width:640px){
+  #eda-panel{ width:100%; max-width:100%; right:-100%; }
+  #eda-fab{ bottom:16px; right:16px; padding:13px 16px; }
+  #eda-fab .eda-fab-full{ display:none; }
+  #eda-fab .eda-fab-short{ display:inline; }
+}
+</style>
+
+<script>
+/* ================= Executive Decision Assistant ================= */
+(function(){
+  const ASSISTANT = {
+  "assistantName": "Executive Decision Assistant",
+  "scope": "This assistant only answers questions using data available in this Command Center.",
+  "pageType": "Engineering Program Control Tower",
+  "fixedQuestions": [
+    "\u2b50 Give me a tour of this Command Center",
+    "\ud83d\udccb What is included in this dashboard?"
+  ],
+  "suggestedQuestions": [
+    "Summarize engineering execution health",
+    "Which engineering milestone is most critical?",
+    "What is blocking validation or production readiness?",
+    "Where are technical risks concentrated?",
+    "Which resource constraint matters most?",
+    "What should engineering leadership focus on this week?"
+  ],
+  "qa": [
+    {
+      "question": "\u2b50 Give me a tour of this Command Center",
+      "type": "info",
+      "match": [
+        "tour",
+        "walkthrough",
+        "guide me",
+        "show me around"
+      ],
+      "intro": "Welcome to the Engineering Program Control Tower. This Command Center has been designed to help engineering leadership track execution health across active programs, surface delivery risks early, and keep milestones, actions, and resources aligned to plan.",
+      "bullets": [
+        "Executive Overview",
+        "Portfolio",
+        "Milestones",
+        "Risks",
+        "Actions",
+        "Resources"
+      ],
+      "closing": "If you'd like to dive deeper, ask about any individual section or select one of the suggested questions."
+    },
+    {
+      "question": "\ud83d\udccb What is included in this dashboard?",
+      "type": "info",
+      "match": [
+        "what is included",
+        "included in this dashboard",
+        "what does this dashboard",
+        "dashboard include"
+      ],
+      "intro": "This Command Center brings together the following sections:",
+      "bullets": [
+        "<strong>Executive Overview</strong> &mdash; real-time health across all active engineering programs",
+        "<strong>Portfolio</strong> &mdash; centralized status for Project Atlas, Falcon, and Titan",
+        "<strong>Milestones</strong> &mdash; planned vs. actual dates with delay tracking",
+        "<strong>Risks</strong> &mdash; probability-by-impact assessment with mitigation owners",
+        "<strong>Actions</strong> &mdash; open, in-progress, and blocked action items by priority",
+        "<strong>Resources</strong> &mdash; team allocation and utilization by function"
+      ],
+      "closing": "Select a section on the dashboard or ask a suggested question to explore further."
+    },
+    {
+      "question": "Summarize engineering execution health",
+      "match": [
+        "summarize",
+        "execution health",
+        "health",
+        "overall"
+      ],
+      "summary": "Execution health is mixed across the three-project portfolio &mdash; Project Atlas is on track, Project Falcon is at risk, and Project Titan is critical.",
+      "evidence": [
+        "Project Atlas (PGM-001): On Track, schedule performance index 0.98",
+        "Project Falcon (PGM-002): At Risk, schedule performance index 0.86, Pilot Run #2 delayed",
+        "Project Titan (PGM-003): Critical, schedule performance index 0.74, Regulatory Submission delayed",
+        "2 actions are currently Blocked, split across Falcon and Titan"
+      ],
+      "recommendation": "Direct leadership attention to Project Titan first &mdash; it carries Critical status and the lowest schedule performance of the portfolio.",
+      "confidence": "High"
+    },
+    {
+      "question": "Which engineering milestone is most critical?",
+      "match": [
+        "milestone",
+        "most critical",
+        "critical milestone"
+      ],
+      "summary": "Regulatory Submission on Project Titan is the most critical milestone &mdash; it is already delayed and gates two downstream milestones.",
+      "evidence": [
+        "Regulatory Submission (Titan): planned 2025-11-17, status Delayed, owner C. Davis",
+        "Downstream dependents Clinical Trial Start and 510(k) Clearance are both blocked behind it",
+        "Titan's overall schedule performance is the lowest in the portfolio at 0.74",
+        "Pilot Run #2 (Falcon) is also Delayed and gates Customer FAT"
+      ],
+      "recommendation": "Expedite the FDA Pre-Submission package to unblock the Titan regulatory chain before it threatens the SOP date.",
+      "confidence": "High"
+    },
+    {
+      "question": "What is blocking validation or production readiness?",
+      "match": [
+        "blocking",
+        "blocked",
+        "validation",
+        "production readiness",
+        "readiness"
+      ],
+      "summary": "Two Blocked actions are the primary constraint on readiness: the Falcon robot end-effector design and Titan's sterilization chamber scheduling.",
+      "evidence": [
+        "ACT: Resolve robot end-effector design &mdash; Falcon, Critical priority, Blocked, owner T. Okafor",
+        "ACT: Lock Sterigenics chamber slots &mdash; Titan, High priority, Blocked, owner B. Hughes",
+        "Falcon Pilot Run #2 is delayed pending line qualification",
+        "Titan biocompatibility (ISO-10993) risk remains open ahead of Clinical Trial Start"
+      ],
+      "recommendation": "Escalate both blocked actions in this week's engineering review &mdash; each sits on the critical path for a separate program.",
+      "confidence": "High"
+    },
+    {
+      "question": "Where are technical risks concentrated?",
+      "match": [
+        "technical risk",
+        "risks concentrated",
+        "risk",
+        "risks"
+      ],
+      "summary": "Technical risk is concentrated in Project Titan (medical device compliance) and Project Falcon (manufacturing cycle time).",
+      "evidence": [
+        "Titan: Biocompatibility ISO-10993 fail risk &mdash; Probability 4, Impact 5",
+        "Titan: FDA 510(k) feedback uncertainty &mdash; Probability 4, Impact 5",
+        "Falcon: Cycle-time miss on automated cell &mdash; Probability 4, Impact 4",
+        "Atlas: Software certification delay (DO-178C) &mdash; Probability 3, Impact 5"
+      ],
+      "recommendation": "Prioritize the two Titan risks first &mdash; both carry impact 5 and directly threaten the program's SOP date.",
+      "confidence": "High"
+    },
+    {
+      "question": "Which resource constraint matters most?",
+      "match": [
+        "resource",
+        "resourcing",
+        "capacity",
+        "utilization",
+        "constraint"
+      ],
+      "summary": "Project Titan's team is the most overloaded &mdash; both the program manager and senior design engineer are significantly over-allocated.",
+      "evidence": [
+        "Priya Anand (Titan PM): 48 of 40 hrs/week assigned (120%)",
+        "Riya Kim (Titan Sr. Design Engineer): 50 of 40 hrs/week assigned (125%)",
+        "Marcus Reyes (Falcon PM): 44 of 40 hrs/week assigned (110%)",
+        "Titan is also the only program at Critical status"
+      ],
+      "recommendation": "Approve additional engineering support for Titan ahead of the Regulatory Submission and Clinical Trial Start milestones.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "What should engineering leadership focus on this week?",
+      "match": [
+        "focus",
+        "this week",
+        "priorities",
+        "priority"
+      ],
+      "summary": "Focus this week on unblocking Titan's regulatory path and Falcon's automated cell, and on relieving the Titan resourcing gap.",
+      "evidence": [
+        "2 Blocked actions require decisions this week (Falcon, Titan)",
+        "Titan schedule performance is 0.74 &mdash; the lowest of the three programs",
+        "Titan's team is over-allocated on 2 key roles (120%+ utilization)",
+        "Falcon Pilot Run #2 is delayed, putting Customer FAT at risk"
+      ],
+      "recommendation": "Hold a targeted review on Titan and Falcon this week; defer non-critical Atlas items to the next cycle.",
+      "confidence": "High"
+    }
+  ],
+  "fallback": "I can only answer using the data available in this Command Center. This question is outside the current dashboard context."
+};
+
+  function edaNormalize(s){ return (s||"").toLowerCase().replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim(); }
+
+  
+
+  function edaFindAnswer(question){
+    const q = edaNormalize(question);
+    if(!q) return null;
+    for(const qa of ASSISTANT.qa){
+      if(edaNormalize(qa.question) === q) return qa;
+    }
+    let best=null, bestScore=0;
+    ASSISTANT.qa.forEach(function(qa){
+      let score=0;
+      qa.match.forEach(function(k){ if(q.indexOf(k)!==-1) score++; });
+      if(score>bestScore){ bestScore=score; best=qa; }
+    });
+    return bestScore>0 ? best : null;
+  }
+
+  function edaEsc(s){
+    const d=document.createElement('div'); d.textContent=s; return d.innerHTML;
+  }
+
+  function edaRenderAnswer(qa){
+    if(!qa){
+      return '<div class="eda-answer eda-oos"><div class="eda-block"><span class="eda-label">Out of Scope</span>'+
+        '<p>'+edaEsc(ASSISTANT.fallback)+'</p></div></div>';
+    }
+    if(qa.type === 'info'){
+      const bullets = qa.bullets.map(function(b){ return '<li>'+b+'</li>'; }).join('');
+      return '<div class="eda-answer eda-info">'+
+        '<p>'+qa.intro+'</p>'+
+        '<ul>'+bullets+'</ul>'+
+        '<p>'+qa.closing+'</p>'+
+        '</div>';
+    }
+    const evidence = qa.evidence.map(function(e){ return '<li>'+e+'</li>'; }).join('');
+    const confClass = 'eda-conf-'+qa.confidence.toLowerCase();
+    return '<div class="eda-answer">'+
+      '<div class="eda-block"><span class="eda-label">Executive Summary</span><p>'+qa.summary+'</p></div>'+
+      '<div class="eda-block"><span class="eda-label">Evidence from Dashboard</span><ul>'+evidence+'</ul></div>'+
+      '<div class="eda-block"><span class="eda-label">Recommendation</span><p>'+qa.recommendation+'</p></div>'+
+      '<span class="eda-conf '+confClass+'">Confidence: '+qa.confidence+'</span>'+
+      '</div>';
+  }
+
+  function edaBuildUI(){
+    const fab = document.createElement('button');
+    fab.id = 'eda-fab';
+    fab.type = 'button';
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+      '<span class="eda-fab-full">Executive Decision Assistant</span><span class="eda-fab-short">Assistant</span>';
+    document.body.appendChild(fab);
+
+    const overlay = document.createElement('div');
+    overlay.id = 'eda-overlay';
+    document.body.appendChild(overlay);
+
+    const panel = document.createElement('div');
+    panel.id = 'eda-panel';
+    panel.innerHTML =
+      '<div class="eda-head">'+
+        '<div class="eda-head-top">'+
+          '<div class="eda-head-title">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+            '<h2>Executive Decision Assistant</h2>'+
+          '</div>'+
+          '<button class="eda-close" id="eda-close" type="button" aria-label="Close">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<div class="eda-head-sub">Grounded in this Command Center\u2019s dashboard data</div>'+
+      '</div>'+
+      '<div class="eda-body" id="eda-body">'+
+        '<div class="eda-chips" id="eda-fixed-chips"></div>'+
+        '<div class="eda-chips-label">Suggested Questions</div>'+
+        '<div class="eda-chips" id="eda-chips"></div>'+
+        '<div id="eda-thread"></div>'+
+      '</div>'+
+      '<div class="eda-foot">'+
+        '<div class="eda-foot-row">'+
+          '<input class="eda-input" id="eda-input" type="text" placeholder="Ask a question about this dashboard\u2026" />'+
+          '<button class="eda-send" id="eda-send" type="button" aria-label="Send">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<button class="eda-reset" id="eda-reset" type="button">Reset conversation</button>'+
+      '</div>';
+    document.body.appendChild(panel);
+
+    const fixedChipsEl = document.getElementById('eda-fixed-chips');
+    ASSISTANT.fixedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip eda-chip-fixed';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      fixedChipsEl.appendChild(chip);
+    });
+
+    const chipsEl = document.getElementById('eda-chips');
+    ASSISTANT.suggestedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      chipsEl.appendChild(chip);
+    });
+
+    function edaOpen(){
+      panel.classList.add('eda-open');
+      overlay.classList.add('eda-open');
+    }
+    function edaClose(){
+      panel.classList.remove('eda-open');
+      overlay.classList.remove('eda-open');
+    }
+    fab.addEventListener('click', edaOpen);
+    overlay.addEventListener('click', edaClose);
+    document.getElementById('eda-close').addEventListener('click', edaClose);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') edaClose(); });
+
+    document.getElementById('eda-reset').addEventListener('click', function(){
+      document.getElementById('eda-thread').innerHTML = '';
+    });
+
+    const inputEl = document.getElementById('eda-input');
+    document.getElementById('eda-send').addEventListener('click', function(){
+      if(inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+    inputEl.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+
+    window.edaAsk = edaAsk;
+    function edaAsk(question){
+      const thread = document.getElementById('eda-thread');
+      const userWrap = document.createElement('div');
+      userWrap.className = 'eda-msg-user-wrap';
+      userWrap.innerHTML = '<div class="eda-msg-user">'+edaEsc(question)+'</div>';
+      thread.appendChild(userWrap);
+
+      const qa = edaFindAnswer(question);
+      const answerWrap = document.createElement('div');
+      answerWrap.className = 'eda-msg';
+      answerWrap.innerHTML = edaRenderAnswer(qa);
+      thread.appendChild(answerWrap);
+
+      const body = document.getElementById('eda-body');
+      body.scrollTop = body.scrollHeight;
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', edaBuildUI);
+  } else {
+    edaBuildUI();
+  }
+})();
 </script>
 </body>
 </html>

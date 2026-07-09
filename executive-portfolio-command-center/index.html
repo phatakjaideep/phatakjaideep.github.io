@@ -143,49 +143,470 @@ decimal.js-light/decimal.js:
 */
 
 </script>
+
+<style>
+/* ================= Executive Decision Assistant ================= */
+#eda-fab{
+  position:fixed; bottom:24px; right:24px; z-index:99990;
+  display:flex; align-items:center; gap:8px;
+  background:#005A9E; color:#fff; border:none; cursor:pointer;
+  padding:13px 20px 13px 16px; border-radius:999px;
+  font-family:'Segoe UI', Manrope, -apple-system, BlinkMacSystemFont, sans-serif; font-size:13.5px; font-weight:600; letter-spacing:.01em;
+  box-shadow:0 10px 28px -6px rgba(0,0,0,.4);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+#eda-fab:hover{ transform:translateY(-2px); box-shadow:0 14px 32px -6px rgba(0,0,0,.48); background:#0078D4; }
+#eda-fab svg{ width:17px; height:17px; color:#8A6100; flex-shrink:0; }
+#eda-fab .eda-fab-full{ display:inline; }
+#eda-fab .eda-fab-short{ display:none; }
+
+#eda-overlay{
+  position:fixed; inset:0; background:rgba(8,12,20,.38); z-index:99991;
+  opacity:0; pointer-events:none; transition:opacity .22s ease;
+}
+#eda-overlay.eda-open{ opacity:1; pointer-events:auto; }
+
+#eda-panel{
+  position:fixed; top:0; right:-440px; width:412px; max-width:92vw; height:100%;
+  background:#FFFFFF; z-index:99992;
+  box-shadow:-14px 0 40px -10px rgba(0,0,0,.35);
+  display:flex; flex-direction:column;
+  transition:right .28s cubic-bezier(.4,0,.2,1);
+  font-family:'Segoe UI', Manrope, -apple-system, BlinkMacSystemFont, sans-serif; color:#242A31;
+}
+#eda-panel.eda-open{ right:0; }
+
+.eda-head{
+  background:#005A9E; color:#fff; padding:20px 22px 18px; flex-shrink:0;
+  border-bottom:3px solid #8A6100;
+}
+.eda-head-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.eda-head-title{ display:flex; align-items:center; gap:9px; }
+.eda-head-title svg{ width:19px; height:19px; color:#8A6100; flex-shrink:0; }
+.eda-head-title h2{ font-size:15.5px; font-weight:700; margin:0; letter-spacing:.01em; }
+.eda-head-sub{ font-size:12px; color:rgba(255,255,255,.68); margin-top:6px; padding-left:28px; }
+.eda-close{
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#fff;
+  width:28px; height:28px; border-radius:7px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-close:hover{ background:rgba(255,255,255,.18); }
+.eda-close svg{ width:14px; height:14px; }
+
+.eda-body{ flex:1; overflow-y:auto; padding:18px 20px 12px; background:#F5F7FA; }
+.eda-chips-label{
+  font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#5B6472; margin:2px 0 10px;
+}
+.eda-chips{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.eda-chip{
+  text-align:left; background:#FFFFFF; border:1px solid #E1E5EB; color:#242A31;
+  padding:10px 13px; border-radius:9px; font-size:13px; font-family:'Segoe UI', Manrope, -apple-system, BlinkMacSystemFont, sans-serif; cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+  line-height:1.4;
+}
+.eda-chip:hover{ border-color:#8A6100; background:#FFF6DE; }
+.eda-chip-fixed{
+  background:#FFF6DE; border-color:rgba(0,0,0,.06); font-weight:600;
+}
+.eda-chips + .eda-chips-label{ margin-top:2px; }
+
+.eda-info p{ color:#242A31; line-height:1.55; margin-bottom:10px; }
+.eda-info p:last-child{ margin-bottom:0; }
+.eda-info ul{ margin:0 0 10px; padding-left:16px; color:#5B6472; }
+.eda-info li{ margin-bottom:4px; line-height:1.45; }
+
+.eda-msg{ margin-bottom:16px; }
+.eda-msg-user{
+  background:#005A9E; color:#fff; padding:10px 14px; border-radius:10px 10px 3px 10px;
+  font-size:13.5px; max-width:88%; margin-left:auto; line-height:1.45;
+}
+.eda-msg-user-wrap{ display:flex; margin-bottom:14px; }
+.eda-msg-user-wrap{ justify-content:flex-end; }
+
+.eda-answer{
+  background:#FFFFFF; border:1px solid #E1E5EB; border-radius:10px;
+  padding:15px 16px 13px; font-size:13px;
+}
+.eda-answer.eda-oos{ border-left:3px solid #5B6472; }
+.eda-block{ margin-bottom:11px; }
+.eda-block:last-of-type{ margin-bottom:0; }
+.eda-label{
+  display:block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#8A6100; margin-bottom:5px;
+}
+.eda-answer p{ margin:0; color:#242A31; line-height:1.5; }
+.eda-answer ul{ margin:0; padding-left:16px; color:#5B6472; }
+.eda-answer li{ margin-bottom:4px; line-height:1.45; }
+.eda-conf{
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+  font-size:11px; font-weight:700; letter-spacing:.03em; padding:4px 10px; border-radius:100px;
+}
+.eda-conf-high{ background:#DCFCE7; color:#15803D; }
+.eda-conf-medium{ background:#FEF3C7; color:#B45309; }
+.eda-conf-low{ background:#FEE2E2; color:#B91C1C; }
+.eda-oos p{ color:#5B6472; }
+
+.eda-foot{
+  border-top:1px solid #E1E5EB; padding:12px 16px; background:#FFFFFF; flex-shrink:0;
+}
+.eda-foot-row{ display:flex; gap:8px; }
+.eda-input{
+  flex:1; border:1px solid #E1E5EB; border-radius:8px; padding:10px 12px; font-size:13px;
+  font-family:'Segoe UI', Manrope, -apple-system, BlinkMacSystemFont, sans-serif; color:#242A31; background:#F5F7FA;
+}
+.eda-input:focus{ outline:none; border-color:#8A6100; }
+.eda-send{
+  background:#005A9E; color:#fff; border:none; border-radius:8px; width:40px; flex-shrink:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.eda-send:hover{ background:#0078D4; }
+.eda-send svg{ width:16px; height:16px; }
+.eda-reset{
+  background:none; border:none; color:#5B6472; font-size:11px; cursor:pointer;
+  margin-top:8px; text-decoration:underline; padding:0;
+}
+.eda-reset:hover{ color:#242A31; }
+
+@media (max-width:640px){
+  #eda-panel{ width:100%; max-width:100%; right:-100%; }
+  #eda-fab{ bottom:16px; right:16px; padding:13px 16px; }
+  #eda-fab .eda-fab-full{ display:none; }
+  #eda-fab .eda-fab-short{ display:inline; }
+}
+</style>
+
 <script>
-// Brand Style Guide v1.1 — amber header/footer accent.
-// Purely additive: does not modify the app bundle above. Polls the rendered
-// DOM after mount and applies inline border accents to the header bar and
-// footer signature block. Safe no-op if the app's markup ever changes shape.
-(function () {
-  function applyBrandAccent() {
-    var footerDone = false, headerDone = false;
-
-    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    var node;
-    while ((node = walker.nextNode())) {
-      if (node.textContent.indexOf('Created by Jaideep Phatak') !== -1) {
-        var el = node.parentElement && node.parentElement.parentElement;
-        if (el && el.style) {
-          el.style.borderTop = '2px solid rgba(212,137,26,0.4)';
-          footerDone = true;
-        }
-        break;
-      }
+/* ================= Executive Decision Assistant ================= */
+(function(){
+  const ASSISTANT = {
+  "assistantName": "Executive Decision Assistant",
+  "scope": "This assistant only answers questions using data available in this Command Center.",
+  "pageType": "Executive Portfolio Command Center",
+  "fixedQuestions": [
+    "\u2b50 Give me a tour of this Command Center",
+    "\ud83d\udccb What is included in this dashboard?"
+  ],
+  "suggestedQuestions": [
+    "Summarize portfolio health",
+    "Which program needs executive attention first?",
+    "Where is portfolio risk concentrated?",
+    "Which initiative should receive priority support?",
+    "What capacity or funding issue is most urgent?",
+    "What should the steering committee review next?"
+  ],
+  "qa": [
+    {
+      "question": "\u2b50 Give me a tour of this Command Center",
+      "type": "info",
+      "match": [
+        "tour",
+        "walkthrough",
+        "guide me",
+        "show me around"
+      ],
+      "intro": "Welcome to the Executive Portfolio Command Center. This Command Center has been designed to help executive leadership see across the full program portfolio, understand financial and delivery performance, and decide where to focus attention this cycle.",
+      "bullets": [
+        "Portfolio Overview",
+        "Financial Performance",
+        "Business Performance",
+        "Resource Planning",
+        "Customer Programs",
+        "AI Insights",
+        "Decision Center",
+        "Portfolio Health",
+        "Executive Brief"
+      ],
+      "closing": "If you'd like to dive deeper, ask about any individual section or select one of the suggested questions."
+    },
+    {
+      "question": "\ud83d\udccb What is included in this dashboard?",
+      "type": "info",
+      "match": [
+        "what is included",
+        "included in this dashboard",
+        "what does this dashboard",
+        "dashboard include"
+      ],
+      "intro": "This Command Center brings together the following sections:",
+      "bullets": [
+        "<strong>Portfolio Overview</strong> &mdash; which programs need executive attention",
+        "<strong>Financial Performance</strong> &mdash; whether spend is tracking within business objectives",
+        "<strong>Business Performance</strong> &mdash; whether customer commitments are protected",
+        "<strong>Resource Planning</strong> &mdash; engineering capacity across the portfolio",
+        "<strong>Customer Programs</strong> &mdash; which launches require leadership support",
+        "<strong>AI Insights</strong> &mdash; emerging risks that require early intervention",
+        "<strong>Decision Center</strong> &mdash; decisions that cannot wait this week",
+        "<strong>Portfolio Health</strong> &mdash; how well the operating model is scaling",
+        "<strong>Executive Brief</strong> &mdash; what to know before the Steering Committee"
+      ],
+      "closing": "Select a section on the dashboard or ask a suggested question to explore further."
+    },
+    {
+      "question": "Summarize portfolio health",
+      "match": [
+        "summarize",
+        "portfolio health",
+        "health",
+        "overall"
+      ],
+      "summary": "Portfolio health is best read across four live panels: Portfolio Overview, Financial Performance, Portfolio Health (maturity), and Executive Brief.",
+      "evidence": [
+        "See the <strong>Portfolio Overview</strong> panel for current program-level status and delivery confidence",
+        "See the <strong>Financial Performance</strong> panel for whether spend is tracking within business objectives",
+        "See the <strong>Portfolio Health</strong> panel for the operating-model maturity score",
+        "See the <strong>Executive Brief</strong> panel for the current steering-committee-ready summary"
+      ],
+      "recommendation": "Open the Portfolio Overview panel first &mdash; it is the fastest read on which programs are driving the overall health picture this cycle.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "Which program needs executive attention first?",
+      "match": [
+        "which program",
+        "executive attention",
+        "attention first",
+        "priority program"
+      ],
+      "summary": "The Portfolio Overview panel ranks programs by status and is the authoritative source for which one needs attention first.",
+      "evidence": [
+        "The <strong>Portfolio Overview</strong> panel is designed to answer: \"Which programs need executive attention?\"",
+        "Programs are shown with live status (On Track / Watch / At Risk / Critical) and delivery confidence",
+        "Cross-check the <strong>Decision Center</strong> panel for any decision blocking that program",
+        "Cross-check the <strong>AI Insights</strong> panel for early-warning signals on the same program"
+      ],
+      "recommendation": "Sort the Portfolio Overview panel by status and take the top At Risk or Critical program as this week's priority.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "Where is portfolio risk concentrated?",
+      "match": [
+        "risk concentrated",
+        "risk",
+        "risks",
+        "concentration"
+      ],
+      "summary": "Risk concentration is tracked in the AI Insights panel, which is scoped specifically to emerging risks requiring early intervention.",
+      "evidence": [
+        "The <strong>AI Insights</strong> panel is designed to answer: \"Which emerging risks require early intervention?\"",
+        "Cross-check the <strong>Portfolio Overview</strong> panel for which programs those risks sit on",
+        "Cross-check the <strong>Customer Programs</strong> panel for any risk tied to a customer commitment"
+      ],
+      "recommendation": "Review the AI Insights panel first, then confirm exposure against the specific program in Portfolio Overview.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "Which initiative should receive priority support?",
+      "match": [
+        "priority support",
+        "initiative",
+        "which initiative"
+      ],
+      "summary": "Priority support is best determined by combining Portfolio Overview status with Resource Planning capacity data.",
+      "evidence": [
+        "The <strong>Resource Planning</strong> panel is designed to answer: \"Do we have sufficient engineering capacity?\"",
+        "The <strong>Customer Programs</strong> panel is designed to answer: \"Which launches require leadership support?\"",
+        "Cross-check <strong>Decision Center</strong> for any open decision currently blocking that initiative"
+      ],
+      "recommendation": "Prioritize the initiative that appears both resource-constrained in Resource Planning and flagged in Customer Programs &mdash; that combination signals the highest executive leverage.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "What capacity or funding issue is most urgent?",
+      "match": [
+        "capacity",
+        "funding",
+        "urgent",
+        "budget issue"
+      ],
+      "summary": "Capacity pressure and funding exposure are tracked separately &mdash; Resource Planning for capacity, Financial Performance for funding.",
+      "evidence": [
+        "The <strong>Resource Planning</strong> panel shows current engineering capacity and utilization",
+        "The <strong>Financial Performance</strong> panel is designed to answer: \"Are we delivering within business objectives?\"",
+        "Cross-check the <strong>Business Performance</strong> panel for whether a capacity or funding gap threatens a customer commitment"
+      ],
+      "recommendation": "Check Resource Planning for the most over-allocated function first; funding issues typically follow capacity gaps rather than lead them.",
+      "confidence": "Medium"
+    },
+    {
+      "question": "What should the steering committee review next?",
+      "match": [
+        "steering committee",
+        "review next",
+        "what should"
+      ],
+      "summary": "The Executive Brief panel is purpose-built to answer exactly this question ahead of a Steering Committee session.",
+      "evidence": [
+        "The <strong>Executive Brief</strong> panel is designed to answer: \"What should I know before the Steering Committee?\"",
+        "The <strong>Decision Center</strong> panel is designed to answer: \"What decisions cannot wait this week?\"",
+        "Combine both panels to build the steering agenda: brief first, open decisions second"
+      ],
+      "recommendation": "Lead the steering agenda with the Executive Brief summary, then walk through any items flagged in Decision Center that cannot wait.",
+      "confidence": "Medium"
     }
+  ],
+  "fallback": "I can only answer using the data available in this Command Center. This question is outside the current dashboard context."
+};
 
-    var divs = document.querySelectorAll('div');
-    for (var i = 0; i < divs.length; i++) {
-      var d = divs[i];
-      var cs = window.getComputedStyle(d);
-      var rect = d.getBoundingClientRect();
-      if (cs.position === 'sticky' && parseInt(cs.top, 10) === 0 &&
-          rect.top < 5 && d.offsetHeight > 40 && d.offsetHeight < 100) {
-        d.style.borderTop = '3px solid #D4891A';
-        headerDone = true;
-        break;
-      }
+  function edaNormalize(s){ return (s||"").toLowerCase().replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim(); }
+
+  
+
+  function edaFindAnswer(question){
+    const q = edaNormalize(question);
+    if(!q) return null;
+    for(const qa of ASSISTANT.qa){
+      if(edaNormalize(qa.question) === q) return qa;
     }
-
-    return footerDone && headerDone;
+    let best=null, bestScore=0;
+    ASSISTANT.qa.forEach(function(qa){
+      let score=0;
+      qa.match.forEach(function(k){ if(q.indexOf(k)!==-1) score++; });
+      if(score>bestScore){ bestScore=score; best=qa; }
+    });
+    return bestScore>0 ? best : null;
   }
 
-  var tries = 0;
-  var iv = setInterval(function () {
-    tries++;
-    if (applyBrandAccent() || tries > 40) clearInterval(iv);
-  }, 250);
+  function edaEsc(s){
+    const d=document.createElement('div'); d.textContent=s; return d.innerHTML;
+  }
+
+  function edaRenderAnswer(qa){
+    if(!qa){
+      return '<div class="eda-answer eda-oos"><div class="eda-block"><span class="eda-label">Out of Scope</span>'+
+        '<p>'+edaEsc(ASSISTANT.fallback)+'</p></div></div>';
+    }
+    if(qa.type === 'info'){
+      const bullets = qa.bullets.map(function(b){ return '<li>'+b+'</li>'; }).join('');
+      return '<div class="eda-answer eda-info">'+
+        '<p>'+qa.intro+'</p>'+
+        '<ul>'+bullets+'</ul>'+
+        '<p>'+qa.closing+'</p>'+
+        '</div>';
+    }
+    const evidence = qa.evidence.map(function(e){ return '<li>'+e+'</li>'; }).join('');
+    const confClass = 'eda-conf-'+qa.confidence.toLowerCase();
+    return '<div class="eda-answer">'+
+      '<div class="eda-block"><span class="eda-label">Executive Summary</span><p>'+qa.summary+'</p></div>'+
+      '<div class="eda-block"><span class="eda-label">Evidence from Dashboard</span><ul>'+evidence+'</ul></div>'+
+      '<div class="eda-block"><span class="eda-label">Recommendation</span><p>'+qa.recommendation+'</p></div>'+
+      '<span class="eda-conf '+confClass+'">Confidence: '+qa.confidence+'</span>'+
+      '</div>';
+  }
+
+  function edaBuildUI(){
+    const fab = document.createElement('button');
+    fab.id = 'eda-fab';
+    fab.type = 'button';
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+      '<span class="eda-fab-full">Executive Decision Assistant</span><span class="eda-fab-short">Assistant</span>';
+    document.body.appendChild(fab);
+
+    const overlay = document.createElement('div');
+    overlay.id = 'eda-overlay';
+    document.body.appendChild(overlay);
+
+    const panel = document.createElement('div');
+    panel.id = 'eda-panel';
+    panel.innerHTML =
+      '<div class="eda-head">'+
+        '<div class="eda-head-top">'+
+          '<div class="eda-head-title">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.9L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.1L12 3z"/></svg>'+
+            '<h2>Executive Decision Assistant</h2>'+
+          '</div>'+
+          '<button class="eda-close" id="eda-close" type="button" aria-label="Close">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<div class="eda-head-sub">Grounded in this Command Center\u2019s dashboard data</div>'+
+      '</div>'+
+      '<div class="eda-body" id="eda-body">'+
+        '<div class="eda-chips" id="eda-fixed-chips"></div>'+
+        '<div class="eda-chips-label">Suggested Questions</div>'+
+        '<div class="eda-chips" id="eda-chips"></div>'+
+        '<div id="eda-thread"></div>'+
+      '</div>'+
+      '<div class="eda-foot">'+
+        '<div class="eda-foot-row">'+
+          '<input class="eda-input" id="eda-input" type="text" placeholder="Ask a question about this dashboard\u2026" />'+
+          '<button class="eda-send" id="eda-send" type="button" aria-label="Send">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>'+
+          '</button>'+
+        '</div>'+
+        '<button class="eda-reset" id="eda-reset" type="button">Reset conversation</button>'+
+      '</div>';
+    document.body.appendChild(panel);
+
+    const fixedChipsEl = document.getElementById('eda-fixed-chips');
+    ASSISTANT.fixedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip eda-chip-fixed';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      fixedChipsEl.appendChild(chip);
+    });
+
+    const chipsEl = document.getElementById('eda-chips');
+    ASSISTANT.suggestedQuestions.forEach(function(q){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'eda-chip';
+      chip.textContent = q;
+      chip.addEventListener('click', function(){ edaAsk(q); });
+      chipsEl.appendChild(chip);
+    });
+
+    function edaOpen(){
+      panel.classList.add('eda-open');
+      overlay.classList.add('eda-open');
+    }
+    function edaClose(){
+      panel.classList.remove('eda-open');
+      overlay.classList.remove('eda-open');
+    }
+    fab.addEventListener('click', edaOpen);
+    overlay.addEventListener('click', edaClose);
+    document.getElementById('eda-close').addEventListener('click', edaClose);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') edaClose(); });
+
+    document.getElementById('eda-reset').addEventListener('click', function(){
+      document.getElementById('eda-thread').innerHTML = '';
+    });
+
+    const inputEl = document.getElementById('eda-input');
+    document.getElementById('eda-send').addEventListener('click', function(){
+      if(inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+    inputEl.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && inputEl.value.trim()){ edaAsk(inputEl.value.trim()); inputEl.value=''; }
+    });
+
+    window.edaAsk = edaAsk;
+    function edaAsk(question){
+      const thread = document.getElementById('eda-thread');
+      const userWrap = document.createElement('div');
+      userWrap.className = 'eda-msg-user-wrap';
+      userWrap.innerHTML = '<div class="eda-msg-user">'+edaEsc(question)+'</div>';
+      thread.appendChild(userWrap);
+
+      const qa = edaFindAnswer(question);
+      const answerWrap = document.createElement('div');
+      answerWrap.className = 'eda-msg';
+      answerWrap.innerHTML = edaRenderAnswer(qa);
+      thread.appendChild(answerWrap);
+
+      const body = document.getElementById('eda-body');
+      body.scrollTop = body.scrollHeight;
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', edaBuildUI);
+  } else {
+    edaBuildUI();
+  }
 })();
 </script>
 </body>
