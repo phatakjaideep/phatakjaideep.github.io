@@ -1,0 +1,3448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none';">
+<title>Executive Risk Prioritizer | Executive AI Toolkit</title>
+<style>
+:root{
+  --bg:#0B1420;
+  --bg-grid:#0E1A2A;
+  --panel:#121D30;
+  --panel-elevated:#17253C;
+  --panel-hover:#1C2C46;
+  --border:#25384F;
+  --border-soft:#1B2A3E;
+  --text:#EDF1F7;
+  --text-dim:#97A6BE;
+  --text-faint:#5E7089;
+  --amber:#D9A441;
+  --amber-bright:#F0BE5C;
+  --amber-dim:#8A6B2C;
+  --red:#E2574C;
+  --orange:#E08A3C;
+  --blue:#4C9BD9;
+  --green:#4CAF7D;
+  --focus:#F0BE5C;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 3px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.35);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--bg-grid) 1px, transparent 1px) 0 0/100% 42px,
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px) 0 0/42px 100%,
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:var(--font-sans);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%;display:block;}
+button{font-family:inherit;}
+a{color:var(--amber-bright);}
+
+::selection{background:var(--amber-dim);color:#fff;}
+
+:focus-visible{
+  outline:2px solid var(--focus);
+  outline-offset:2px;
+}
+.visually-hidden{
+  position:absolute!important;
+  width:1px;height:1px;
+  padding:0;margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;border:0;
+}
+.skip-link{
+  position:absolute;left:8px;top:-60px;
+  background:var(--amber);color:#0B1420;
+  padding:10px 16px;border-radius:var(--radius);
+  font-weight:700;z-index:1000;transition:top .15s ease;
+  text-decoration:none;
+}
+.skip-link:focus{top:8px;}
+
+/* ---------- Layout shells ---------- */
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px;}
+.eyebrow{
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+  font-weight:700;
+  color:var(--amber);
+}
+h1,h2,h3,h4{
+  font-family:var(--font-sans);
+  font-weight:800;
+  letter-spacing:-0.01em;
+  color:var(--text);
+  margin:0 0 8px 0;
+}
+p{color:var(--text-dim);margin:0 0 12px 0;}
+
+/* ---------- Header ---------- */
+header.app-header{
+  border-bottom:1px solid var(--border-soft);
+  background:linear-gradient(180deg, rgba(18,29,48,.9), rgba(11,20,32,.4));
+  padding:22px 0;
+  position:sticky;top:0;
+  z-index:50;
+  backdrop-filter:blur(6px);
+}
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand-mark{
+  width:40px;height:40px;flex:none;
+}
+.brand-text h1{font-size:19px;margin:0;line-height:1.2;}
+.brand-text .sub{font-size:12px;color:var(--text-faint);margin-top:2px;letter-spacing:.02em;}
+.toolkit-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.toolkit-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--amber-bright);
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+  white-space:nowrap;
+}
+.toolkit-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--amber);flex:none;}
+.toolkit-badge.secondary{color:var(--text-dim);}
+.toolkit-badge.secondary::before{background:var(--text-faint);}
+.status-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:12px;
+  color:var(--text-dim);
+  white-space:nowrap;
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 8px var(--green);}
+.home-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-dim);
+  padding:7px 12px;
+  border-radius:var(--radius);
+  font-size:12px;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .12s ease,border-color .12s ease,color .12s ease;
+}
+.home-btn:hover{background:var(--panel-elevated);border-color:var(--amber-dim);color:var(--text);}
+
+.hero{
+  padding:40px 0 28px;
+  border-bottom:1px solid var(--border-soft);
+}
+.hero h2{font-size:28px;max-width:820px;}
+.hero p.lede{max-width:700px;font-size:15px;}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.chip{
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text-dim);
+  font-size:12px;
+  padding:6px 11px;
+  border-radius:20px;
+}
+
+/* ---------- Section shells ---------- */
+main{padding-bottom:80px;}
+section.block{
+  padding:36px 0;
+  border-bottom:1px solid var(--border-soft);
+}
+.block-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.block-head h3{font-size:20px;}
+.block-head .desc{font-size:13px;color:var(--text-faint);max-width:640px;margin:4px 0 0;}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:20px;
+}
+.panel + .panel{margin-top:16px;}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border);
+  background:var(--panel-elevated);
+  color:var(--text);
+  padding:10px 16px;
+  border-radius:var(--radius);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition:background .12s ease,border-color .12s ease,transform .05s ease;
+}
+.btn:hover{background:var(--panel-hover);border-color:var(--amber-dim);}
+.btn:active{transform:translateY(1px);}
+.btn.primary{
+  background:var(--amber);
+  border-color:var(--amber);
+  color:#1A1305;
+}
+.btn.primary:hover{background:var(--amber-bright);border-color:var(--amber-bright);}
+.btn.ghost{background:transparent;}
+.btn.danger{border-color:#5A2A26;color:#F0958C;}
+.btn.danger:hover{background:#241213;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.small{padding:6px 11px;font-size:12px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.icon{width:15px;height:15px;flex:none;}
+
+/* ---------- Forms ---------- */
+label{display:block;font-size:12px;font-weight:700;color:var(--text-dim);margin-bottom:5px;letter-spacing:.01em;}
+.field{margin-bottom:14px;}
+.field .hint{font-size:11px;color:var(--text-faint);margin-top:4px;}
+input[type=text],input[type=date],input[type=number],textarea,select{
+  width:100%;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:9px 11px;
+  border-radius:var(--radius);
+  font-size:13px;
+  font-family:inherit;
+}
+textarea{resize:vertical;min-height:64px;}
+input:focus,textarea:focus,select:focus{border-color:var(--amber);}
+.field.error input,.field.error textarea,.field.error select{border-color:var(--red);}
+.field-error{color:#F0958C;font-size:11.5px;margin-top:4px;display:none;}
+.field.error .field-error{display:block;}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 16px;}
+.form-grid .span2{grid-column:span 2;}
+.form-grid .span3{grid-column:span 3;}
+@media(max-width:900px){.form-grid{grid-template-columns:repeat(2,1fr);}.form-grid .span3{grid-column:span 2;}}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr;}.form-grid .span2,.form-grid .span3{grid-column:span 1;}}
+
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.tab-btn{
+  background:transparent;border:none;color:var(--text-faint);
+  padding:10px 4px;margin-right:20px;
+  font-size:13px;font-weight:700;
+  border-bottom:2px solid transparent;
+  cursor:pointer;
+}
+.tab-btn[aria-selected="true"]{color:var(--amber-bright);border-bottom-color:var(--amber);}
+.tab-panel[hidden]{display:none;}
+
+/* ---------- Queue table ---------- */
+.queue-table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{
+  text-align:left;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  padding:9px 10px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+td{padding:10px 10px;border-bottom:1px solid var(--border-soft);vertical-align:top;color:var(--text-dim);}
+tbody tr:hover{background:var(--panel-elevated);}
+tbody tr{cursor:pointer;}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.badge{
+  display:inline-block;
+  padding:3px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.02em;
+  border:1px solid transparent;
+  white-space:nowrap;
+}
+.badge.p-immediate{background:rgba(226,87,76,.15);color:#F0958C;border-color:rgba(226,87,76,.4);}
+.badge.p-critical{background:rgba(224,138,60,.15);color:#F4B279;border-color:rgba(224,138,60,.4);}
+.badge.p-high{background:rgba(217,164,65,.15);color:var(--amber-bright);border-color:rgba(217,164,65,.4);}
+.badge.p-monitor{background:rgba(76,155,217,.15);color:#8CC4EE;border-color:rgba(76,155,217,.4);}
+.badge.p-operational{background:rgba(76,175,125,.15);color:#8CDBAF;border-color:rgba(76,175,125,.4);}
+.badge.neutral{background:var(--panel-elevated);color:var(--text-dim);border-color:var(--border);}
+
+/* ---------- Empty / status states ---------- */
+.empty-state{
+  text-align:center;
+  padding:52px 24px;
+  border:1px dashed var(--border);
+  border-radius:6px;
+  color:var(--text-faint);
+}
+.empty-state h4{color:var(--text-dim);font-size:15px;}
+.empty-state svg{margin:0 auto 14px;opacity:.5;}
+
+.banner{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;
+  border-radius:var(--radius);
+  font-size:13px;
+  border:1px solid var(--border);
+  margin-bottom:16px;
+}
+.banner.stale{background:rgba(224,138,60,.1);border-color:rgba(224,138,60,.4);color:#F4B279;}
+.banner.info{background:rgba(76,155,217,.1);border-color:rgba(76,155,217,.4);color:#8CC4EE;}
+
+/* ---------- KPI cards ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+.kpi-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:16px;
+}
+.kpi-card .val{font-size:26px;font-weight:800;font-family:var(--font-mono);}
+.kpi-card .lbl{font-size:11.5px;color:var(--text-faint);margin-top:4px;}
+.kpi-card.warn .val{color:var(--orange);}
+.kpi-card.critical .val{color:var(--red);}
+
+/* ---------- Decision cards ---------- */
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media(max-width:900px){.card-grid{grid-template-columns:1fr;}}
+.decision-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:6px;
+  padding:18px;border-left:3px solid var(--amber);
+}
+.decision-card.lvl-executive{border-left-color:var(--red);}
+.decision-card.lvl-director{border-left-color:var(--orange);}
+.decision-card .dc-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+.decision-card h4{font-size:14.5px;margin:0 0 4px;}
+.decision-card dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12.5px;margin:12px 0;}
+.decision-card dt{color:var(--text-faint);font-weight:700;}
+.decision-card dd{margin:0;color:var(--text-dim);}
+
+/* ---------- Heat map ---------- */
+.heatmap-wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;}
+@media(max-width:980px){.heatmap-wrap{grid-template-columns:1fr;}}
+.heatmap-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:11.5px;color:var(--text-faint);}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+/* ---------- Bars ---------- */
+.bar-row{display:grid;grid-template-columns:170px 1fr 60px;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px;}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:20px;height:12px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--amber-dim),var(--amber));border-radius:20px;}
+
+/* ---------- Escalation matrix ---------- */
+.esc-table th,.esc-table td{text-align:center;}
+.esc-table td:first-child,.esc-table th:first-child{text-align:left;}
+.esc-row-btn{background:none;border:none;color:inherit;font:inherit;cursor:pointer;text-align:left;padding:0;}
+.esc-row-btn:hover{color:var(--amber-bright);}
+
+/* ---------- Assistant ---------- */
+.assistant-panel{display:grid;grid-template-columns:280px 1fr;gap:18px;}
+@media(max-width:900px){.assistant-panel{grid-template-columns:1fr;}}
+.suggested-q{display:flex;flex-direction:column;gap:8px;}
+.suggested-q button{
+  text-align:left;background:var(--panel-elevated);border:1px solid var(--border);
+  color:var(--text-dim);padding:9px 11px;border-radius:var(--radius);font-size:12.5px;cursor:pointer;
+}
+.suggested-q button:hover{border-color:var(--amber-dim);color:var(--text);}
+.chat-window{
+  background:var(--bg);border:1px solid var(--border);border-radius:6px;
+  min-height:260px;max-height:420px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;
+}
+.chat-msg{max-width:88%;padding:10px 13px;border-radius:8px;font-size:13px;line-height:1.5;}
+.chat-msg.user{align-self:flex-end;background:var(--amber-dim);color:#fff;}
+.chat-msg.assistant{align-self:flex-start;background:var(--panel-elevated);border:1px solid var(--border);color:var(--text);}
+.chat-msg .msg-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.chat-input-row{display:flex;gap:8px;margin-top:12px;}
+.chat-input-row input{flex:1;}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(6,10,17,.72);
+  display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;
+}
+.modal-overlay[hidden]{display:none;}
+.modal{
+  background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  max-width:640px;width:100%;max-height:84vh;overflow-y:auto;padding:26px;box-shadow:var(--shadow);
+}
+.modal h3{margin-top:0;}
+.modal-close{
+  float:right;background:transparent;border:1px solid var(--border);color:var(--text-dim);
+  width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;
+}
+
+/* ---------- Toast ---------- */
+#toast-region{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:300;}
+.toast{
+  background:var(--panel-elevated);border:1px solid var(--border);color:var(--text);
+  padding:11px 16px;border-radius:6px;font-size:13px;box-shadow:var(--shadow);
+  border-left:3px solid var(--green);animation:toast-in .18s ease;
+}
+.toast.error{border-left-color:var(--red);}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- Footer ---------- */
+footer{padding:24px 0;color:var(--text-faint);font-size:12px;border-top:1px solid var(--border-soft);}
+.footer-grid{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.footer-left{color:var(--text-faint);}
+.footer-left strong{color:var(--text-dim);font-weight:600;}
+.footer-right{color:var(--text-faint);white-space:nowrap;}
+@media(max-width:600px){
+  .footer-grid{flex-direction:column;align-items:flex-start;text-align:left;}
+}
+footer a{color:var(--text-dim);}
+
+/* ---------- Misc ---------- */
+.privacy-note{
+  display:flex;gap:10px;align-items:flex-start;
+  border:1px solid var(--border);background:var(--panel);
+  padding:14px 16px;border-radius:6px;font-size:12.5px;color:var(--text-dim);
+}
+.privacy-note svg{flex:none;margin-top:2px;}
+.methodology-link{background:none;border:none;color:var(--amber-bright);cursor:pointer;font-size:12.5px;text-decoration:underline;padding:0;}
+.sr-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+
+.queue-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.queue-controls select,.queue-controls input[type=text]{width:auto;min-width:160px;}
+.stale-flag{opacity:.55;filter:grayscale(.3);}
+
+/* ---------- Exposure areas ---------- */
+.exposure-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+@media(max-width:700px){.exposure-grid{grid-template-columns:repeat(2,1fr);}}
+.exposure-option{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-dim);background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:7px 9px;}
+.exposure-option input{width:auto;margin:0;}
+.exposure-chip{display:inline-block;background:var(--panel-elevated);border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:2px 8px;border-radius:12px;margin:0 4px 4px 0;}
+.exposure-chip.inferred{border-style:dashed;color:var(--text-faint);}
+
+/* ---------- Assistant filter chip ---------- */
+.active-filter-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(217,164,65,.12);border:1px solid var(--amber-dim);color:var(--amber-bright);padding:6px 12px;border-radius:20px;font-size:12.5px;margin-bottom:12px;}
+.active-filter-chip button{background:none;border:none;color:inherit;font-weight:700;cursor:pointer;padding:0 0 0 4px;font-size:13px;}
+
+/* ---------- Score breakdown ---------- */
+.score-breakdown{display:flex;flex-direction:column;gap:6px;margin:12px 0;}
+.score-breakdown .sb-row{display:grid;grid-template-columns:170px 1fr 60px;align-items:center;gap:10px;font-size:12px;}
+.score-breakdown .sb-track{background:var(--bg);border:1px solid var(--border);border-radius:20px;height:10px;overflow:hidden;}
+.score-breakdown .sb-fill{height:100%;background:linear-gradient(90deg,var(--amber-dim),var(--amber));}
+.score-breakdown .sb-total{border-top:1px solid var(--border);margin-top:4px;padding-top:8px;font-weight:700;color:var(--text);}
+
+/* ---------- Closed / dataset toggle ---------- */
+.dataset-toggle{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-dim);}
+.dataset-toggle input{width:auto;}
+.data-inclusion-note{font-size:11.5px;color:var(--text-faint);margin-top:6px;}
+
+@media print{
+  :root{
+    --bg:#ffffff;
+    --bg-grid:#ffffff;
+    --panel:#ffffff;
+    --panel-elevated:#ffffff;
+    --panel-hover:#ffffff;
+    --border:#999999;
+    --border-soft:#cccccc;
+    --text:#111111;
+    --text-dim:#333333;
+    --text-faint:#555555;
+    --amber:#8A6B2C;
+    --amber-bright:#6b5320;
+    --red:#a5251c;
+    --orange:#a35a15;
+    --blue:#22587f;
+    --green:#1f6b45;
+  }
+  *{ print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  header,.no-print,.assistant-panel,.queue-controls,.tabs,#toast-region,#input-section,.hero,.privacy-note button,.home-btn,footer,.toolkit-badges{display:none!important;}
+  body{background:#fff;color:#111;}
+  .panel,.decision-card,.kpi-card{border:1px solid #999;background:#fff;color:#111;break-inside:avoid;}
+  .kpi-grid{break-inside:avoid;}
+  .card-grid .decision-card{break-inside:avoid;}
+  a{color:#111;text-decoration:underline;}
+  .stale-flag{opacity:1!important;filter:none!important;}
+  section.block{break-inside:avoid-page;padding:14px 0;}
+  #heatmap-section, #escalation-section, #workstream-section{break-before:page;}
+  table{font-size:11px;}
+  th{color:#333;}
+  td{color:#222;}
+  .badge{border:1px solid #666;background:#eee!important;color:#111!important;}
+  @page{ margin:16mm 14mm; }
+  thead{ display:table-header-group; }
+  #print-report-header{display:block!important;margin-bottom:14px;}
+}
+#print-report-header{display:none;}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="toast-region" aria-live="polite" role="status"></div>
+<div class="sr-live" id="sr-announcer" aria-live="polite"></div>
+
+<header class="app-header">
+  <div class="wrap header-row">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" rx="4" stroke="#D9A441" stroke-width="1.5"/>
+        <path d="M10 27L16 15L22 21L30 9" stroke="#D9A441" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="30" cy="9" r="2.4" fill="#F0BE5C"/>
+      </svg>
+      <div class="brand-text">
+        <h1>Executive Risk Prioritizer</h1>
+        <div class="sub">Local Risk Intelligence &middot; Program &amp; Portfolio Governance</div>
+        <div class="toolkit-badges">
+          <span class="toolkit-badge">Executive AI Toolkit</span>
+          <span class="toolkit-badge secondary">Free Tool</span>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="align-items:center;">
+      <span class="status-pill"><span class="status-dot" aria-hidden="true"></span>Local analysis &middot; No API key &middot; No external data transfer</span>
+      <a class="home-btn" href="../../" aria-label="Return to the Executive AI Toolkit homepage">&larr; Executive AI Toolkit</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Executive Decision Support</span>
+    <h2>Convert a conventional risk register into an executive-ranked action queue.</h2>
+    <p class="lede">Prioritization is based on business impact, urgency, strategic importance, cross-functional dependency, mitigation confidence, ownership clarity, and deadline proximity &mdash; not probability &times; impact alone.</p>
+    <div class="hero-meta">
+      <span class="chip">Runs entirely in your browser</span>
+      <span class="chip">No generative AI model</span>
+      <span class="chip">Deterministic scoring</span>
+      <span class="chip">GitHub Pages ready</span>
+    </div>
+  </div>
+</div>
+
+<main id="main-content">
+<div class="wrap">
+
+  <!-- ================= PRIVACY NOTE ================= -->
+  <section class="block" style="border-bottom:none;padding-bottom:0;">
+    <div class="privacy-note">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3z" stroke="#D9A441" stroke-width="1.6"/><path d="M9 12l2 2 4-4" stroke="#D9A441" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <strong style="color:var(--text);">Your project data remains in your browser.</strong> This tool does not upload, transmit, or store your risks on an external server. <button type="button" class="methodology-link" id="open-methodology-1">View methodology &amp; security notes</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INPUT WORKSPACE ================= -->
+  <section class="block" id="input-section" aria-labelledby="input-heading">
+    <div class="block-head">
+      <div>
+        <h3 id="input-heading">Risk Input Workspace</h3>
+        <p class="desc">Add risks manually or import a CSV register. Analysis runs only after you choose to run it.</p>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn" id="btn-load-sample">Load sample program data</button>
+        <button type="button" class="btn ghost" id="btn-clear-queue">Clear queue</button>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Risk input method">
+      <button class="tab-btn" id="tab-manual" role="tab" aria-selected="true" tabindex="0" aria-controls="panel-manual">Manual / Paste Entry</button>
+      <button class="tab-btn" id="tab-csv" role="tab" aria-selected="false" tabindex="-1" aria-controls="panel-csv">CSV Upload</button>
+    </div>
+
+    <div id="panel-manual" class="tab-panel" role="tabpanel" aria-labelledby="tab-manual">
+      <div class="panel">
+        <form id="risk-form" novalidate>
+          <div class="form-grid">
+            <div class="field span2" data-field="title">
+              <label for="f-title">Risk title <span aria-hidden="true">*</span></label>
+              <input type="text" id="f-title" maxlength="140" autocomplete="off">
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="riskId">
+              <label for="f-riskid">Risk ID (optional)</label>
+              <input type="text" id="f-riskid" maxlength="30" autocomplete="off" placeholder="Auto-generated if blank">
+            </div>
+
+            <div class="field span3" data-field="description">
+              <label for="f-desc">Risk description <span aria-hidden="true">*</span></label>
+              <textarea id="f-desc" maxlength="600"></textarea>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="owner">
+              <label for="f-owner">Risk owner</label>
+              <input type="text" id="f-owner" maxlength="80" autocomplete="off" placeholder="Leave blank if unassigned">
+              <div class="hint">Accountable for the risk overall.</div>
+            </div>
+            <div class="field" data-field="actionOwner">
+              <label for="f-action-owner">Action owner (optional)</label>
+              <input type="text" id="f-action-owner" maxlength="80" autocomplete="off" placeholder="Executing mitigation, if different">
+            </div>
+            <div class="field" data-field="workstream">
+              <label for="f-workstream">Workstream <span aria-hidden="true">*</span></label>
+              <select id="f-workstream">
+                <option value="">Select workstream</option>
+                <option>Engineering</option>
+                <option>Software</option>
+                <option>Validation</option>
+                <option>Quality</option>
+                <option>Manufacturing</option>
+                <option>Supply Chain</option>
+                <option>Procurement</option>
+                <option>Finance</option>
+                <option>Commercial</option>
+                <option>Customer</option>
+                <option>Regulatory</option>
+                <option>Program Management</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="category">
+              <label for="f-category">Category</label>
+              <input type="text" id="f-category" maxlength="60" autocomplete="off" placeholder="e.g. Technical, Compliance">
+            </div>
+            <div class="field" data-field="probability">
+              <label for="f-probability">Probability <span aria-hidden="true">*</span></label>
+              <select id="f-probability">
+                <option value="">Select</option>
+                <option value="1">Low</option>
+                <option value="2">Low-Moderate</option>
+                <option value="3">Moderate</option>
+                <option value="4">High</option>
+                <option value="5">Very High</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="businessImpact">
+              <label for="f-impact">Business impact <span aria-hidden="true">*</span></label>
+              <select id="f-impact">
+                <option value="">Select</option>
+                <option value="1">Minor</option>
+                <option value="2">Low</option>
+                <option value="3">Moderate</option>
+                <option value="4">Major</option>
+                <option value="5">Severe</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="urgency">
+              <label for="f-urgency">Urgency <span aria-hidden="true">*</span></label>
+              <select id="f-urgency">
+                <option value="">Select</option>
+                <option value="5">Immediate</option>
+                <option value="4">Within 48 hours</option>
+                <option value="3">Within 7 days</option>
+                <option value="2">Within 30 days</option>
+                <option value="1">Longer-term</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="strategicImportance">
+              <label for="f-strategic">Strategic importance <span aria-hidden="true">*</span></label>
+              <select id="f-strategic">
+                <option value="">Select strategic importance</option>
+                <option value="1">Low</option>
+                <option value="2">Moderate</option>
+                <option value="3">Elevated</option>
+                <option value="4">High &mdash; customer, KPI, or major milestone</option>
+                <option value="5">Critical &mdash; board, launch, safety, regulatory, or contractual commitment</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="dependencyImpact">
+              <label for="f-dependency">Dependency impact</label>
+              <select id="f-dependency">
+                <option value="1" selected>Isolated / limited impact</option>
+                <option value="2">Affects one adjacent team</option>
+                <option value="3">Affects multiple teams</option>
+                <option value="4">Blocks downstream workstream(s)</option>
+                <option value="5">Cascading, multi-milestone risk</option>
+              </select>
+            </div>
+
+            <div class="field" data-field="mitigationConfidence">
+              <label for="f-mitigation-conf">Mitigation confidence <span aria-hidden="true">*</span></label>
+              <select id="f-mitigation-conf">
+                <option value="">Select</option>
+                <option value="5">Strong &mdash; clear plan, evidence of progress</option>
+                <option value="4">Adequate</option>
+                <option value="3">Partial &mdash; gaps remain</option>
+                <option value="2">Weak &mdash; limited action</option>
+                <option value="1">None / unmitigated</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="dateState">
+              <label for="f-date-state">Date status <span aria-hidden="true">*</span></label>
+              <select id="f-date-state">
+                <option value="provided">Target date provided</option>
+                <option value="no-date-applicable">No date applicable</option>
+                <option value="ongoing-monitoring">Ongoing monitoring</option>
+                <option value="not-established">Date not established</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field="targetDate">
+              <label for="f-date">Target date</label>
+              <input type="date" id="f-date">
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="status">
+              <label for="f-status">Status</label>
+              <select id="f-status">
+                <option>Open</option>
+                <option>Mitigating</option>
+                <option>Monitoring</option>
+                <option>Escalated</option>
+                <option>Closed</option>
+              </select>
+              <div class="hint">Closed risks are excluded from active analysis by default.</div>
+            </div>
+            <div class="field span2" data-field="currentMitigation">
+              <label for="f-current-mit">Current mitigation</label>
+              <textarea id="f-current-mit" maxlength="500" placeholder="Describe mitigation actions currently underway"></textarea>
+            </div>
+
+            <div class="field span3" data-field="exposureAreas">
+              <label>Exposure areas <span aria-hidden="true">*</span> <span class="hint" style="display:inline;">(select at least one)</span></label>
+              <div class="exposure-grid" id="f-exposure-grid" role="group" aria-label="Exposure areas"></div>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="decisionRequired" style="align-self:end;padding-bottom:9px;">
+              <label style="display:flex;align-items:center;gap:8px;font-weight:400;">
+                <input type="checkbox" id="f-decision-required" style="width:auto;"> Requires a leadership decision
+              </label>
+            </div>
+            <div class="field" data-field="confirmedDecisionOwner">
+              <label for="f-confirmed-owner">Confirmed decision owner</label>
+              <input type="text" id="f-confirmed-owner" maxlength="80" placeholder="Named person/role, if confirmed">
+              <div class="hint">Leave blank if not yet confirmed.</div>
+            </div>
+            <div class="field" data-field="requestedDecisionAuthority">
+              <label for="f-decision-authority">Requested decision authority</label>
+              <input type="text" id="f-decision-authority" maxlength="80" placeholder="e.g. VP Engineering, Steering Committee">
+              <div class="hint">What authority level you believe is needed.</div>
+            </div>
+
+            <div class="field" data-field="escalationRequired" style="align-self:end;padding-bottom:9px;">
+              <label style="display:flex;align-items:center;gap:8px;font-weight:400;">
+                <input type="checkbox" id="f-escalation-required" style="width:auto;"> Explicitly requires escalation
+              </label>
+              <div class="hint">Leave unchecked to let the tool suggest a level.</div>
+            </div>
+            <div class="field" data-field="escalationRecipient">
+              <label for="f-escalation-recipient">Escalation recipient (optional)</label>
+              <input type="text" id="f-escalation-recipient" maxlength="80" placeholder="Leave blank to use the suggested level">
+            </div>
+            <div class="field" data-field="executiveVisibility" style="align-self:end;padding-bottom:9px;">
+              <label style="display:flex;align-items:center;gap:8px;font-weight:400;">
+                <input type="checkbox" id="f-executive-visibility" style="width:auto;"> Requires executive visibility
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-top:6px;">
+            <button type="submit" class="btn primary" id="btn-add-risk">Add risk to queue</button>
+            <button type="button" class="btn ghost" id="btn-reset-form">Reset form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="panel-csv" class="tab-panel" role="tabpanel" aria-labelledby="tab-csv" hidden>
+      <div class="panel">
+        <p style="margin-top:0;">Upload a CSV risk register. Column names are matched flexibly (e.g. "Risk" or "Risk Title"; "Impact" or "Business Impact"). Files are processed entirely in your browser and are never transmitted.</p>
+        <div class="btn-row" style="margin-bottom:14px;">
+          <label class="btn primary" for="csv-file-input" style="cursor:pointer;">Choose CSV file
+            <input type="file" id="csv-file-input" accept=".csv,text/csv" class="visually-hidden">
+          </label>
+          <button type="button" class="btn ghost" id="btn-download-template">Download CSV template</button>
+        </div>
+        <div id="csv-summary" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:18px;">
+      <div class="block-head" style="margin-bottom:12px;">
+        <h4 style="margin:0;font-size:15px;">Input Queue <span class="badge neutral" id="queue-count">0 risks</span></h4>
+        <div class="btn-row" style="align-items:center;">
+          <label class="dataset-toggle"><input type="checkbox" id="chk-include-closed"> Include closed risks in analysis</label>
+          <button type="button" class="btn primary" id="btn-run-analysis">Run Executive Analysis</button>
+        </div>
+      </div>
+      <div class="data-inclusion-note" id="dataset-summary-note"></div>
+      <div id="queue-region"></div>
+    </div>
+  </section>
+
+  <!-- ================= STALE / STATUS BANNER ================= -->
+  <div class="wrap no-print" id="status-banner-region" style="padding-top:24px;"></div>
+
+  <!-- ================= RESULTS (hidden until analysis run) ================= -->
+  <div id="results-root" hidden>
+
+    <div id="print-report-header">
+      <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#666;margin-bottom:4px;">Executive AI Toolkit</div>
+      <h2 style="margin-bottom:4px;">Executive Risk Prioritizer &mdash; Executive Report</h2>
+      <div id="print-report-meta" style="font-size:12px;color:#333;"></div>
+    </div>
+
+    <section class="block" id="summary-section" aria-labelledby="summary-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="summary-heading">Executive Summary</h3>
+          <p class="desc">A dataset-specific briefing generated from the current analysis.</p>
+        </div>
+        <div class="btn-row no-print">
+          <button type="button" class="btn small" id="btn-copy-summary">Copy summary</button>
+        </div>
+      </div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div class="panel" style="margin-top:16px;">
+        <p id="exec-summary-text" style="margin:0;color:var(--text);font-size:14px;line-height:1.7;"></p>
+      </div>
+    </section>
+
+    <section class="block" id="queue-priority-section" aria-labelledby="priority-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="priority-heading">Executive Priority Queue</h3>
+          <p class="desc">Ranked by stable Executive Rank. Rank does not change when you filter or search &mdash; select a row to view its full decision context.</p>
+        </div>
+      </div>
+      <div class="queue-controls no-print">
+        <input type="text" id="filter-search" placeholder="Search risks...">
+        <select id="filter-priority"><option value="">All priority levels</option><option>Executive Immediate</option><option>Executive Critical</option><option>High Priority</option><option>Monitor Closely</option><option>Operational</option></select>
+        <select id="filter-workstream"><option value="">All workstreams</option></select>
+        <select id="filter-decision"><option value="">Decision: any</option><option value="yes">Decision required</option><option value="no">No decision required</option></select>
+        <select id="filter-escalation-required"><option value="">Escalation: any</option><option value="yes">Escalation required</option><option value="no">No escalation required</option></select>
+        <select id="filter-governance"><option value="">All suggested governance levels</option></select>
+        <select id="filter-exposure"><option value="">All exposure areas</option></select>
+        <select id="filter-mitigation"><option value="">Mitigation: any</option><option value="weak">Weak / unmitigated</option><option value="adequate">Adequate / strong</option></select>
+        <select id="filter-visibility"><option value="">Executive visibility: any</option><option value="yes">Required</option><option value="no">Not required</option></select>
+        <button type="button" class="btn ghost small" id="btn-reset-filters">Reset filters</button>
+      </div>
+      <div id="assistant-filter-chip-region"></div>
+      <div id="priority-queue-region"></div>
+    </section>
+
+    <section class="block" id="decision-cards-section" aria-labelledby="decision-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="decision-heading">Executive Decision Cards</h3>
+          <p class="desc">Generated only where a genuine decision or escalation requirement exists.</p>
+        </div>
+      </div>
+      <div id="decision-cards-region" class="card-grid"></div>
+    </section>
+
+    <section class="block" id="heatmap-section" aria-labelledby="heatmap-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="heatmap-heading">Executive Heat Map</h3>
+          <p class="desc">Probability vs. business impact. Marker size reflects Executive Priority Score.</p>
+        </div>
+      </div>
+      <div class="heatmap-wrap">
+        <div class="panel" id="heatmap-svg-region"></div>
+        <div class="panel">
+          <h4 style="font-size:13px;margin-bottom:10px;">Data table (accessible alternative)</h4>
+          <div id="heatmap-table-region" style="max-height:340px;overflow-y:auto;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="workstream-section" aria-labelledby="workstream-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="workstream-heading">Workstream Impact Analysis</h3>
+          <p class="desc">Ranked by Workstream Exposure Index, a composite of average score, peak score, executive-critical concentration, decision load, and mitigation weakness &mdash; not average score alone.</p>
+        </div>
+      </div>
+      <div class="panel" id="workstream-region"></div>
+    </section>
+
+    <section class="block" id="escalation-section" aria-labelledby="escalation-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="escalation-heading">Escalation Matrix</h3>
+          <p class="desc">Suggested governance level by risk count and exposure. Levels are derived from a combination of factors, not score alone. Select a row to filter the priority queue.</p>
+        </div>
+      </div>
+      <div class="panel queue-table-wrap" id="escalation-region"></div>
+    </section>
+
+    <section class="block no-print" id="assistant-section" aria-labelledby="assistant-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="assistant-heading">Local Intelligence Assistant</h3>
+          <p class="desc">This assistant analyses the risks currently loaded into the tool using local executive prioritization logic. No information is sent outside your browser.</p>
+        </div>
+      </div>
+      <div class="assistant-panel">
+        <div>
+          <h4 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);">Suggested questions</h4>
+          <div class="suggested-q" id="suggested-questions"></div>
+        </div>
+        <div>
+          <div class="chat-window" id="chat-window" role="log" aria-live="polite" aria-label="Assistant conversation"></div>
+          <form class="chat-input-row" id="chat-form">
+            <label for="chat-input" class="visually-hidden">Ask the local intelligence assistant a question</label>
+            <input type="text" id="chat-input" placeholder="Ask about executive priorities, escalation, deadlines...">
+            <button type="submit" class="btn primary">Ask</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="export-section" aria-labelledby="export-heading">
+      <div class="block-head">
+        <div>
+          <h3 id="export-heading">Export Controls</h3>
+          <p class="desc">Generate an executive-ready briefing. All exports are produced locally in your browser.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="btn-export-pdf">Print / Export PDF</button>
+          <button type="button" class="btn" id="btn-export-md">Download Markdown briefing</button>
+          <button type="button" class="btn" id="btn-export-csv">Download analysed CSV</button>
+          <button type="button" class="btn ghost" id="btn-copy-briefing">Copy Steering Committee briefing</button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /results-root -->
+
+  <section class="block" id="methodology-section" aria-labelledby="methodology-heading">
+    <div class="block-head">
+      <div>
+        <h3 id="methodology-heading">Methodology &amp; Privacy</h3>
+      </div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn small" id="open-methodology-2">Open methodology panel</button>
+      </div>
+    </div>
+    <div class="privacy-note">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3z" stroke="#D9A441" stroke-width="1.6"/><path d="M9 12l2 2 4-4" stroke="#D9A441" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>This tool uses local rules and deterministic scoring logic rather than an external AI service. The prioritization is advisory and intended to support executive discussion and governance &mdash; it does not replace professional judgment, regulatory review, safety assessment, or formal organizational approval processes.</div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-left">Part of the <strong>Executive AI Toolkit</strong> &middot; Created by Jaideep Phatak</div>
+    <div class="footer-right">Version 1.0 &middot; July 2026</div>
+  </div>
+</footer>
+
+<!-- ================= METHODOLOGY MODAL ================= -->
+<div class="modal-overlay" id="methodology-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="methodology-modal-title">
+    <button type="button" class="modal-close" id="methodology-modal-close" aria-label="Close methodology panel">&times;</button>
+    <h3 id="methodology-modal-title">Methodology &amp; Security</h3>
+    <p><strong style="color:var(--text);">What the Executive Priority Score represents.</strong> A 0&ndash;100 deterministic, weighted composite: Business Impact 25%, Urgency 20% (includes a capped deadline accelerant), Strategic Importance 15%, Dependency Impact 15%, Mitigation Confidence Gap 15%, Ownership &amp; Decision Gap 10%. The same inputs always produce the same score.</p>
+    <p><strong style="color:var(--text);">Deadline accelerant.</strong> Overdue: +15 points to normalized urgency. Due &le;2 days: +12. Due &le;7 days: +8. Due &le;30 days: +3. "No date applicable" and "Ongoing monitoring" apply no accelerant. "Date not established" on a risk requiring a decision, or with business impact 5, adds a governance gap penalty instead (see below).</p>
+    <p><strong style="color:var(--text);">Ownership &amp; decision gap.</strong> No risk owner: +45 (of 100 on this sub-scale). Decision required with no confirmed decision owner: +40. Decision required with a confirmed owner: +15. "Date not established" on a decision-required or executive-critical risk: +20 additional governance-gap points.</p>
+    <p><strong style="color:var(--text);">Probability.</strong> Probability is displayed for conventional risk context and the heat map, but it is not directly weighted in the Executive Priority Score.</p>
+    <p><strong style="color:var(--text);">Closed risks.</strong> Risks with status "Closed" are excluded from all scoring, counts, cards, charts, and exports by default. You may opt in to including them via "Include closed risks in analysis."</p>
+    <p><strong style="color:var(--text);">Exposure areas.</strong> Areas such as Launch, SOP, Safety, or Compliance are explicit, user-selected classifications &mdash; not inferred automatically from a Business Impact score of 5. CSV imports without an Exposure Areas column receive a cautious, clearly labelled inference from category/title/description text.</p>
+    <p><strong style="color:var(--text);">Suggested Governance Level &amp; escalation.</strong> Escalation is derived from a combination of decision requirement, missing ownership, deadline criticality, mitigation weakness, dependency footprint, strategic/regulatory exposure, and score &mdash; never from score alone. Escalation Required and Executive Visibility can also be set explicitly by the risk submitter.</p>
+    <p><strong style="color:var(--text);">Workstream Exposure Index.</strong> 40% normalized average score, 25% normalized peak score, 15% executive-critical concentration, 10% leadership-decision concentration, 10% weak-mitigation concentration.</p>
+    <p><strong style="color:var(--text);">Advisory only.</strong> Human judgment, regulatory review, safety assessment, and formal governance approval remain required. This tool does not replace them.</p>
+    <p><strong style="color:var(--text);">Local intelligence assistant.</strong> The embedded assistant is not a live large language model, not generative AI, and not machine learning. It uses predefined keyword and intent matching against your currently loaded, analysed dataset.</p>
+    <p><strong style="color:var(--text);">Security controls.</strong> Strict Content Security Policy; no <code>fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code>, cookies, or browser storage of any kind; all CSV and form input treated as plain text and rendered via safe DOM APIs; spreadsheet formula neutralization on CSV export; no external fonts, scripts, or stylesheets; no analytics or tracking.</p>
+    <div class="btn-row"><button type="button" class="btn primary" id="methodology-modal-ok">Close</button></div>
+  </div>
+</div>
+
+<!-- ================= RISK DETAIL MODAL ================= -->
+<div class="modal-overlay" id="detail-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detail-modal-title">
+    <button type="button" class="modal-close" id="detail-modal-close" aria-label="Close risk detail">&times;</button>
+    <div id="detail-modal-body"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =========================================================================
+   EXECUTIVE RISK PRIORITIZER
+   Fully client-side. No network requests. No external dependencies.
+   Sections:
+     1. State management
+     2. Utilities
+     3. Validation
+     4. CSV parsing / normalization
+     5. Sample data
+     6. Scoring engine
+     7. Prioritization / classification
+     8. Summary generation
+     9. Filtering
+    10. Rendering
+    11. Assistant intent mapping
+    12. Export generation
+    13. Accessibility / notifications
+    14. Event wiring / init
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   1. STATE MANAGEMENT
+   --------------------------------------------------------------------- */
+var STATE = {
+  queue: [],              // risks pending analysis (raw normalized), includes Closed risks
+  analysed: [],           // scored + classified ACTIVE risks from last run
+  analysisStale: true,
+  analysisHasRun: false,
+  sampleLoaded: false,
+  includeClosed: false,
+  editingId: null,
+  lastCsvBatch: null,     // { batchId, imported: [...], addedToQueue: bool }
+  filters: { search:"", priority:"", workstream:"", decision:"", escalationRequired:"", governance:"", exposure:"", mitigation:"", visibility:"", riskIds:null, riskIdsLabel:"" },
+  chatHistory: []
+};
+
+var WORKSTREAMS = ["Engineering","Software","Validation","Quality","Manufacturing","Supply Chain","Procurement","Finance","Commercial","Customer","Regulatory","Program Management"];
+var ESCALATION_LEVELS = ["Project Team","Project Manager","Program Manager","Functional Manager","Director","Vice President","Executive Steering Committee","Customer","External Authority"];
+
+var EXPOSURE_AREAS = ["Schedule","Launch","SOP","Customer Commitment","Financial","Quality","Safety","Compliance","Regulatory","Reputation","Cybersecurity","Resource / Capacity","Supply Continuity"];
+var EXPOSURE_ALIASES = {
+  "schedule":"Schedule","launch":"Launch","sop":"SOP","customer commitment":"Customer Commitment","customer":"Customer Commitment",
+  "financial":"Financial","finance":"Financial","quality":"Quality","safety":"Safety","compliance":"Compliance","regulatory":"Regulatory",
+  "reputation":"Reputation","cybersecurity":"Cybersecurity","security":"Cybersecurity","resource / capacity":"Resource / Capacity",
+  "resource":"Resource / Capacity","capacity":"Resource / Capacity","supply continuity":"Supply Continuity","supply":"Supply Continuity"
+};
+
+var STATUS_VALUES = ["Open","Mitigating","Monitoring","Escalated","Closed"];
+var STATUS_ALIASES = {
+  "open":"Open",
+  "in progress":"Mitigating","active mitigation":"Mitigating","mitigating":"Mitigating",
+  "watch":"Monitoring","under observation":"Monitoring","monitoring":"Monitoring",
+  "escalated":"Escalated",
+  "complete":"Closed","completed":"Closed","resolved":"Closed","done":"Closed","closed":"Closed"
+};
+
+var DATE_STATES = [
+  { value:"provided", label:"Target date provided" },
+  { value:"no-date-applicable", label:"No date applicable" },
+  { value:"ongoing-monitoring", label:"Ongoing monitoring" },
+  { value:"not-established", label:"Date not established" }
+];
+
+var PRIORITY_LEVELS = [
+  { key:"executive-immediate", label:"Executive Immediate", min:85, max:100, cls:"p-immediate" },
+  { key:"executive-critical",  label:"Executive Critical",  min:70, max:84,  cls:"p-critical" },
+  { key:"high-priority",       label:"High Priority",       min:55, max:69,  cls:"p-high" },
+  { key:"monitor-closely",     label:"Monitor Closely",     min:40, max:54,  cls:"p-monitor" },
+  { key:"operational",         label:"Operational",         min:0,  max:39,  cls:"p-operational" }
+];
+
+/* ---------------------------------------------------------------------
+   2. UTILITIES
+   --------------------------------------------------------------------- */
+function $(sel, ctx){ return (ctx||document).querySelector(sel); }
+function $all(sel, ctx){ return Array.prototype.slice.call((ctx||document).querySelectorAll(sel)); }
+
+function el(tag, attrs, children){
+  var node = document.createElement(tag);
+  attrs = attrs || {};
+  for (var k in attrs){
+    if (!Object.prototype.hasOwnProperty.call(attrs,k)) continue;
+    if (k === "class") node.className = attrs[k];
+    else if (k === "html") { /* deliberately unsupported; use text */ }
+    else if (k.indexOf("on") === 0 && typeof attrs[k] === "function") node.addEventListener(k.slice(2), attrs[k]);
+    else node.setAttribute(k, attrs[k]);
+  }
+  children = children || [];
+  if (!Array.isArray(children)) children = [children];
+  children.forEach(function(c){
+    if (c === null || c === undefined) return;
+    if (typeof c === "string" || typeof c === "number") node.appendChild(document.createTextNode(String(c)));
+    else node.appendChild(c);
+  });
+  return node;
+}
+
+function clearNode(node){ while(node.firstChild) node.removeChild(node.firstChild); }
+
+function escapeText(str){
+  // Used only where we must build an HTML string (Markdown / CSV exports),
+  // never for DOM injection. Neutralizes characters that could be
+  // misinterpreted if content is later pasted into HTML contexts.
+  return String(str == null ? "" : str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function uid(prefix){
+  // Stable, collision-resistant ID. Not derived from array position, title,
+  // sort order, or timestamp alone.
+  if (window.crypto && typeof window.crypto.randomUUID === "function"){
+    return (prefix||"risk") + "-" + window.crypto.randomUUID();
+  }
+  return fallbackCollisionResistantId(prefix);
+}
+function fallbackCollisionResistantId(prefix){
+  var rand1 = Math.random().toString(36).slice(2,10);
+  var rand2 = Math.random().toString(36).slice(2,10);
+  var t = Date.now().toString(36);
+  return (prefix||"risk") + "-" + t + "-" + rand1 + rand2;
+}
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+function round1(n){ return Math.round(n*10)/10; }
+
+function fmtDate(iso){
+  if (!iso) return "No target date";
+  var d = new Date(iso + "T00:00:00");
+  if (isNaN(d.getTime())) return "No target date";
+  return d.toLocaleDateString(undefined,{ year:"numeric", month:"short", day:"numeric" });
+}
+
+function daysUntil(iso){
+  if (!iso) return null;
+  var d = new Date(iso + "T00:00:00");
+  if (isNaN(d.getTime())) return null;
+  var now = new Date();
+  now.setHours(0,0,0,0);
+  return Math.round((d.getTime() - now.getTime()) / 86400000);
+}
+
+function isValidDateString(s){
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  return strictYMDValid(s);
+}
+
+function daysInMonth(year, month){ // month: 1-12
+  return new Date(year, month, 0).getDate();
+}
+
+function strictYMDValid(s){
+  // Rejects calendar-impossible dates (e.g. 2026-02-30) that JS Date would
+  // otherwise silently roll forward.
+  var parts = s.split("-");
+  var y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
+  if (!y || m < 1 || m > 12 || d < 1) return false;
+  if (d > daysInMonth(y, m)) return false;
+  return true;
+}
+
+function pad2(n){ return String(n).length < 2 ? "0"+n : String(n); }
+
+// Strict date parser accepting ISO (YYYY-MM-DD) unambiguously, and DD/MM/YYYY
+// or MM/DD/YYYY only when the day/month positions make the format
+// unambiguous (one value > 12). Genuinely ambiguous values are rejected so
+// the caller can request ISO format explicitly, rather than silently
+// guessing via permissive JS Date parsing.
+function parseStrictDate(raw){
+  var s = String(raw||"").trim();
+  if (!s) return { ok:false, reason:"empty" };
+
+  var iso = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (iso){
+    var y=Number(iso[1]), m=Number(iso[2]), d=Number(iso[3]);
+    if (m<1||m>12||d<1||d>daysInMonth(y,m)) return { ok:false, reason:"impossible-date" };
+    return { ok:true, iso: y+"-"+pad2(m)+"-"+pad2(d) };
+  }
+
+  var slash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (slash){
+    var a=Number(slash[1]), b=Number(slash[2]), yy=Number(slash[3]);
+    var aIsDay = a>12, bIsDay = b>12;
+    if (aIsDay && bIsDay) return { ok:false, reason:"impossible-date" };
+    if (!aIsDay && !bIsDay) return { ok:false, reason:"ambiguous" }; // both <=12: cannot tell DD/MM from MM/DD
+    var day = aIsDay ? a : b;
+    var month = aIsDay ? b : a;
+    if (month<1||month>12||day<1||day>daysInMonth(yy,month)) return { ok:false, reason:"impossible-date" };
+    return { ok:true, iso: yy+"-"+pad2(month)+"-"+pad2(day) };
+  }
+
+  return { ok:false, reason:"unrecognized-format" };
+}
+
+function priorityLevelFor(score){
+  for (var i=0;i<PRIORITY_LEVELS.length;i++){
+    var lvl = PRIORITY_LEVELS[i];
+    if (score >= lvl.min && score <= lvl.max) return lvl;
+  }
+  return PRIORITY_LEVELS[PRIORITY_LEVELS.length-1];
+}
+
+function announce(msg){
+  var region = $("#sr-announcer");
+  if (region){ region.textContent=""; setTimeout(function(){ region.textContent = msg; }, 30); }
+}
+
+function toast(msg, type){
+  var region = $("#toast-region");
+  var t = el("div", { class:"toast" + (type==="error" ? " error" : "") }, msg);
+  region.appendChild(t);
+  setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 4200);
+}
+
+/* ---------------------------------------------------------------------
+   3. VALIDATION
+   --------------------------------------------------------------------- */
+function normalizeExposureList(list){
+  if (!Array.isArray(list)) return [];
+  var out = [];
+  list.forEach(function(v){
+    var val = String(v||"").trim();
+    if (!val) return;
+    if (EXPOSURE_AREAS.indexOf(val) !== -1 && out.indexOf(val) === -1){ out.push(val); return; }
+    var alias = EXPOSURE_ALIASES[val.toLowerCase()];
+    if (alias && out.indexOf(alias) === -1) out.push(alias);
+  });
+  return out;
+}
+
+function validateRiskInput(r){
+  // r: raw object with string/number fields as collected from a form or CSV row
+  var errors = {};
+
+  var title = (r.title || "").trim();
+  if (title.length < 4) errors.title = "Risk title must be at least 4 characters.";
+
+  var desc = (r.description || "").trim();
+  if (desc.replace(/\s/g,"").length < 8) errors.description = "Risk description must contain meaningful text (at least 8 non-space characters).";
+
+  if (!r.workstream || !String(r.workstream).trim()) errors.workstream = "Workstream or category is required.";
+
+  var prob = Number(r.probability);
+  if (!r.probability && r.probability !== 0 || isNaN(prob) || prob < 1 || prob > 5) errors.probability = "Select a valid probability.";
+
+  var impact = Number(r.businessImpact);
+  if (!r.businessImpact && r.businessImpact !== 0 || isNaN(impact) || impact < 1 || impact > 5) errors.businessImpact = "Select a valid business impact.";
+
+  var urgency = Number(r.urgency);
+  if (!r.urgency && r.urgency !== 0 || isNaN(urgency) || urgency < 1 || urgency > 5) errors.urgency = "Select a valid urgency.";
+
+  var mitConf = Number(r.mitigationConfidence);
+  if (!r.mitigationConfidence && r.mitigationConfidence !== 0 || isNaN(mitConf) || mitConf < 1 || mitConf > 5) errors.mitigationConfidence = "Select a valid mitigation confidence.";
+
+  var strategic = Number(r.strategicImportance);
+  if (!r.strategicImportance && r.strategicImportance !== 0 || isNaN(strategic) || strategic < 1 || strategic > 5) errors.strategicImportance = "Select a valid strategic importance. This field does not default automatically.";
+
+  var exposure = normalizeExposureList(r.exposureAreas);
+  if (!exposure.length && !r.exposureAreasInferred) errors.exposureAreas = "Select at least one exposure area.";
+
+  var dateState = r.dateState || "provided";
+  if (DATE_STATES.map(function(d){return d.value;}).indexOf(dateState) === -1) errors.dateState = "Select a valid date status.";
+  if (dateState === "provided"){
+    if (!r.targetDate){
+      errors.targetDate = "Provide a target date, or choose a different date status.";
+    } else if (!isValidDateString(r.targetDate)){
+      errors.targetDate = "Target date is not a valid calendar date.";
+    }
+  }
+
+  return errors;
+}
+
+function normalizeRisk(raw){
+  // Produces a fully-typed internal risk object with defaults applied.
+  var dateState = raw.dateState || (raw.noTargetDate ? "no-date-applicable" : "provided");
+  var hasDate = dateState === "provided";
+  var status = STATUS_VALUES.indexOf(raw.status) !== -1 ? raw.status : (STATUS_ALIASES[String(raw.status||"").trim().toLowerCase()] || "Open");
+  return {
+    id: raw.id || uid("risk"),
+    riskId: (raw.riskId || "").trim(),
+    title: (raw.title || "").trim(),
+    description: (raw.description || "").trim(),
+    owner: (raw.owner || "").trim(),
+    actionOwner: (raw.actionOwner || "").trim(),
+    workstream: (raw.workstream || "").trim(),
+    category: (raw.category || "").trim(),
+    probability: clamp(Number(raw.probability) || 1, 1, 5),
+    businessImpact: clamp(Number(raw.businessImpact) || 1, 1, 5),
+    urgency: clamp(Number(raw.urgency) || 1, 1, 5),
+    strategicImportance: clamp(Number(raw.strategicImportance) || 1, 1, 5),
+    dependencyImpact: clamp(Number(raw.dependencyImpact) || 1, 1, 5),
+    mitigationConfidence: clamp(Number(raw.mitigationConfidence) || 1, 1, 5),
+    dateState: dateState,
+    targetDate: hasDate ? (raw.targetDate || "") : "",
+    noTargetDate: !hasDate,
+    exposureAreas: normalizeExposureList(raw.exposureAreas),
+    exposureAreasInferred: !!raw.exposureAreasInferred,
+    currentMitigation: (raw.currentMitigation || "").trim(),
+    decisionRequired: !!raw.decisionRequired,
+    confirmedDecisionOwner: (raw.confirmedDecisionOwner || "").trim(),
+    requestedDecisionAuthority: (raw.requestedDecisionAuthority || "").trim(),
+    escalationRequiredExplicit: !!raw.escalationRequiredExplicit,
+    escalationRecipientExplicit: (raw.escalationRecipientExplicit || "").trim(),
+    executiveVisibilityExplicit: !!raw.executiveVisibilityExplicit,
+    status: status
+  };
+}
+
+/* ---------------------------------------------------------------------
+   4. CSV PARSING / NORMALIZATION
+   --------------------------------------------------------------------- */
+var CSV_MAX_BYTES = 3 * 1024 * 1024; // 3MB reasonable local limit
+var CSV_MAX_ROWS = 5000;
+var CSV_CELL_LIMITS = {
+  riskId:30, title:140, description:600, owner:80, actionOwner:80, workstream:80, category:60,
+  currentMitigation:500, confirmedDecisionOwner:80, requestedDecisionAuthority:80, status:40
+};
+
+var COLUMN_ALIASES = {
+  riskId: ["risk id","id","riskid"],
+  title: ["risk title","risk","title"],
+  description: ["risk description","description","desc"],
+  owner: ["owner","risk owner"],
+  actionOwner: ["action owner"],
+  workstream: ["workstream","team"],
+  category: ["category","type"],
+  probability: ["probability","likelihood"],
+  businessImpact: ["business impact","impact"],
+  urgency: ["urgency"],
+  strategicImportance: ["strategic importance","strategic"],
+  dependencyImpact: ["dependency impact","dependency"],
+  mitigationConfidence: ["mitigation confidence","confidence"],
+  targetDate: ["target date","due date","date"],
+  currentMitigation: ["current mitigation","mitigation"],
+  decisionRequired: ["decision required"],
+  confirmedDecisionOwner: ["confirmed decision owner","decision owner"],
+  requestedDecisionAuthority: ["requested decision authority","decision authority"],
+  escalationRequired: ["escalation required"],
+  escalationRecipient: ["escalation recipient"],
+  executiveVisibility: ["executive visibility"],
+  exposureAreas: ["exposure areas","exposure area","exposure"],
+  status: ["status"]
+};
+
+function normalizeHeader(h){ return String(h||"").trim().toLowerCase().replace(/\s+/g," "); }
+
+// Returns { map, duplicates, missing } — duplicates lists cases where two+
+// header columns mapped to the same internal field (ambiguous mapping).
+function mapHeaders(headers){
+  var map = {};
+  var duplicates = [];
+  headers.forEach(function(h, idx){
+    var norm = normalizeHeader(h);
+    Object.keys(COLUMN_ALIASES).forEach(function(field){
+      if (COLUMN_ALIASES[field].indexOf(norm) === -1) return;
+      if (map[field] !== undefined){
+        duplicates.push({ field: field, first: headers[map[field]], second: h });
+        return; // keep first mapping, but flag the ambiguity
+      }
+      map[field] = idx;
+    });
+  });
+  return { map: map, duplicates: duplicates };
+}
+
+// Safe CSV line parser supporting quoted fields with embedded commas/quotes/
+// line breaks. Detects unterminated quoted fields (reaching EOF while still
+// inside a quote) and reports that as a file-level error rather than
+// silently mis-parsing the remainder of the file.
+function parseCSVText(text){
+  var rows = [];
+  var row = [];
+  var field = "";
+  var inQuotes = false;
+  var i = 0;
+  var len = text.length;
+  while (i < len){
+    var c = text[i];
+    if (inQuotes){
+      if (c === '"'){
+        if (text[i+1] === '"'){ field += '"'; i += 2; continue; }
+        inQuotes = false; i++; continue;
+      }
+      field += c; i++; continue;
+    } else {
+      if (c === '"'){ inQuotes = true; i++; continue; }
+      if (c === ','){ row.push(field); field = ""; i++; continue; }
+      if (c === '\r'){ i++; continue; }
+      if (c === '\n'){ row.push(field); rows.push(row); row=[]; field=""; i++; continue; }
+      field += c; i++; continue;
+    }
+  }
+  if (inQuotes){
+    return { ok:false, error:"The file contains an unterminated quoted field (a \u201c\u2018\u201d\u2019 was opened but never closed). Please fix the CSV and re-upload." };
+  }
+  if (field.length || row.length){ row.push(field); rows.push(row); }
+  var cleaned = rows.filter(function(r){ return !(r.length===1 && r[0].trim()==="" ); });
+  return { ok:true, rows: cleaned };
+}
+
+function scaleTextToLevel(text, kind){
+  // Converts free-text CSV values like "High" / "Immediate" into 1-5 numeric levels.
+  var t = String(text||"").trim().toLowerCase();
+  if (t === "") return null;
+  var n = Number(t);
+  if (!isNaN(n) && t !== "") return clamp(Math.round(n), 1, 5);
+  var maps = {
+    generic: { "very low":1,"low":1,"low-moderate":2,"moderate":3,"medium":3,"high":4,"major":4,"very high":5,"severe":5,"critical":5 },
+    urgency: { "longer-term":1,"long-term":1,"within 30 days":2,"within 7 days":3,"within 48 hours":4,"immediate":5 },
+    confidence: { "none":1,"unmitigated":1,"weak":2,"partial":3,"adequate":4,"strong":5 }
+  };
+  var table = maps[kind] || maps.generic;
+  if (table[t] !== undefined) return table[t];
+  if (maps.generic[t] !== undefined) return maps.generic[t];
+  return null;
+}
+
+function normalizeStatusValue(text){
+  var t = String(text||"").trim();
+  if (!t) return { value:"Open", warning:false };
+  if (STATUS_VALUES.indexOf(t) !== -1) return { value:t, warning:false };
+  var alias = STATUS_ALIASES[t.toLowerCase()];
+  if (alias) return { value:alias, warning:false };
+  return { value:"Open", warning:true, original:t };
+}
+
+function inferExposureAreas(category, title, description){
+  // Cautious keyword-based inference used only when the CSV has no
+  // Exposure Areas column. Marked as inferred so it is never presented as
+  // an explicit classification.
+  var hay = (String(category||"") + " " + String(title||"") + " " + String(description||"")).toLowerCase();
+  var found = [];
+  var rules = [
+    ["launch", "Launch"], ["sop", "SOP"], ["safety", "Safety"], ["compliance", "Compliance"],
+    ["regulatory", "Regulatory"], ["homologation", "Regulatory"], ["customer", "Customer Commitment"],
+    ["quality", "Quality"], ["schedule", "Schedule"], ["delay", "Schedule"], ["cyber", "Cybersecurity"],
+    ["security", "Cybersecurity"], ["supplier", "Supply Continuity"], ["supply", "Supply Continuity"],
+    ["budget", "Financial"], ["cost", "Financial"], ["financial", "Financial"], ["reputation", "Reputation"],
+    ["resource", "Resource / Capacity"], ["staffing", "Resource / Capacity"]
+  ];
+  rules.forEach(function(pair){ if (hay.indexOf(pair[0]) !== -1 && found.indexOf(pair[1]) === -1) found.push(pair[1]); });
+  return found;
+}
+
+function fingerprintRisk(r){
+  return [r.riskId, (r.title||"").toLowerCase().trim(), (r.description||"").slice(0,60).toLowerCase().trim(), r.workstream, r.targetDate].join("|");
+}
+
+function parseCSVFile(text){
+  var result = { imported:[], rejected:[], issues:[], totalRows:0, blocking:false, duplicateCount:0 };
+
+  var parsed = parseCSVText(text);
+  if (!parsed.ok){
+    result.issues.push(parsed.error);
+    result.blocking = true;
+    return result;
+  }
+  var rows = parsed.rows;
+  if (!rows.length){ result.issues.push("The file is empty or contains no readable rows."); result.blocking = true; return result; }
+
+  var headers = rows[0];
+  var mapped = mapHeaders(headers);
+  var map = mapped.map;
+
+  if (mapped.duplicates.length){
+    mapped.duplicates.forEach(function(d){
+      result.issues.push("Columns \u201c" + d.first + "\u201d and \u201c" + d.second + "\u201d both map to " + d.field + ". Remove or rename one column and re-upload.");
+    });
+    result.blocking = true;
+  }
+
+  var required = ["title","description","probability","businessImpact","urgency","mitigationConfidence","workstream"];
+  var missingRequired = required.filter(function(f){ return map[f] === undefined; });
+  if (missingRequired.length){
+    result.issues.push("Missing required column(s): " + missingRequired.join(", ") + ". Recognised aliases include Risk/Risk Title, Description/Risk Description, Impact/Business Impact, Due Date/Target Date, Mitigation/Current Mitigation, Strategic Importance/Strategic.");
+    result.blocking = true;
+  }
+
+  if (result.blocking){ result.totalRows = rows.length - 1; return result; }
+
+  var dataRows = rows.slice(1);
+  if (dataRows.length > CSV_MAX_ROWS){
+    result.issues.push("The file contains " + dataRows.length + " data row(s), exceeding the maximum of " + CSV_MAX_ROWS + ". Split the file and re-upload.");
+    result.blocking = true;
+    result.totalRows = dataRows.length;
+    return result;
+  }
+
+  var headerCount = headers.length;
+  result.totalRows = dataRows.length;
+
+  dataRows.forEach(function(cols, rIdx){
+    var rowNum = rIdx + 2; // account for header row, 1-indexed
+    if (cols.every(function(c){ return String(c).trim()===""; })) return; // skip fully blank rows silently
+
+    if (cols.length !== headerCount){
+      result.rejected.push({ row: rowNum, title: "(row " + rowNum + ")", errors: { columns: "Row has " + cols.length + " column(s), expected " + headerCount + "." } });
+      return;
+    }
+
+    var get = function(field){
+      var idx = map[field];
+      return idx === undefined ? "" : (cols[idx] || "").trim();
+    };
+
+    // Cell length limits
+    var lengthErrors = {};
+    Object.keys(CSV_CELL_LIMITS).forEach(function(field){
+      var v = get(field);
+      if (v && v.length > CSV_CELL_LIMITS[field]) lengthErrors[field] = field + " exceeds the " + CSV_CELL_LIMITS[field] + "-character limit.";
+    });
+    if (Object.keys(lengthErrors).length){
+      result.rejected.push({ row: rowNum, title: get("title") || "(untitled)", errors: lengthErrors });
+      return;
+    }
+
+    // Strict date parsing
+    var rawTargetDate = get("targetDate");
+    var noDateWords = /^(no target date|no date applicable|none|n\/a|na|tbd|ongoing|ongoing monitoring|not established)$/i;
+    var dateState = "provided";
+    var normalizedDate = "";
+    if (!rawTargetDate){
+      dateState = "not-established";
+    } else if (noDateWords.test(rawTargetDate.trim())){
+      var lw = rawTargetDate.trim().toLowerCase();
+      dateState = (lw.indexOf("ongoing") !== -1) ? "ongoing-monitoring" : (lw.indexOf("not established") !== -1 ? "not-established" : "no-date-applicable");
+    } else {
+      var dp = parseStrictDate(rawTargetDate);
+      if (!dp.ok){
+        result.rejected.push({ row: rowNum, title: get("title") || "(untitled)", errors: { targetDate: "Target date \u201c" + rawTargetDate + "\u201d could not be parsed as a valid, unambiguous date. Use YYYY-MM-DD." } });
+        return;
+      }
+      normalizedDate = dp.iso;
+      dateState = "provided";
+    }
+
+    var statusInfo = normalizeStatusValue(get("status"));
+    if (statusInfo.warning){
+      result.issues.push("Row " + rowNum + ": status \u201c" + statusInfo.original + "\u201d is not recognised and was mapped to \u201cOpen.\u201d Recognised values: Open, Mitigating, Monitoring, Escalated, Closed (plus common variants).");
+    }
+
+    var exposureRaw = get("exposureAreas");
+    var exposureList = [];
+    var exposureInferred = false;
+    if (exposureRaw){
+      exposureList = normalizeExposureList(exposureRaw.split(/[;,]/).map(function(s){return s.trim();}));
+    }
+    if (!exposureList.length){
+      exposureList = inferExposureAreas(get("category"), get("title"), get("description"));
+      exposureInferred = true;
+    }
+
+    var strategicRaw = get("strategicImportance");
+    var strategicVal = scaleTextToLevel(strategicRaw, "generic");
+    var strategicInferredDefault = false;
+    if (strategicVal === null){ strategicVal = 3; strategicInferredDefault = true; }
+
+    var raw = {
+      riskId: get("riskId"),
+      title: get("title"),
+      description: get("description"),
+      owner: get("owner"),
+      actionOwner: get("actionOwner"),
+      workstream: get("workstream"),
+      category: get("category"),
+      probability: scaleTextToLevel(get("probability"),"generic"),
+      businessImpact: scaleTextToLevel(get("businessImpact"),"generic"),
+      urgency: scaleTextToLevel(get("urgency"),"urgency"),
+      strategicImportance: strategicVal,
+      dependencyImpact: scaleTextToLevel(get("dependencyImpact"),"generic") || 1,
+      mitigationConfidence: scaleTextToLevel(get("mitigationConfidence"),"confidence"),
+      dateState: dateState,
+      targetDate: normalizedDate,
+      exposureAreas: exposureList,
+      exposureAreasInferred: exposureInferred,
+      currentMitigation: get("currentMitigation"),
+      decisionRequired: /^(true|yes|1)$/i.test(get("decisionRequired")),
+      confirmedDecisionOwner: get("confirmedDecisionOwner"),
+      requestedDecisionAuthority: get("requestedDecisionAuthority"),
+      escalationRequiredExplicit: /^(true|yes|1)$/i.test(get("escalationRequired")),
+      escalationRecipientExplicit: get("escalationRecipient"),
+      executiveVisibilityExplicit: /^(true|yes|1)$/i.test(get("executiveVisibility")),
+      status: statusInfo.value
+    };
+
+    var errors = validateRiskInput(raw);
+    if (Object.keys(errors).length){
+      result.rejected.push({ row: rowNum, title: raw.title || "(untitled)", errors: errors });
+      return;
+    }
+    var normalized = normalizeRisk(raw);
+    if (strategicInferredDefault) normalized._strategicDefaulted = true;
+    result.imported.push(normalized);
+  });
+
+  // Duplicate detection against the current queue (Risk ID match, else content fingerprint)
+  var existingFingerprints = {};
+  var existingIds = {};
+  STATE.queue.forEach(function(r){
+    if (r.riskId) existingIds[r.riskId] = true;
+    existingFingerprints[fingerprintRisk(r)] = true;
+  });
+  var uniqueImported = [];
+  result.imported.forEach(function(r){
+    var isDup = (r.riskId && existingIds[r.riskId]) || existingFingerprints[fingerprintRisk(r)];
+    if (isDup){ result.duplicateCount++; r._likelyDuplicate = true; }
+    uniqueImported.push(r); // keep in preview but flagged; user decides via summary
+  });
+  result.imported = uniqueImported;
+  result.batchId = uid("csvbatch");
+
+  return result;
+}
+
+
+/* ---------------------------------------------------------------------
+   5. SAMPLE DATA
+   --------------------------------------------------------------------- */
+function buildSampleRisks(){
+  var today = new Date();
+  function inDays(n){
+    var d = new Date(today.getTime() + n*86400000);
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  var rows = [
+    { riskId:"R-001", title:"Battery pack thermal validation delay", description:"Thermal runaway validation testing on the new battery pack is behind schedule due to chamber availability, threatening SOP readiness sign-off.", owner:"", workstream:"Validation", category:"Technical / Safety", probability:4, businessImpact:5, urgency:5, strategicImportance:5, dependencyImpact:5, mitigationConfidence:2, dateState:"provided", targetDate:inDays(6), exposureAreas:["SOP","Safety","Launch"], currentMitigation:"Second test chamber requested; supplier lab being evaluated as backup.", decisionRequired:true, requestedDecisionAuthority:"VP Engineering", status:"Open" },
+    { riskId:"R-002", title:"Tier-1 supplier tooling delivery slip", description:"Stamping tool delivery from key supplier has slipped three weeks due to steel shortage, risking body-in-white build readiness.", owner:"Ravi Menon", workstream:"Supply Chain", category:"Supplier", probability:4, businessImpact:4, urgency:4, strategicImportance:4, dependencyImpact:5, mitigationConfidence:3, dateState:"provided", targetDate:inDays(10), exposureAreas:["Schedule","Supply Continuity"], currentMitigation:"Weekly supplier recovery calls; expedited steel allocation requested.", decisionRequired:true, requestedDecisionAuthority:"Director of Procurement", status:"Mitigating" },
+    { riskId:"R-003", title:"Infotainment software integration defects", description:"Late-stage integration testing has surfaced recurring defects between the infotainment stack and the telematics control unit.", owner:"Priya Nair", workstream:"Software", category:"Technical", probability:3, businessImpact:3, urgency:3, strategicImportance:3, dependencyImpact:3, mitigationConfidence:3, dateState:"provided", targetDate:inDays(21), exposureAreas:["Quality","Schedule"], currentMitigation:"Defect triage board meeting daily; two P1 defects remain open.", decisionRequired:false, status:"Mitigating" },
+    { riskId:"R-004", title:"Regulatory homologation submission gap", description:"A required emissions homologation data package for the EU market has not yet been finalized, threatening the regulatory approval timeline ahead of launch.", owner:"", workstream:"Regulatory", category:"Compliance", probability:3, businessImpact:5, urgency:4, strategicImportance:5, dependencyImpact:4, mitigationConfidence:2, dateState:"provided", targetDate:inDays(14), exposureAreas:["Regulatory","Compliance","Launch"], currentMitigation:"Data package 70% complete; owner not yet confirmed.", decisionRequired:true, requestedDecisionAuthority:"Regulatory Affairs Director", status:"Open" },
+    { riskId:"R-005", title:"Final assembly line readiness behind plan", description:"Manufacturing readiness reviews indicate the final assembly line is tracking two weeks behind the pilot build schedule.", owner:"Deepak Sharma", workstream:"Manufacturing", category:"Operational", probability:3, businessImpact:4, urgency:3, strategicImportance:4, dependencyImpact:4, mitigationConfidence:3, dateState:"provided", targetDate:inDays(25), exposureAreas:["Schedule","Launch"], currentMitigation:"Recovery plan drafted; additional shift being evaluated.", decisionRequired:false, status:"Mitigating" },
+    { riskId:"R-006", title:"Key customer approval milestone at risk", description:"The lead customer's design freeze approval has not been received, and their review board meets only once more before the committed date.", owner:"Anjali Rao", workstream:"Customer", category:"Commercial", probability:3, businessImpact:5, urgency:5, strategicImportance:5, dependencyImpact:3, mitigationConfidence:3, dateState:"provided", targetDate:inDays(4), exposureAreas:["Customer Commitment","Schedule"], currentMitigation:"Executive alignment call scheduled with customer program director.", decisionRequired:true, requestedDecisionAuthority:"Executive Steering Committee", escalationRequiredExplicit:true, executiveVisibilityExplicit:true, status:"Escalated" },
+    { riskId:"R-007", title:"In-process quality escape on weld inspection", description:"A recurring weld inspection escape was identified during quality audit, with root cause not yet confirmed.", owner:"Suresh Iyer", workstream:"Quality", category:"Quality", probability:3, businessImpact:4, urgency:4, strategicImportance:3, dependencyImpact:2, mitigationConfidence:2, dateState:"provided", targetDate:inDays(9), exposureAreas:["Quality","Safety"], currentMitigation:"100% inspection added as interim containment; root cause analysis in progress.", decisionRequired:false, status:"Open" },
+    { riskId:"R-008", title:"Long-lead procurement award undecided", description:"The award decision for a long-lead casting component has not been made, and the supplier's price hold expires soon.", owner:"", workstream:"Procurement", category:"Commercial", probability:2, businessImpact:3, urgency:4, strategicImportance:3, dependencyImpact:3, mitigationConfidence:2, dateState:"provided", targetDate:inDays(5), exposureAreas:["Financial","Schedule"], currentMitigation:"Sourcing comparison complete; awaiting award decision.", decisionRequired:true, requestedDecisionAuthority:"Director of Procurement", status:"Open" },
+    { riskId:"R-009", title:"Engineering resource shortfall on validation team", description:"The validation team is short two senior engineers against the program plan, extending test cycle throughput.", owner:"Meera Kulkarni", workstream:"Engineering", category:"Resource", probability:3, businessImpact:2, urgency:2, strategicImportance:2, dependencyImpact:2, mitigationConfidence:3, dateState:"provided", targetDate:inDays(45), exposureAreas:["Resource / Capacity"], currentMitigation:"Contract engineers being onboarded; backfill in progress.", decisionRequired:false, status:"Monitoring" },
+    { riskId:"R-010", title:"Launch readiness dashboard shows amber on three gates", description:"Program-level launch readiness review shows three gate criteria at amber status heading into the final readiness review.", owner:"Program Management Office", workstream:"Program Management", category:"Governance", probability:2, businessImpact:3, urgency:3, strategicImportance:4, dependencyImpact:3, mitigationConfidence:3, dateState:"provided", targetDate:inDays(18), exposureAreas:["Launch","Schedule"], currentMitigation:"Action plan tracked in weekly launch readiness review.", decisionRequired:false, status:"Monitoring" },
+    { riskId:"R-011", title:"Vehicle network cybersecurity assessment pending", description:"The functional safety and cybersecurity assessment for the vehicle network architecture has not started due to assessor availability, and is a required exit criterion.", owner:"", workstream:"Software", category:"Cybersecurity / Functional Safety", probability:2, businessImpact:5, urgency:3, strategicImportance:5, dependencyImpact:3, mitigationConfidence:1, dateState:"not-established", exposureAreas:["Cybersecurity","Safety","Regulatory"], currentMitigation:"External assessor being sourced; no confirmed start date.", decisionRequired:true, requestedDecisionAuthority:"VP Engineering", status:"Open" },
+    { riskId:"R-012", title:"Minor packaging label formatting inconsistency", description:"A minor inconsistency in shipping label formatting was found during a routine logistics audit, with negligible operational effect.", owner:"Logistics Team", workstream:"Supply Chain", category:"Operational", probability:2, businessImpact:1, urgency:1, strategicImportance:1, dependencyImpact:1, mitigationConfidence:4, dateState:"provided", targetDate:inDays(60), exposureAreas:["Schedule"], currentMitigation:"Template correction scheduled in next document revision cycle.", decisionRequired:false, status:"Open" },
+    { riskId:"R-013", title:"Interior trim supplier quality corrective action closed out", description:"A prior interior trim supplier quality issue completed root-cause corrective action and passed re-validation, with no further open items.", owner:"Suresh Iyer", workstream:"Quality", category:"Quality", probability:1, businessImpact:2, urgency:1, strategicImportance:1, dependencyImpact:1, mitigationConfidence:5, dateState:"no-date-applicable", exposureAreas:["Quality"], currentMitigation:"Corrective action verified and closed.", decisionRequired:false, status:"Closed" }
+  ];
+  return rows.map(normalizeRisk);
+}
+
+/* ---------------------------------------------------------------------
+   6. SCORING ENGINE
+   ---------------------------------------------------------------------
+   Executive Priority Score (0-100), deterministic, weighted composite:
+     Business Impact             25%
+     Urgency                     20%   (includes a capped deadline accelerant)
+     Strategic Importance        15%
+     Dependency Impact           15%
+     Mitigation Confidence Gap   15%   (gap = 6 - mitigationConfidence, normalized)
+     Ownership & Decision Gap    10%
+   Each raw 1-5 input is normalized to 0-100 via (value-1)/4*100 before
+   weighting. Component values below are stored as POINTS already scaled by
+   weight (e.g. Business Impact severity 5 contributes up to 25.0 points),
+   so risk.components sums (with rounding) to risk.score.
+   Probability is NOT part of this score; it is shown separately for
+   conventional risk context and the heat map only.
+   --------------------------------------------------------------------- */
+var WEIGHTS = {
+  businessImpact: 0.25,
+  urgency: 0.20,
+  strategicImportance: 0.15,
+  dependencyImpact: 0.15,
+  mitigationGap: 0.15,
+  ownershipGap: 0.10
+};
+
+function normalize100(v){ return clamp(((v-1)/4)*100, 0, 100); }
+
+function deadlineAccelerant(risk){
+  // Returns 0-15 point bonus folded into urgency's normalized 0-100 value,
+  // reflecting overdue or imminent target dates. Capped so it cannot alone
+  // push a low-impact risk into a high band. "No date applicable" and
+  // "Ongoing monitoring" apply no accelerant (neutral). "Date not
+  // established" applies no accelerant here either -- that state is
+  // instead treated as a governance gap (see ownershipDecisionGapScore).
+  if (risk.dateState !== "provided" || !risk.targetDate) return 0;
+  var days = daysUntil(risk.targetDate);
+  if (days === null) return 0;
+  if (days < 0) return 15;         // overdue
+  if (days <= 2) return 12;
+  if (days <= 7) return 8;
+  if (days <= 30) return 3;
+  return 0;
+}
+
+function isExecutiveCriticalCandidate(risk){
+  return risk.businessImpact >= 5 || risk.strategicImportance >= 5;
+}
+
+function ownershipDecisionGapScore(risk){
+  // 0-100 scale representing how unresolved ownership/decision/governance
+  // readiness is. Documented, rule-based, no randomness.
+  var points = 0;
+  if (!risk.owner) points += 45;                                                  // no risk owner
+  if (risk.decisionRequired && !risk.confirmedDecisionOwner) points += 40;         // decision needed, no confirmed owner
+  if (risk.decisionRequired && risk.confirmedDecisionOwner) points += 15;          // decision needed, at least confirmed
+  if (risk.dateState === "not-established" && (risk.decisionRequired || isExecutiveCriticalCandidate(risk))) points += 20; // governance gap: no date established on a decision-required or executive-critical risk
+  return clamp(points, 0, 100);
+}
+
+function computeScore(risk){
+  var biN = normalize100(risk.businessImpact);
+  var urgRaw = normalize100(risk.urgency);
+  var urgN = clamp(urgRaw + deadlineAccelerant(risk), 0, 100);
+  var siN = normalize100(risk.strategicImportance);
+  var diN = normalize100(risk.dependencyImpact);
+  var mitigationGapN = normalize100(6 - risk.mitigationConfidence); // lower confidence -> higher gap -> higher score
+  var ownershipGapN = ownershipDecisionGapScore(risk);
+
+  var biPts = biN * WEIGHTS.businessImpact;
+  var urgPts = urgN * WEIGHTS.urgency;
+  var siPts = siN * WEIGHTS.strategicImportance;
+  var diPts = diN * WEIGHTS.dependencyImpact;
+  var mitPts = mitigationGapN * WEIGHTS.mitigationGap;
+  var ownPts = ownershipGapN * WEIGHTS.ownershipGap;
+
+  var raw = biPts + urgPts + siPts + diPts + mitPts + ownPts;
+  var score = Math.round(clamp(raw, 0, 100));
+
+  return {
+    score: score,
+    components: {
+      businessImpact: round1(biPts),
+      urgency: round1(urgPts),
+      strategicImportance: round1(siPts),
+      dependencyImpact: round1(diPts),
+      mitigationGap: round1(mitPts),
+      ownershipGap: round1(ownPts)
+    }
+  };
+}
+
+/* ---------------------------------------------------------------------
+   6b. GOVERNANCE / ESCALATION LOGIC
+   ---------------------------------------------------------------------
+   Escalation is a multi-factor determination, not a score threshold alone.
+   Factors: explicit user flag, decision requirement, missing risk owner,
+   missing confirmed decision owner, critical/overdue deadline, weak
+   mitigation, cross-functional dependency, strategic/regulatory/safety
+   exposure, and score (as one input among several).
+   --------------------------------------------------------------------- */
+function computeGovernance(risk, score){
+  var days = risk.dateState === "provided" ? daysUntil(risk.targetDate) : null;
+  var overdueOrImminent = days !== null && days <= 2;
+  var criticalExposure = risk.exposureAreas.some(function(a){ return ["Safety","Regulatory","Compliance","Launch","SOP"].indexOf(a) !== -1; });
+
+  var govPoints = 0;
+  if (risk.decisionRequired) govPoints += 25;
+  if (!risk.owner) govPoints += 15;
+  if (risk.decisionRequired && !risk.confirmedDecisionOwner) govPoints += 15;
+  if (overdueOrImminent) govPoints += 15;
+  if (risk.mitigationConfidence <= 2) govPoints += 10;
+  if (risk.dependencyImpact >= 4) govPoints += 10;
+  if (criticalExposure) govPoints += 15;
+  if (risk.strategicImportance >= 4) govPoints += 10;
+  govPoints += score * 0.25; // score contributes, but is not the sole determinant
+
+  var suggestedGovernanceLevel;
+  if (criticalExposure && (govPoints >= 70 || (risk.decisionRequired && overdueOrImminent))){
+    suggestedGovernanceLevel = "Executive Steering Committee";
+  } else if (govPoints >= 65){
+    suggestedGovernanceLevel = "Vice President";
+  } else if (govPoints >= 50){
+    suggestedGovernanceLevel = risk.decisionRequired ? "Vice President" : "Director";
+  } else if (govPoints >= 35){
+    suggestedGovernanceLevel = risk.decisionRequired ? "Director" : "Functional Manager";
+  } else if (govPoints >= 20){
+    suggestedGovernanceLevel = "Program Manager";
+  } else {
+    suggestedGovernanceLevel = "Project Manager";
+  }
+
+  var computedEscalationRequired = govPoints >= 50 || overdueOrImminent && risk.decisionRequired || (criticalExposure && score >= 55);
+  var escalationRequired = risk.escalationRequiredExplicit || computedEscalationRequired;
+  var escalationRecipient = risk.escalationRecipientExplicit || suggestedGovernanceLevel;
+  var escalationRecipientIsSuggested = !risk.escalationRecipientExplicit;
+
+  var suggestedDecisionAuthority = risk.requestedDecisionAuthority || suggestedGovernanceLevel;
+  var suggestedDecisionAuthorityIsSuggested = !risk.requestedDecisionAuthority;
+
+  var executiveVisibility = risk.executiveVisibilityExplicit ||
+    suggestedGovernanceLevel === "Vice President" || suggestedGovernanceLevel === "Executive Steering Committee" ||
+    criticalExposure;
+
+  return {
+    suggestedGovernanceLevel: suggestedGovernanceLevel,
+    escalationRequired: escalationRequired,
+    escalationRecipient: escalationRecipient,
+    escalationRecipientIsSuggested: escalationRecipientIsSuggested,
+    suggestedDecisionAuthority: suggestedDecisionAuthority,
+    suggestedDecisionAuthorityIsSuggested: suggestedDecisionAuthorityIsSuggested,
+    confirmedDecisionOwnerDisplay: risk.confirmedDecisionOwner || "Not assigned",
+    executiveVisibility: executiveVisibility,
+    criticalExposure: criticalExposure,
+    overdueOrImminent: overdueOrImminent
+  };
+}
+
+function shouldCreateDecisionCard(risk){
+  var g = risk.governance;
+  if (risk.decisionRequired) return true;
+  if (g.escalationRequired) return true;
+  if (risk.decisionRequired && !risk.confirmedDecisionOwner && risk.score >= 55) return true;
+  if (!risk.owner && risk.score >= 70) return true;
+  if (g.overdueOrImminent && !risk.owner) return true;
+  if (g.criticalExposure && risk.businessImpact >= 4) return true;
+  if (g.executiveVisibility) return true;
+  return false;
+}
+
+function generateExplanation(risk){
+  var c = risk.components;
+  var drivers = [];
+  drivers.push({ label:"business impact", pts: c.businessImpact });
+  drivers.push({ label:"urgency and timing", pts: c.urgency });
+  drivers.push({ label:"strategic importance", pts: c.strategicImportance });
+  drivers.push({ label:"dependency impact", pts: c.dependencyImpact });
+  drivers.push({ label:"mitigation gap", pts: c.mitigationGap });
+  drivers.push({ label:"ownership and decision gap", pts: c.ownershipGap });
+  drivers.sort(function(a,b){ return b.pts - a.pts; });
+  var top = drivers.slice(0,3).filter(function(d){ return d.pts >= 3; });
+
+  var parts = top.map(function(d){ return d.label + " contributes " + d.pts.toFixed(1) + " point(s)"; });
+  var extras = [];
+  if (!risk.owner) extras.push("it has no confirmed risk owner");
+  if (risk.decisionRequired && !risk.confirmedDecisionOwner) extras.push("a leadership decision is required with no confirmed decision owner");
+  if (risk.dateState === "not-established" && (risk.decisionRequired || isExecutiveCriticalCandidate(risk))) extras.push("its date has not been established despite requiring governance attention");
+  if (risk.exposureAreas.length) extras.push("it affects the " + risk.exposureAreas.join(", ") + " exposure area" + (risk.exposureAreas.length>1?"s":""));
+
+  var bandPhrase = risk.priorityLevel.key === "operational" ? "classified for operational governance" : "ranked " + risk.priorityLevel.label;
+  var sentence = "This risk is " + bandPhrase + " because " + (parts.length ? parts.join(", ") + "." : "its scoring components are all in a moderate-to-low range.");
+  if (extras.length) sentence += " It also " + extras.join(", and ") + ".";
+  return sentence;
+}
+
+function scoreAndClassify(riskList){
+  var scored = riskList.map(function(risk){
+    var r = Object.assign({}, risk);
+    var scoring = computeScore(r);
+    r.score = scoring.score;
+    r.components = scoring.components;
+    r.priorityLevel = priorityLevelFor(r.score);
+    r.daysUntilTarget = r.dateState === "provided" ? daysUntil(r.targetDate) : null;
+    r.governance = computeGovernance(r, r.score);
+    // Back-compat convenience fields used throughout rendering:
+    r.escalationLevel = r.governance.suggestedGovernanceLevel;
+    r.decisionOwner = r.governance.confirmedDecisionOwnerDisplay;
+    r.explanation = generateExplanation(r);
+    r.decisionCardEligible = shouldCreateDecisionCard(r);
+    return r;
+  });
+  scored.sort(function(a,b){ return b.score - a.score; });
+  scored.forEach(function(r, idx){ r.executiveRank = idx + 1; }); // stable global rank, assigned once after full sort
+  return scored;
+}
+
+/* ---------------------------------------------------------------------
+   8. SUMMARY GENERATION
+   ---------------------------------------------------------------------
+   Workstream Exposure Index (0-100), documented composite:
+     40% normalized average score
+     25% normalized maximum score
+     15% executive-critical risk concentration (share of risks in Exec
+         Immediate / Exec Critical bands)
+     10% leadership-decision concentration (share of risks requiring a
+         decision)
+     10% weak-mitigation concentration (share with mitigation <= 2)
+   This is distinct from, and presented alongside, the plain average score.
+   --------------------------------------------------------------------- */
+function computeWorkstreamStats(analysed){
+  var byWs = {};
+  analysed.forEach(function(r){
+    var ws = r.workstream || "Unclassified";
+    if (!byWs[ws]) byWs[ws] = { workstream: ws, count:0, scoreSum:0, maxScore:0, decisions:0, weakMitigation:0, execCritical:0 };
+    var s = byWs[ws];
+    s.count++;
+    s.scoreSum += r.score;
+    s.maxScore = Math.max(s.maxScore, r.score);
+    if (r.decisionRequired) s.decisions++;
+    if (r.mitigationConfidence <= 2) s.weakMitigation++;
+    if (r.priorityLevel.key === "executive-immediate" || r.priorityLevel.key === "executive-critical") s.execCritical++;
+  });
+  var list = Object.keys(byWs).map(function(k){
+    var s = byWs[k];
+    s.avgScore = round1(s.scoreSum / s.count);
+    var execConcentration = (s.execCritical / s.count) * 100;
+    var decisionConcentration = (s.decisions / s.count) * 100;
+    var mitigationConcentration = (s.weakMitigation / s.count) * 100;
+    s.exposureIndex = round1(
+      s.avgScore * 0.40 +
+      s.maxScore * 0.25 +
+      execConcentration * 0.15 +
+      decisionConcentration * 0.10 +
+      mitigationConcentration * 0.10
+    );
+    s.exposure = s.exposureIndex >= 70 ? "Elevated" : (s.exposureIndex >= 50 ? "Moderate" : "Contained");
+    return s;
+  });
+  list.sort(function(a,b){ return b.exposureIndex - a.exposureIndex; });
+  return list;
+}
+
+function computeEscalationMatrix(analysed){
+  var byLvl = {};
+  ESCALATION_LEVELS.forEach(function(l){ byLvl[l] = { level:l, count:0, critical:0, decisions:0, overdue:0, scoreSum:0, escalationRequired:0 }; });
+  analysed.forEach(function(r){
+    var lvl = r.governance.suggestedGovernanceLevel;
+    if (!byLvl[lvl]) byLvl[lvl] = { level:lvl, count:0, critical:0, decisions:0, overdue:0, scoreSum:0, escalationRequired:0 };
+    var s = byLvl[lvl];
+    s.count++;
+    s.scoreSum += r.score;
+    if (r.priorityLevel.key === "executive-immediate" || r.priorityLevel.key === "executive-critical") s.critical++;
+    if (r.decisionRequired) s.decisions++;
+    if (r.governance.escalationRequired) s.escalationRequired++;
+    if (r.daysUntilTarget !== null && r.daysUntilTarget < 0 && r.decisionRequired) s.overdue++;
+  });
+  return ESCALATION_LEVELS.map(function(l){
+    var s = byLvl[l];
+    s.avgScore = s.count ? round1(s.scoreSum / s.count) : 0;
+    return s;
+  }).filter(function(s){ return s.count > 0; });
+}
+
+function buildExecutiveSummary(analysed, closedCount, totalLoaded){
+  var total = analysed.length;
+  var execAttention = analysed.filter(function(r){ return r.priorityLevel.key==="executive-immediate" || r.priorityLevel.key==="executive-critical"; }).length;
+  var decisionsNeeded = analysed.filter(function(r){ return r.decisionRequired; }).length;
+  var threatens = analysed.filter(function(r){ return r.exposureAreas.indexOf("Launch")!==-1 || r.exposureAreas.indexOf("SOP")!==-1 || r.exposureAreas.indexOf("Safety")!==-1 || r.exposureAreas.indexOf("Compliance")!==-1 || r.exposureAreas.indexOf("Customer Commitment")!==-1 || r.exposureAreas.indexOf("Quality")!==-1; }).length;
+
+  // Correct, exactly-matching mitigation statement: high-priority weak mitigation
+  // = mitigationConfidence <= 2 AND score >= 55 AND active (already filtered to active).
+  var highPriorityWeakMit = analysed.filter(function(r){ return r.mitigationConfidence <= 2 && r.score >= 55; });
+  var allWeakMit = analysed.filter(function(r){ return r.mitigationConfidence <= 2; });
+  var lowerPriorityWeakMit = allWeakMit.length - highPriorityWeakMit.length;
+
+  var unclearOwner = analysed.filter(function(r){ return !r.owner; }).length;
+  var wsStats = computeWorkstreamStats(analysed);
+  var mostExposed = wsStats.length ? wsStats[0].workstream : "n/a";
+  var urgentDecision = null;
+  analysed.forEach(function(r){
+    if (!r.decisionRequired) return;
+    if (r.daysUntilTarget === null) return;
+    if (urgentDecision === null || r.daysUntilTarget < urgentDecision.daysUntilTarget) urgentDecision = r;
+  });
+
+  var sentence0 = totalLoaded + " risk" + (totalLoaded===1?"":"s") + " loaded \u00b7 " + total + " active risk" + (total===1?"":"s") + " analysed \u00b7 " + closedCount + " closed risk" + (closedCount===1?"":"s") + " excluded.";
+
+  var sentence1 = "The active portfolio contains " + total + " risk" + (total===1?"":"s") + ". " +
+    execAttention + " require" + (execAttention===1?"s":"") + " executive attention" +
+    (decisionsNeeded ? ", including " + decisionsNeeded + " that require" + (decisionsNeeded===1?"s":"") + " a leadership decision" : "") + ".";
+
+  var sentence2 = threatens
+    ? threatens + " risk" + (threatens===1?"":"s") + " may threaten launch, SOP, customer commitments, quality, safety, or compliance outcomes based on their selected exposure areas."
+    : "No active risks currently carry launch, SOP, safety, compliance, quality, or customer commitment exposure areas.";
+
+  var sentence3 = mostExposed !== "n/a"
+    ? mostExposed + " has the highest composite exposure" + (urgentDecision ? ", and the most urgent decision window is " + (urgentDecision.daysUntilTarget < 0 ? "already overdue" : "within " + urgentDecision.daysUntilTarget + " day(s)") + " on \u201c" + urgentDecision.title + ".\u201d" : ".")
+    : "Workstream exposure could not be determined.";
+
+  var sentence4 = (highPriorityWeakMit.length
+      ? highPriorityWeakMit.length + " high-priority risk" + (highPriorityWeakMit.length===1?" has":"s have") + " inadequate mitigation"
+      : "No high-priority risks currently have inadequate mitigation") +
+    (lowerPriorityWeakMit > 0 ? "; " + lowerPriorityWeakMit + " additional lower-priority risk" + (lowerPriorityWeakMit===1?" has":"s have") + " weak mitigation" : "") +
+    (unclearOwner ? ", and " + unclearOwner + " risk" + (unclearOwner===1?" has":"s have") + " no confirmed owner." : ".");
+
+  return {
+    text: [sentence0, sentence1, sentence2, sentence3, sentence4].join(" "),
+    kpis: {
+      totalLoaded: totalLoaded,
+      total: total,
+      closedExcluded: closedCount,
+      execAttention: execAttention,
+      decisionsNeeded: decisionsNeeded,
+      weakMit: highPriorityWeakMit.length,
+      weakMitAll: allWeakMit.length,
+      overdueUrgent: analysed.filter(function(r){ return r.daysUntilTarget !== null && r.daysUntilTarget <= 2; }).length,
+      mostExposed: mostExposed
+    }
+  };
+}
+
+function buildRecommendations(analysed){
+  var recs = [];
+  var noOwnerDecision = analysed.filter(function(r){ return r.decisionRequired && !r.confirmedDecisionOwner; });
+  if (noOwnerDecision.length) recs.push("Assign a confirmed decision owner for " + noOwnerDecision.length + " risk(s) awaiting one, including \u201c" + noOwnerDecision[0].title + ".\u201d");
+
+  var overdueDecisions = analysed.filter(function(r){ return r.decisionRequired && r.daysUntilTarget !== null && r.daysUntilTarget < 0; });
+  if (overdueDecisions.length) recs.push("Escalate " + overdueDecisions.length + " overdue decision(s) immediately, starting with \u201c" + overdueDecisions[0].title + ".\u201d");
+
+  var weakMitigation = analysed.filter(function(r){ return r.mitigationConfidence <= 2 && r.score >= 55; });
+  if (weakMitigation.length) recs.push("Strengthen mitigation evidence for " + weakMitigation.length + " high-priority risk(s) with weak or unmitigated plans.");
+
+  var dependency = analysed.filter(function(r){ return r.dependencyImpact >= 4 && r.score >= 55; });
+  if (dependency.length) recs.push("Establish a cross-functional mitigation workshop for risks with cascading dependency impact, including \u201c" + dependency[0].title + ".\u201d");
+
+  var atRiskMilestone = analysed.filter(function(r){ return (r.exposureAreas.indexOf("Launch")!==-1 || r.exposureAreas.indexOf("SOP")!==-1) && r.daysUntilTarget !== null && r.daysUntilTarget <= 14 && r.score >= 70; });
+  if (atRiskMilestone.length) recs.push("Consider rebaselining or executive review of launch/SOP milestones threatened by \u201c" + atRiskMilestone[0].title + ".\u201d");
+
+  var operational = analysed.filter(function(r){ return r.priorityLevel.key === "operational"; });
+  if (operational.length && recs.length < 5) recs.push(operational.length + " risk(s) are currently classified for operational governance and do not require immediate executive action.");
+
+  return recs.slice(0,5);
+}
+
+/* ---------------------------------------------------------------------
+   9. FILTERING
+   --------------------------------------------------------------------- */
+function applyFilters(analysed){
+  var f = STATE.filters;
+  return analysed.filter(function(r){
+    if (f.riskIds && f.riskIds.indexOf(r.id) === -1) return false;
+    if (f.search){
+      var hay = (r.title + " " + r.description + " " + r.owner + " " + r.workstream).toLowerCase();
+      if (hay.indexOf(f.search.toLowerCase()) === -1) return false;
+    }
+    if (f.priority && r.priorityLevel.label !== f.priority) return false;
+    if (f.workstream && r.workstream !== f.workstream) return false;
+    if (f.decision === "yes" && !r.decisionRequired) return false;
+    if (f.decision === "no" && r.decisionRequired) return false;
+    if (f.escalationRequired === "yes" && !r.governance.escalationRequired) return false;
+    if (f.escalationRequired === "no" && r.governance.escalationRequired) return false;
+    if (f.governance && r.governance.suggestedGovernanceLevel !== f.governance) return false;
+    if (f.exposure && r.exposureAreas.indexOf(f.exposure) === -1) return false;
+    if (f.mitigation === "weak" && r.mitigationConfidence > 2) return false;
+    if (f.mitigation === "adequate" && r.mitigationConfidence <= 2) return false;
+    if (f.visibility === "yes" && !r.governance.executiveVisibility) return false;
+    if (f.visibility === "no" && r.governance.executiveVisibility) return false;
+    return true;
+  });
+}
+
+/* ---------------------------------------------------------------------
+   10. RENDERING - Input queue + status banner
+   --------------------------------------------------------------------- */
+function markStale(){
+  if (STATE.analysisHasRun) STATE.analysisStale = true;
+  renderStatusBanner();
+  renderQueueCount();
+  updateResultsAvailability();
+}
+
+function renderQueueCount(){
+  $("#queue-count").textContent = STATE.queue.length + " risk" + (STATE.queue.length===1?"":"s");
+  var closedInQueue = STATE.queue.filter(function(r){ return r.status === "Closed"; }).length;
+  var note = $("#dataset-summary-note");
+  if (STATE.queue.length){
+    note.textContent = STATE.queue.length + " risk(s) loaded \u00b7 " + (STATE.queue.length - closedInQueue) + " open/active \u00b7 " + closedInQueue + " closed" + (STATE.includeClosed ? " (included in analysis)" : " (excluded from analysis by default)");
+  } else {
+    note.textContent = "";
+  }
+}
+
+function renderStatusBanner(){
+  var region = $("#status-banner-region");
+  clearNode(region);
+  if (STATE.analysisHasRun && STATE.analysisStale){
+    region.appendChild(el("div", { class:"banner stale", role:"status" }, [
+      svgIcon("alert"),
+      el("span", {}, "Input data has changed. Run analysis again to refresh the results.")
+    ]));
+  }
+}
+
+function updateResultsAvailability(){
+  var root = $("#results-root");
+  var disableActions = !STATE.analysisHasRun || STATE.analysisStale;
+  $all("#export-section button").forEach(function(b){ b.disabled = disableActions; });
+  $all("#chat-form button, #suggested-questions button, #chat-input").forEach(function(b){ b.disabled = disableActions; });
+  if (disableActions){ root.classList.add("stale-flag"); } else { root.classList.remove("stale-flag"); }
+}
+
+function svgIcon(name){
+  var paths = {
+    alert: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3L2 21h20L12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 10v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>',
+    empty: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 9h10M7 13h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>'
+  };
+  var span = document.createElement("span");
+  span.setAttribute("aria-hidden","true");
+  span.style.display = "inline-flex";
+  span.style.flex = "none";
+  // Fixed, hard-coded icon markup only (no user data) - safe to assign.
+  span.innerHTML = paths[name] || "";
+  return span;
+}
+
+function renderQueueTable(){
+  var region = $("#queue-region");
+  clearNode(region);
+  renderQueueCount();
+
+  if (!STATE.queue.length){
+    region.appendChild(el("div", { class:"empty-state" }, [
+      svgIcon("empty"),
+      el("h4", {}, "No risks queued yet"),
+      el("p", { style:"margin:0;" }, "Add a risk using the manual form, upload a CSV register, or load the sample program dataset to get started.")
+    ]));
+    return;
+  }
+
+  var wrap = el("div", { class:"queue-table-wrap" });
+  var table = el("table", {});
+  var thead = el("thead", {}, el("tr", {}, [
+    el("th", {}, "Title"), el("th", {}, "Workstream"), el("th", {}, "Owner"), el("th",{},"Status"),
+    el("th", {}, "Target date"), el("th", {}, "Decision?"), el("th", {}, "Actions")
+  ]));
+  var tbody = el("tbody", {});
+  STATE.queue.forEach(function(r){
+    var tr = el("tr", {});
+    if (r.status === "Closed") tr.style.opacity = "0.6";
+    tr.appendChild(el("td", { style:"color:var(--text);font-weight:600;" }, r.title));
+    tr.appendChild(el("td", {}, r.workstream || "\u2014"));
+    tr.appendChild(el("td", {}, r.owner || "Unassigned"));
+    tr.appendChild(el("td", {}, r.status === "Closed" ? el("span",{class:"badge neutral"},"Closed \u2014 excluded") : r.status));
+    tr.appendChild(el("td", { class:"mono" }, r.dateState === "provided" ? fmtDate(r.targetDate) : DATE_STATES.find(function(d){return d.value===r.dateState;}).label));
+    tr.appendChild(el("td", {}, r.decisionRequired ? "Yes" : "No"));
+    var actions = el("td", {}, [
+      el("button", { type:"button", class:"btn small ghost", "aria-label":"Edit " + r.title, onclick:function(){ editQueuedRisk(r.id); } }, "Edit"),
+      " ",
+      el("button", { type:"button", class:"btn small ghost", "aria-label":"Duplicate " + r.title, onclick:function(){ duplicateQueuedRisk(r.id); } }, "Duplicate"),
+      " ",
+      el("button", { type:"button", class:"btn small danger", "aria-label":"Delete " + r.title, onclick:function(){ deleteQueuedRisk(r.id); } }, "Delete")
+    ]);
+    tr.appendChild(actions);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(thead); table.appendChild(tbody);
+  wrap.appendChild(table);
+  region.appendChild(wrap);
+}
+
+function resetEditingStateIfTargetMissing(){
+  // Item 10: editing-state integrity. If the risk currently being edited no
+  // longer exists in the queue, exit edit mode instead of silently
+  // continuing to point at a stale ID.
+  if (STATE.editingId && !STATE.queue.some(function(r){ return r.id === STATE.editingId; })){
+    STATE.editingId = null;
+    resetForm();
+    toast("The risk you were editing no longer exists in the queue. Edit mode was cancelled.", "error");
+  }
+}
+
+function fullyResetInputState(){
+  // Called whenever the active dataset is fully replaced (clear, sample
+  // replace, CSV replace) so no stale edit/preview/analysis state lingers.
+  STATE.editingId = null;
+  resetForm();
+  $("#csv-summary").textContent = "";
+  clearNode($("#csv-summary"));
+  STATE.lastCsvBatch = null;
+  clearAllFilters();
+  STATE.chatHistory = [];
+  clearNode($("#chat-window"));
+}
+
+function deleteQueuedRisk(id){
+  STATE.queue = STATE.queue.filter(function(r){ return r.id !== id; });
+  resetEditingStateIfTargetMissing();
+  renderQueueTable();
+  markStale();
+  toast("Risk removed from queue.");
+  announce("Risk removed from the input queue.");
+}
+
+function duplicateQueuedRisk(id){
+  var src = STATE.queue.find(function(r){ return r.id === id; });
+  if (!src) return;
+  var copy = Object.assign({}, src, { id: uid("risk"), title: src.title + " (copy)" });
+  STATE.queue.push(copy);
+  renderQueueTable();
+  markStale();
+  toast("Risk duplicated.");
+}
+
+function editQueuedRisk(id){
+  var src = STATE.queue.find(function(r){ return r.id === id; });
+  if (!src) return;
+  populateFormFromRisk(src);
+  STATE.editingId = id;
+  switchTab("manual");
+  $("#f-title").focus();
+  $("#btn-add-risk").textContent = "Save changes to risk";
+  window.scrollTo({ top: $("#input-section").offsetTop - 80, behavior:"smooth" });
+}
+
+/* ---------------------------------------------------------------------
+   10b. RENDERING - Results: KPIs, priority queue, decision cards
+   --------------------------------------------------------------------- */
+function renderKPIs(summary){
+  var grid = $("#kpi-grid");
+  clearNode(grid);
+  var cards = [
+    { val: summary.kpis.total, lbl:"Active Risks Analysed" },
+    { val: summary.kpis.closedExcluded, lbl:"Closed Risks Excluded" },
+    { val: summary.kpis.execAttention, lbl:"Executive Attention Required", cls: summary.kpis.execAttention ? "critical" : "" },
+    { val: summary.kpis.decisionsNeeded, lbl:"Leadership Decisions Required", cls: summary.kpis.decisionsNeeded ? "warn" : "" },
+    { val: summary.kpis.weakMit, lbl:"High-Priority Weak Mitigation", cls: summary.kpis.weakMit ? "warn" : "" },
+    { val: summary.kpis.overdueUrgent, lbl:"Overdue or Urgent (\u22642 days)", cls: summary.kpis.overdueUrgent ? "critical" : "" }
+  ];
+  cards.forEach(function(c){
+    grid.appendChild(el("div", { class:"kpi-card" + (c.cls?" "+c.cls:"") }, [
+      el("div", { class:"val" }, String(c.val)),
+      el("div", { class:"lbl" }, c.lbl)
+    ]));
+  });
+}
+
+function badgeForPriority(priorityLevel){
+  return el("span", { class:"badge " + priorityLevel.cls }, priorityLevel.label);
+}
+
+function populateWorkstreamFilterOptions(){
+  var sel = $("#filter-workstream");
+  var current = sel.value;
+  clearNode(sel);
+  sel.appendChild(el("option", { value:"" }, "All workstreams"));
+  var seen = {};
+  STATE.analysed.forEach(function(r){ if (r.workstream) seen[r.workstream]=1; });
+  Object.keys(seen).sort().forEach(function(ws){ sel.appendChild(el("option", { value:ws }, ws)); });
+  sel.value = current;
+
+  var govSel = $("#filter-governance");
+  var currentGov = govSel.value;
+  clearNode(govSel);
+  govSel.appendChild(el("option", { value:"" }, "All suggested governance levels"));
+  var seenGov = {};
+  STATE.analysed.forEach(function(r){ seenGov[r.governance.suggestedGovernanceLevel]=1; });
+  ESCALATION_LEVELS.filter(function(l){ return seenGov[l]; }).forEach(function(l){ govSel.appendChild(el("option",{value:l}, l)); });
+  govSel.value = currentGov;
+
+  var expSel = $("#filter-exposure");
+  var currentExp = expSel.value;
+  clearNode(expSel);
+  expSel.appendChild(el("option", { value:"" }, "All exposure areas"));
+  var seenExp = {};
+  STATE.analysed.forEach(function(r){ r.exposureAreas.forEach(function(a){ seenExp[a]=1; }); });
+  EXPOSURE_AREAS.filter(function(a){ return seenExp[a]; }).forEach(function(a){ expSel.appendChild(el("option",{value:a}, a)); });
+  expSel.value = currentExp;
+}
+
+function renderAssistantFilterChip(){
+  var region = $("#assistant-filter-chip-region");
+  clearNode(region);
+  if (!STATE.filters.riskIds) return;
+  region.appendChild(el("div", { class:"active-filter-chip" }, [
+    el("span", {}, STATE.filters.riskIdsLabel || ("Assistant result \u00b7 " + STATE.filters.riskIds.length + " risk(s)")),
+    el("button", { type:"button", "aria-label":"Show all risks", onclick:function(){ STATE.filters.riskIds=null; STATE.filters.riskIdsLabel=""; renderPriorityQueue(); } }, "Show all risks \u2715")
+  ]));
+}
+
+function renderPriorityQueue(){
+  var region = $("#priority-queue-region");
+  clearNode(region);
+  renderAssistantFilterChip();
+  var filtered = applyFilters(STATE.analysed);
+
+  if (!filtered.length){
+    region.appendChild(el("div", { class:"empty-state" }, [
+      svgIcon("empty"),
+      el("h4", {}, "No risks match the current filters"),
+      el("p", { style:"margin:0;" }, "Try resetting filters or broadening your search.")
+    ]));
+    return;
+  }
+
+  region.appendChild(el("p", { style:"font-size:11.5px;color:var(--text-faint);margin:0 0 8px;" }, "Showing " + filtered.length + " of " + STATE.analysed.length + " active risk(s). Executive Rank is stable and does not change when filtered."));
+
+  var wrap = el("div", { class:"queue-table-wrap" });
+  var table = el("table", {});
+  var thead = el("thead", {}, el("tr", {}, [
+    "Rank","Risk","Score","Priority","Owner","Workstream","Decision","Target date","Suggested Governance","Mitigation","Status"
+  ].map(function(h){ return el("th", {}, h); })));
+  var tbody = el("tbody", {});
+
+  filtered.forEach(function(r){
+    var tr = el("tr", {});
+    tr.appendChild(el("td", { class:"mono" }, "#" + r.executiveRank));
+    var titleCell = el("td", { style:"max-width:280px;" });
+    titleCell.appendChild(el("button", {
+      type:"button", class:"esc-row-btn", style:"color:var(--text);font-weight:600;",
+      "aria-label":"View decision context for " + r.title + ", rank " + r.executiveRank + ", score " + r.score,
+      onclick: function(){ openDetailModal(r.id); }
+    }, r.title));
+    tr.appendChild(titleCell);
+    tr.appendChild(el("td", { class:"mono", style:"color:var(--text);font-weight:700;" }, String(r.score)));
+    tr.appendChild(el("td", {}, badgeForPriority(r.priorityLevel)));
+    tr.appendChild(el("td", {}, r.owner || "Unassigned"));
+    tr.appendChild(el("td", {}, r.workstream || "\u2014"));
+    tr.appendChild(el("td", {}, r.decisionRequired ? "Required" : "\u2014"));
+    tr.appendChild(el("td", { class:"mono" }, r.dateState !== "provided" ? "\u2014" : fmtDate(r.targetDate) + (r.daysUntilTarget!==null && r.daysUntilTarget<0 ? " (overdue)" : "")));
+    tr.appendChild(el("td", {}, r.governance.suggestedGovernanceLevel));
+    tr.appendChild(el("td", {}, r.mitigationConfidence <= 2 ? el("span",{class:"badge p-immediate"},"Weak") : el("span",{class:"badge neutral"},"Adequate")));
+    tr.appendChild(el("td", {}, r.status));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(thead); table.appendChild(tbody);
+  wrap.appendChild(table);
+  region.appendChild(wrap);
+}
+
+function renderDecisionCards(){
+  var region = $("#decision-cards-region");
+  clearNode(region);
+  var candidates = STATE.analysed.filter(function(r){ return r.decisionCardEligible; });
+
+  if (!candidates.length){
+    region.appendChild(el("div", { class:"empty-state", style:"grid-column:1/-1;" }, [
+      svgIcon("empty"),
+      el("h4", {}, "No decision or escalation cards required"),
+      el("p", { style:"margin:0;" }, "No risks in the current dataset currently meet the criteria for a leadership decision or formal escalation.")
+    ]));
+    return;
+  }
+
+  candidates.sort(function(a,b){ return a.executiveRank - b.executiveRank; });
+
+  candidates.forEach(function(r){
+    var lvl = r.governance.suggestedGovernanceLevel;
+    var lvlClass = (lvl === "Executive Steering Committee" || lvl === "Vice President") ? "lvl-executive" : (lvl === "Director" ? "lvl-director" : "");
+    var card = el("div", { class:"decision-card " + lvlClass });
+    card.appendChild(el("div", { class:"dc-head" }, [
+      el("div", {}, [ el("h4", {}, "#" + r.executiveRank + " \u00b7 " + r.title), el("div", { style:"font-size:11.5px;color:var(--text-faint);" }, r.workstream) ]),
+      badgeForPriority(r.priorityLevel)
+    ]));
+    var dl = el("dl", {});
+    function row(dt, dd){ dl.appendChild(el("dt",{},dt)); dl.appendChild(el("dd",{},dd)); }
+    row("Risk Owner", r.owner || "Unassigned");
+    row("Action Owner", r.actionOwner || "Same as risk owner");
+    row("Decision Required", r.decisionRequired ? "Yes" : "No");
+    row("Confirmed Decision Owner", r.governance.confirmedDecisionOwnerDisplay);
+    row("Suggested Decision Authority" + (r.governance.suggestedDecisionAuthorityIsSuggested ? " (suggested)" : ""), r.governance.suggestedDecisionAuthority);
+    row("Escalation Required", r.governance.escalationRequired ? "Yes" : "No");
+    row("Escalation Recipient" + (r.governance.escalationRecipientIsSuggested ? " (suggested)" : ""), r.governance.escalationRecipient);
+    row("Executive Visibility", r.governance.executiveVisibility ? "Required" : "Not required");
+    row("Decision Deadline", r.dateState === "provided" ? fmtDate(r.targetDate) : DATE_STATES.find(function(d){return d.value===r.dateState;}).label);
+    row("Exposure Areas", r.exposureAreas.length ? r.exposureAreas.join(", ") + (r.exposureAreasInferred ? " (inferred)" : "") : "None selected");
+    row("Recommended Action", r.currentMitigation || "No mitigation action documented yet.");
+    row("Consequence of Delay", r.governance.criticalExposure ? "Continued delay increases exposure in: " + r.exposureAreas.join(", ") + "." : "Delay increases operational exposure within the workstream.");
+    row("Reason", r.explanation);
+    row("Executive Priority Score", String(r.score) + " / 100");
+    card.appendChild(dl);
+    region.appendChild(card);
+  });
+}
+
+/* ---------------------------------------------------------------------
+   10c. RENDERING - Heat map, workstream analysis, escalation matrix
+   --------------------------------------------------------------------- */
+function renderHeatmap(){
+  var svgRegion = $("#heatmap-svg-region");
+  var tableRegion = $("#heatmap-table-region");
+  clearNode(svgRegion); clearNode(tableRegion);
+
+  var W = 560, H = 400, pad = 46;
+  var svgNS = "http://www.w3.org/2000/svg";
+  var svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "Heat map of risks by probability and business impact. Marker size reflects executive priority score. An accessible data table follows with the same information.");
+  svg.style.width = "100%"; svg.style.height = "auto";
+
+  function addEl(tag, attrs){
+    var e = document.createElementNS(svgNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    svg.appendChild(e);
+    return e;
+  }
+
+  // background quadrants (blueprint-style faint grid)
+  addEl("rect", { x:0, y:0, width:W, height:H, fill:"#0B1420" });
+  for (var gx = pad; gx <= W-pad; gx += (W-2*pad)/5){
+    addEl("line", { x1:gx, y1:pad, x2:gx, y2:H-pad, stroke:"#1B2A3E", "stroke-width":1 });
+  }
+  for (var gy = pad; gy <= H-pad; gy += (H-2*pad)/5){
+    addEl("line", { x1:pad, y1:gy, x2:W-pad, y2:gy, stroke:"#1B2A3E", "stroke-width":1 });
+  }
+  // axes
+  addEl("line", { x1:pad, y1:H-pad, x2:W-pad, y2:H-pad, stroke:"#5E7089", "stroke-width":1.2 });
+  addEl("line", { x1:pad, y1:pad, x2:pad, y2:H-pad, stroke:"#5E7089", "stroke-width":1.2 });
+  var xlabel = addEl("text", { x:W/2, y:H-10, fill:"#97A6BE", "font-size":11, "text-anchor":"middle" }); xlabel.textContent = "Probability \u2192 (context only, not scored)";
+  var ylabel = addEl("text", { x:14, y:H/2, fill:"#97A6BE", "font-size":11, "text-anchor":"middle", transform:"rotate(-90 14," + (H/2) + ")" }); ylabel.textContent = "Business Impact \u2192";
+
+  function xPos(p){ return pad + ((p-1)/4) * (W - 2*pad); }
+  function yPos(imp){ return (H-pad) - ((imp-1)/4) * (H - 2*pad); }
+
+  var colorFor = function(lvl){
+    return { "executive-immediate":"#E2574C","executive-critical":"#E08A3C","high-priority":"#D9A441","monitor-closely":"#4C9BD9","operational":"#4CAF7D" }[lvl] || "#97A6BE";
+  };
+
+  var jitterMap = {};
+  STATE.analysed.forEach(function(r, i){
+    var key = r.probability + "-" + r.businessImpact;
+    jitterMap[key] = (jitterMap[key] || 0) + 1;
+    var count = jitterMap[key];
+    var jitterX = (count % 3) * 6 - 6;
+    var jitterY = Math.floor(count/3) * 6 - 6;
+    var cx = xPos(r.probability) + jitterX;
+    var cy = yPos(r.businessImpact) + jitterY;
+    var radius = 6 + (r.score/100) * 13;
+    var shortId = "#" + r.executiveRank;
+    var circle = addEl("circle", { cx:cx, cy:cy, r:radius, fill:colorFor(r.priorityLevel.key), "fill-opacity":"0.82", stroke:"#0B1420", "stroke-width":1.4 });
+    circle.setAttribute("role","button");
+    circle.setAttribute("tabindex","0");
+    circle.setAttribute("aria-label", "Rank " + r.executiveRank + ", " + r.title + ", " + r.priorityLevel.label + ", score " + r.score + ", workstream " + r.workstream + ". Activate to view full decision context.");
+    var title = document.createElementNS(svgNS, "title");
+    title.textContent = shortId + " " + r.title + " \u2014 Score " + r.score + " \u2014 " + r.workstream + " \u2014 Mitigation confidence " + r.mitigationConfidence + "/5 \u2014 Suggested governance: " + r.governance.suggestedGovernanceLevel;
+    circle.appendChild(title);
+    circle.style.cursor = "pointer";
+    circle.addEventListener("click", (function(id){ return function(){ openDetailModal(id); }; })(r.id));
+    circle.addEventListener("keydown", (function(id){ return function(e){ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); openDetailModal(id); } }; })(r.id));
+    if (radius >= 9){
+      var label = addEl("text", { x:cx, y:cy+3.5, "text-anchor":"middle", "font-size":9, fill:"#0B1420", "font-weight":"700", "pointer-events":"none" });
+      label.textContent = String(r.executiveRank);
+    }
+  });
+
+  svgRegion.appendChild(svg);
+  var legend = el("div", { class:"heatmap-legend" });
+  [["executive-immediate","Executive Immediate"],["executive-critical","Executive Critical"],["high-priority","High Priority"],["monitor-closely","Monitor Closely"],["operational","Operational"]].forEach(function(pair){
+    var dot = el("span", { class:"legend-dot", style:"background:" + colorFor(pair[0]) + ";" });
+    legend.appendChild(el("span", {}, [dot, pair[1]]));
+  });
+  svgRegion.appendChild(legend);
+  svgRegion.appendChild(el("p", { style:"font-size:11px;color:var(--text-faint);margin:8px 0 0;" }, "Numbers on larger markers correspond to Executive Rank in the priority queue and data table below."));
+
+  // Accessible data table alternative (authoritative)
+  var table = el("table", {});
+  table.appendChild(el("thead", {}, el("tr", {}, ["Rank","Risk","Probability","Business Impact","Score","Suggested Governance"].map(function(h){ return el("th",{},h); }))));
+  var tbody = el("tbody", {});
+  STATE.analysed.forEach(function(r){
+    tbody.appendChild(el("tr", {}, [
+      el("td", { class:"mono" }, "#"+r.executiveRank),
+      el("td", { style:"color:var(--text);" }, r.title),
+      el("td", { class:"mono" }, String(r.probability)),
+      el("td", { class:"mono" }, String(r.businessImpact)),
+      el("td", { class:"mono" }, String(r.score)),
+      el("td", {}, r.governance.suggestedGovernanceLevel)
+    ]));
+  });
+  table.appendChild(tbody);
+  tableRegion.appendChild(table);
+}
+
+function renderWorkstreamAnalysis(){
+  var region = $("#workstream-region");
+  clearNode(region);
+  var stats = computeWorkstreamStats(STATE.analysed);
+  if (!stats.length){ region.appendChild(el("div",{class:"empty-state"},"No workstream data available.")); return; }
+  var maxIdx = Math.max.apply(null, stats.map(function(s){ return s.exposureIndex; })) || 1;
+
+  stats.forEach(function(s){
+    var row = el("div", { class:"bar-row" });
+    row.appendChild(el("div", { style:"color:var(--text);font-weight:600;" }, s.workstream));
+    var track = el("div", { class:"bar-track" });
+    track.appendChild(el("div", { class:"bar-fill", style:"width:" + (s.exposureIndex/maxIdx*100) + "%;" }));
+    row.appendChild(track);
+    row.appendChild(el("div", { class:"mono", style:"text-align:right;color:var(--text);" }, String(s.exposureIndex)));
+    region.appendChild(row);
+  });
+  region.appendChild(el("p", { style:"font-size:11px;color:var(--text-faint);margin:4px 0 14px;" }, "Bars show Workstream Exposure Index (composite). Average score shown separately in the table below."));
+
+  var table = el("table", { style:"margin-top:2px;" });
+  table.appendChild(el("thead", {}, el("tr", {}, ["Workstream","Risks","Exposure Index","Avg Score","Highest Score","Decisions","Weak Mitigation","Exposure"].map(function(h){return el("th",{},h);}))));
+  var tbody = el("tbody", {});
+  stats.forEach(function(s){
+    tbody.appendChild(el("tr", {}, [
+      el("td", { style:"color:var(--text);" }, s.workstream),
+      el("td", { class:"mono" }, String(s.count)),
+      el("td", { class:"mono", style:"color:var(--text);font-weight:700;" }, String(s.exposureIndex)),
+      el("td", { class:"mono" }, String(s.avgScore)),
+      el("td", { class:"mono" }, String(s.maxScore)),
+      el("td", { class:"mono" }, String(s.decisions)),
+      el("td", { class:"mono" }, String(s.weakMitigation)),
+      el("td", {}, s.exposure)
+    ]));
+  });
+  table.appendChild(tbody);
+  region.appendChild(table);
+}
+
+function renderEscalationMatrix(){
+  var region = $("#escalation-region");
+  clearNode(region);
+  var rows = computeEscalationMatrix(STATE.analysed);
+  if (!rows.length){ region.appendChild(el("div",{class:"empty-state"},"No escalation data available.")); return; }
+
+  var table = el("table", { class:"esc-table" });
+  table.appendChild(el("thead", {}, el("tr", {}, ["Suggested governance level","Risk count","Critical risks","Decisions required","Escalation required","Overdue decisions","Avg priority score"].map(function(h,i){ return el("th",{}, h); }))));
+  var tbody = el("tbody", {});
+  rows.forEach(function(s){
+    var tr = el("tr", {});
+    var levelCell = el("td", {});
+    levelCell.appendChild(el("button", { type:"button", class:"esc-row-btn", onclick:function(){ setGovernanceFilter(s.level); } }, s.level));
+    tr.appendChild(levelCell);
+    tr.appendChild(el("td", { class:"mono" }, String(s.count)));
+    tr.appendChild(el("td", { class:"mono" }, String(s.critical)));
+    tr.appendChild(el("td", { class:"mono" }, String(s.decisions)));
+    tr.appendChild(el("td", { class:"mono" }, String(s.escalationRequired)));
+    tr.appendChild(el("td", { class:"mono" }, String(s.overdue)));
+    tr.appendChild(el("td", { class:"mono" }, String(s.avgScore)));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  region.appendChild(table);
+}
+
+function setGovernanceFilter(level){
+  clearAllFiltersSilent();
+  $("#filter-governance").value = level;
+  STATE.filters.governance = level;
+  renderPriorityQueue();
+  document.getElementById("queue-priority-section").scrollIntoView({ behavior:"smooth", block:"start" });
+  announce("Priority queue filtered to suggested governance level: " + level);
+}
+
+/* ---------------------------------------------------------------------
+   10d. RENDERING - Detail modal + modal helpers
+   --------------------------------------------------------------------- */
+var lastFocusedBeforeModal = null;
+
+function openModal(overlayEl){
+  // Only one modal open at a time: close any other open overlay first.
+  $all(".modal-overlay").forEach(function(m){ if (m !== overlayEl && !m.hidden) m.hidden = true; });
+  lastFocusedBeforeModal = document.activeElement;
+  overlayEl.hidden = false;
+  $("#main-content").setAttribute("aria-hidden","true");
+  $(".app-header").setAttribute("aria-hidden","true");
+  var focusable = $all('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', overlayEl);
+  if (focusable.length) focusable[0].focus();
+  document.addEventListener("keydown", trapFocusHandler);
+}
+function closeModal(overlayEl){
+  overlayEl.hidden = true;
+  $("#main-content").removeAttribute("aria-hidden");
+  $(".app-header").removeAttribute("aria-hidden");
+  document.removeEventListener("keydown", trapFocusHandler);
+  // Focus is restored safely even if the original trigger element was
+  // removed from the DOM in the meantime (e.g. the queue re-rendered).
+  if (lastFocusedBeforeModal && document.contains(lastFocusedBeforeModal)){
+    lastFocusedBeforeModal.focus();
+  } else {
+    $("#main-content").focus ? null : null;
+  }
+}
+function trapFocusHandler(e){
+  var overlay = $all(".modal-overlay").find(function(m){ return !m.hidden; });
+  if (!overlay) return;
+  if (e.key === "Escape"){ closeModal(overlay); return; }
+  if (e.key !== "Tab") return;
+  var focusable = $all('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', overlay);
+  if (!focusable.length) return;
+  var first = focusable[0], last = focusable[focusable.length-1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+}
+
+function renderScoreBreakdown(r){
+  var container = el("div", { class:"score-breakdown" });
+  var rows = [
+    { label:"Business impact (25%)", pts: r.components.businessImpact, max:25 },
+    { label:"Urgency and deadline (20%)", pts: r.components.urgency, max:20 },
+    { label:"Strategic importance (15%)", pts: r.components.strategicImportance, max:15 },
+    { label:"Dependency impact (15%)", pts: r.components.dependencyImpact, max:15 },
+    { label:"Mitigation gap (15%)", pts: r.components.mitigationGap, max:15 },
+    { label:"Ownership and decision gap (10%)", pts: r.components.ownershipGap, max:10 }
+  ];
+  rows.forEach(function(row){
+    var sbRow = el("div", { class:"sb-row" });
+    sbRow.appendChild(el("div", {}, row.label));
+    var track = el("div", { class:"sb-track" });
+    track.appendChild(el("div", { class:"sb-fill", style:"width:" + clamp((row.pts/row.max)*100,0,100) + "%;" }));
+    sbRow.appendChild(track);
+    sbRow.appendChild(el("div", { class:"mono", style:"text-align:right;" }, row.pts.toFixed(1)));
+    container.appendChild(sbRow);
+  });
+  var totalRow = el("div", { class:"sb-row sb-total" });
+  totalRow.appendChild(el("div", {}, "Total"));
+  totalRow.appendChild(el("div", {}));
+  totalRow.appendChild(el("div", { class:"mono", style:"text-align:right;" }, String(r.score)));
+  container.appendChild(totalRow);
+  return container;
+}
+
+function openDetailModal(id){
+  var r = STATE.analysed.find(function(x){ return x.id === id; });
+  if (!r) return;
+  var body = $("#detail-modal-body");
+  clearNode(body);
+  body.appendChild(el("h3", { id:"detail-modal-title" }, "#" + r.executiveRank + " \u00b7 " + r.title));
+  body.appendChild(el("div", { class:"btn-row", style:"margin-bottom:14px;" }, [ badgeForPriority(r.priorityLevel), el("span",{class:"badge neutral"}, r.workstream), el("span",{class:"badge neutral"}, "Score " + r.score + "/100") ]));
+  body.appendChild(el("p", {}, r.description));
+
+  if (r.exposureAreas.length){
+    var expWrap = el("div", { style:"margin-bottom:10px;" });
+    r.exposureAreas.forEach(function(a){ expWrap.appendChild(el("span", { class:"exposure-chip" + (r.exposureAreasInferred ? " inferred" : "") }, a)); });
+    body.appendChild(expWrap);
+  }
+
+  var dl = el("dl", { style:"display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;" });
+  function row(dt,dd){ dl.appendChild(el("dt",{style:"color:var(--text-faint);font-weight:700;"},dt)); dl.appendChild(el("dd",{style:"margin:0;color:var(--text-dim);"},dd)); }
+  row("Risk Owner", r.owner || "Unassigned");
+  row("Action Owner", r.actionOwner || "Same as risk owner");
+  row("Category", r.category || "\u2014");
+  row("Status", r.status);
+  row("Probability", r.probability + " / 5 (context only \u2014 not scored)");
+  row("Target date", r.dateState === "provided" ? fmtDate(r.targetDate) : DATE_STATES.find(function(d){return d.value===r.dateState;}).label);
+  row("Decision Required", r.decisionRequired ? "Yes" : "No");
+  row("Confirmed Decision Owner", r.governance.confirmedDecisionOwnerDisplay);
+  row("Suggested Decision Authority" + (r.governance.suggestedDecisionAuthorityIsSuggested ? " (suggested)" : ""), r.governance.suggestedDecisionAuthority);
+  row("Escalation Required", r.governance.escalationRequired ? "Yes" : "No");
+  row("Escalation Recipient" + (r.governance.escalationRecipientIsSuggested ? " (suggested)" : ""), r.governance.escalationRecipient);
+  row("Executive Visibility", r.governance.executiveVisibility ? "Required" : "Not required");
+  row("Mitigation confidence", r.mitigationConfidence + " / 5");
+  row("Current mitigation", r.currentMitigation || "Not documented.");
+  body.appendChild(dl);
+
+  body.appendChild(el("h4", { style:"font-size:13px;margin:16px 0 4px;" }, "Score breakdown"));
+  body.appendChild(renderScoreBreakdown(r));
+
+  body.appendChild(el("h4", { style:"font-size:13px;margin:16px 0 4px;" }, "Why this score?"));
+  body.appendChild(el("p", { style:"margin:0;" }, r.explanation));
+
+  body.appendChild(el("div", { class:"btn-row", style:"margin-top:16px;" }, [
+    el("button", { type:"button", class:"btn small", onclick:function(){ copyText(buildRiskCopyText(r)).then(function(ok){ toast(ok ? "Risk details copied to clipboard." : "Copy failed. Select and copy the text manually.", ok?undefined:"error"); }); } }, "Copy details")
+  ]));
+  openModal($("#detail-modal"));
+}
+
+function buildRiskCopyText(r){
+  return "#" + r.executiveRank + " " + r.title + " (Score " + r.score + "/100, " + r.priorityLevel.label + ")\n" +
+    "Workstream: " + r.workstream + " | Owner: " + (r.owner||"Unassigned") + " | Suggested governance: " + r.governance.suggestedGovernanceLevel + "\n" +
+    "Why: " + r.explanation;
+}
+
+/* ---------------------------------------------------------------------
+   3b. FORM HANDLING (manual entry)
+   --------------------------------------------------------------------- */
+function renderExposureGrid(){
+  var grid = $("#f-exposure-grid");
+  clearNode(grid);
+  EXPOSURE_AREAS.forEach(function(area, i){
+    var id = "f-exp-" + i;
+    var label = el("label", { class:"exposure-option", for:id });
+    var input = el("input", { type:"checkbox", id:id, value:area });
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(area));
+    grid.appendChild(label);
+  });
+}
+
+function readSelectedExposures(){
+  return $all("#f-exposure-grid input:checked").map(function(i){ return i.value; });
+}
+
+function readForm(){
+  var dateState = $("#f-date-state").value;
+  return {
+    riskId: $("#f-riskid").value,
+    title: $("#f-title").value,
+    description: $("#f-desc").value,
+    owner: $("#f-owner").value,
+    actionOwner: $("#f-action-owner").value,
+    workstream: $("#f-workstream").value,
+    category: $("#f-category").value,
+    probability: $("#f-probability").value,
+    businessImpact: $("#f-impact").value,
+    urgency: $("#f-urgency").value,
+    strategicImportance: $("#f-strategic").value,
+    dependencyImpact: $("#f-dependency").value,
+    mitigationConfidence: $("#f-mitigation-conf").value,
+    dateState: dateState,
+    targetDate: $("#f-date").value,
+    exposureAreas: readSelectedExposures(),
+    exposureAreasInferred: false,
+    currentMitigation: $("#f-current-mit").value,
+    decisionRequired: $("#f-decision-required").checked,
+    confirmedDecisionOwner: $("#f-confirmed-owner").value,
+    requestedDecisionAuthority: $("#f-decision-authority").value,
+    escalationRequiredExplicit: $("#f-escalation-required").checked,
+    escalationRecipientExplicit: $("#f-escalation-recipient").value,
+    executiveVisibilityExplicit: $("#f-executive-visibility").checked,
+    status: $("#f-status").value
+  };
+}
+
+function populateFormFromRisk(r){
+  $("#f-riskid").value = r.riskId || "";
+  $("#f-title").value = r.title || "";
+  $("#f-desc").value = r.description || "";
+  $("#f-owner").value = r.owner || "";
+  $("#f-action-owner").value = r.actionOwner || "";
+  $("#f-workstream").value = r.workstream || "";
+  $("#f-category").value = r.category || "";
+  $("#f-probability").value = r.probability || "";
+  $("#f-impact").value = r.businessImpact || "";
+  $("#f-urgency").value = r.urgency || "";
+  $("#f-strategic").value = r.strategicImportance || "";
+  $("#f-dependency").value = r.dependencyImpact || 1;
+  $("#f-mitigation-conf").value = r.mitigationConfidence || "";
+  $("#f-date-state").value = r.dateState || "provided";
+  $("#f-date").value = r.targetDate || "";
+  $("#f-date").disabled = (r.dateState || "provided") !== "provided";
+  $all("#f-exposure-grid input").forEach(function(i){ i.checked = (r.exposureAreas||[]).indexOf(i.value) !== -1; });
+  $("#f-current-mit").value = r.currentMitigation || "";
+  $("#f-decision-required").checked = !!r.decisionRequired;
+  $("#f-confirmed-owner").value = r.confirmedDecisionOwner || "";
+  $("#f-decision-authority").value = r.requestedDecisionAuthority || "";
+  $("#f-escalation-required").checked = !!r.escalationRequiredExplicit;
+  $("#f-escalation-recipient").value = r.escalationRecipientExplicit || "";
+  $("#f-executive-visibility").checked = !!r.executiveVisibilityExplicit;
+  $("#f-status").value = r.status || "Open";
+}
+
+function clearFormErrors(){
+  $all("#risk-form .field").forEach(function(f){ f.classList.remove("error"); var e=f.querySelector(".field-error"); if(e) e.textContent=""; });
+}
+
+function showFormErrors(errors){
+  clearFormErrors();
+  Object.keys(errors).forEach(function(k){
+    var fieldEl = document.querySelector('[data-field="' + k + '"]');
+    if (!fieldEl) return;
+    fieldEl.classList.add("error");
+    var errEl = fieldEl.querySelector(".field-error");
+    if (errEl) errEl.textContent = errors[k];
+  });
+}
+
+function resetForm(){
+  $("#risk-form").reset();
+  $("#f-strategic").value = "";
+  $("#f-dependency").value = 1;
+  $("#f-date-state").value = "provided";
+  $("#f-date").disabled = false;
+  $all("#f-exposure-grid input").forEach(function(i){ i.checked = false; });
+  clearFormErrors();
+  STATE.editingId = null;
+  $("#btn-add-risk").textContent = "Add risk to queue";
+}
+
+function handleFormSubmit(e){
+  e.preventDefault();
+  var raw = readForm();
+  var errors = validateRiskInput(raw);
+  if (Object.keys(errors).length){
+    showFormErrors(errors);
+    toast("Please correct the highlighted fields.", "error");
+    announce("The form contains validation errors.");
+    return;
+  }
+  clearFormErrors();
+  var normalized = normalizeRisk(raw);
+
+  if (STATE.editingId){
+    // Item 10: confirm the risk being edited still exists before saving;
+    // never silently discard the update.
+    var idx = STATE.queue.findIndex(function(r){ return r.id === STATE.editingId; });
+    if (idx === -1){
+      STATE.editingId = null;
+      resetForm();
+      toast("The risk you were editing no longer exists. Your edit was not applied \u2014 add it as a new risk instead.", "error");
+      return;
+    }
+    normalized.id = STATE.editingId;
+    STATE.queue[idx] = normalized;
+    toast("Risk updated in queue.");
+  } else {
+    STATE.queue.push(normalized);
+    toast("Risk added to queue.");
+  }
+  resetForm();
+  renderQueueTable();
+  markStale();
+  announce("Risk saved to the input queue.");
+}
+
+/* ---------------------------------------------------------------------
+   11. ASSISTANT INTENT MAPPING
+   --------------------------------------------------------------------- */
+var SUGGESTED_QUESTIONS = [
+  "Which three risks require executive attention first?",
+  "What should be escalated this week?",
+  "Which risks threaten SOP or launch?",
+  "Which risks require leadership decisions?",
+  "Which risks have inadequate mitigation?",
+  "Which workstream has the highest exposure?",
+  "Which risks lack clear ownership?",
+  "What should I present at the Steering Committee?",
+  "Which risks can remain within operational governance?",
+  "What is the most urgent decision required?"
+];
+
+var INTENT_KEYWORDS = [
+  { intent:"top_risks", keywords:["top","biggest","first","priority","executive attention","rank","worst"] },
+  { intent:"escalate_this_week", keywords:["escalate","escalation","this week"] },
+  { intent:"launch_sop", keywords:["sop","launch","threaten"] },
+  { intent:"decisions_needed", keywords:["decision","decide","leadership need","needs executives"] },
+  { intent:"weak_mitigation", keywords:["mitigation","weak","inadequate","gap"] },
+  { intent:"workstream_exposure", keywords:["workstream","exposure","team","concentrat"] },
+  { intent:"no_owner", keywords:["owner","unowned","ownership","unassigned"] },
+  { intent:"steering_briefing", keywords:["steering","present","briefing","committee"] },
+  { intent:"operational_only", keywords:["operational","remain","safe","low priority","governance"] },
+  { intent:"urgent_decision", keywords:["urgent","soonest","deadline","most urgent"] }
+];
+
+function matchIntent(question){
+  var q = question.toLowerCase();
+  var best = null, bestScore = 0;
+  INTENT_KEYWORDS.forEach(function(entry){
+    var score = 0;
+    entry.keywords.forEach(function(kw){ if (q.indexOf(kw) !== -1) score++; });
+    if (score > bestScore){ bestScore = score; best = entry.intent; }
+  });
+  return bestScore > 0 ? best : null;
+}
+
+function describeRisk(r){
+  var deadline = r.dateState === "provided"
+    ? (r.daysUntilTarget < 0 ? "overdue by " + Math.abs(r.daysUntilTarget) + "d" : "due in " + r.daysUntilTarget + "d")
+    : DATE_STATES.find(function(d){return d.value===r.dateState;}).label;
+  var exposure = r.exposureAreas.length ? r.exposureAreas.slice(0,2).join("/") : "no exposure area set";
+  return "#" + r.executiveRank + " " + r.title + " (Score " + r.score + ", " + r.priorityLevel.label + ", " + r.governance.suggestedGovernanceLevel + ", " + deadline + ", " + exposure + ")";
+}
+
+function listRisks(arr, n){
+  return arr.slice(0, n||3).map(function(r){ return describeRisk(r); }).join("\n");
+}
+
+function viewRisksAction(arr, label){
+  var ids = arr.map(function(r){ return r.id; });
+  return { label: label || "View affected risks", fn:function(){ applyAssistantRiskFilter(ids, arr.length + " risk(s) from assistant result"); } };
+}
+
+function applyAssistantRiskFilter(ids, label){
+  STATE.filters.riskIds = ids;
+  STATE.filters.riskIdsLabel = label;
+  renderPriorityQueue();
+  scrollToPriorityQueue();
+}
+
+function assistantRespond(question){
+  if (!STATE.analysisHasRun || STATE.analysisStale){
+    return { text: "Run (or re-run) the executive analysis first so I can answer from the current, active (non-closed) dataset.", actions: [] };
+  }
+  var intent = matchIntent(question);
+  var data = STATE.analysed;
+
+  switch(intent){
+    case "top_risks": {
+      var top = data.slice(0,3);
+      if (!top.length) return { text:"There are no active risks in the current analysis.", actions:[] };
+      return { text: "The top risks requiring executive attention are:\n" + listRisks(top,3), actions:[viewRisksAction(top)] };
+    }
+    case "escalate_this_week": {
+      var esc = data.filter(function(r){ return r.daysUntilTarget !== null && r.daysUntilTarget <= 7 && r.governance.escalationRequired; });
+      if (!esc.length) return { text:"No active risks currently require escalation this week based on target dates and governance rules.", actions:[] };
+      return { text: esc.length + " risk(s) should be escalated this week:\n" + listRisks(esc,5), actions:[viewRisksAction(esc)] };
+    }
+    case "launch_sop": {
+      var launch = data.filter(function(r){ return r.exposureAreas.indexOf("Launch")!==-1 || r.exposureAreas.indexOf("SOP")!==-1; });
+      if (!launch.length) return { text:"No active risks are currently classified with Launch or SOP exposure areas.", actions:[] };
+      return { text: launch.length + " risk(s) carry Launch or SOP exposure:\n" + listRisks(launch,5), actions:[viewRisksAction(launch)] };
+    }
+    case "decisions_needed": {
+      var dec = data.filter(function(r){ return r.decisionRequired; });
+      if (!dec.length) return { text:"No active risks currently require a leadership decision.", actions:[] };
+      return { text: dec.length + " risk(s) require a leadership decision:\n" + listRisks(dec,5), actions:[viewRisksAction(dec, "Show decision risks"), { label:"Open decision queue", fn:function(){ document.getElementById("decision-cards-section").scrollIntoView({behavior:"smooth"}); } }] };
+    }
+    case "weak_mitigation": {
+      var weak = data.filter(function(r){ return r.mitigationConfidence <= 2; });
+      if (!weak.length) return { text:"No active risks currently show weak or inadequate mitigation confidence.", actions:[] };
+      return { text: weak.length + " risk(s) have weak or inadequate mitigation:\n" + listRisks(weak,5), actions:[viewRisksAction(weak, "Show weak mitigation")] };
+    }
+    case "workstream_exposure": {
+      var stats = computeWorkstreamStats(data);
+      if (!stats.length) return { text:"No workstream data is available.", actions:[] };
+      var s = stats[0];
+      var wsRisks = data.filter(function(r){ return r.workstream === s.workstream; });
+      return { text: s.workstream + " has the highest composite exposure, with a Workstream Exposure Index of " + s.exposureIndex + " (average score " + s.avgScore + ") across " + s.count + " risk(s).", actions:[viewRisksAction(wsRisks)] };
+    }
+    case "no_owner": {
+      var noOwner = data.filter(function(r){ return !r.owner; });
+      if (!noOwner.length) return { text:"All active risks in the current dataset have a confirmed risk owner.", actions:[] };
+      return { text: noOwner.length + " risk(s) lack a clear owner:\n" + listRisks(noOwner,5), actions:[viewRisksAction(noOwner, "Show unowned risks")] };
+    }
+    case "steering_briefing": {
+      return { text: buildSteeringBriefingText(), actions:[{label:"Copy briefing", fn:function(){ copyText(buildSteeringBriefingText()).then(function(ok){ toast(ok?"Steering Committee briefing copied.":"Copy failed. Select and copy manually.", ok?undefined:"error"); }); }}] };
+    }
+    case "operational_only": {
+      var op = data.filter(function(r){ return r.priorityLevel.key === "operational"; });
+      if (!op.length) return { text:"No active risks currently qualify for operational-only governance.", actions:[] };
+      return { text: op.length + " risk(s) are currently classified for operational governance based on the available inputs. Escalation should still follow organizational, safety, compliance, customer, and regulatory requirements.", actions:[viewRisksAction(op, "Show operational risks")] };
+    }
+    case "urgent_decision": {
+      var withDates = data.filter(function(r){ return r.decisionRequired && r.daysUntilTarget !== null; }).sort(function(a,b){ return a.daysUntilTarget - b.daysUntilTarget; });
+      if (!withDates.length) return { text:"No pending decisions currently have a target date recorded.", actions:[] };
+      var u = withDates[0];
+      return { text: "The most urgent decision is " + describeRisk(u) + ".", actions:[{label:"View this risk", fn:function(){ openDetailModal(u.id); }}] };
+    }
+    default:
+      return { text: "I can currently analyse executive priority, escalation, launch/SOP exposure, decision requirements, mitigation strength, ownership, deadlines, and workstream concentration. Select one of the suggested questions or rephrase your request around those areas.", actions:[] };
+  }
+}
+
+function clearAllFiltersSilent(){
+  STATE.filters = { search:"", priority:"", workstream:"", decision:"", escalationRequired:"", governance:"", exposure:"", mitigation:"", visibility:"", riskIds:null, riskIdsLabel:"" };
+  $("#filter-search").value=""; $("#filter-priority").value=""; $("#filter-workstream").value="";
+  $("#filter-decision").value=""; $("#filter-escalation-required").value=""; $("#filter-governance").value="";
+  $("#filter-exposure").value=""; $("#filter-mitigation").value=""; $("#filter-visibility").value="";
+}
+function clearAllFilters(){
+  clearAllFiltersSilent();
+  renderPriorityQueue();
+}
+function scrollToPriorityQueue(){ document.getElementById("queue-priority-section").scrollIntoView({behavior:"smooth"}); }
+
+/* ---------------------------------------------------------------------
+   12. EXPORT GENERATION
+   --------------------------------------------------------------------- */
+function copyText(text){
+  // Returns a Promise<boolean> so callers only report success after it is
+  // actually confirmed, rather than optimistically before the copy lands.
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).then(function(){ return true; }).catch(function(){ return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+function fallbackCopy(text){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  var ok = false;
+  try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+function downloadBlob(content, filename, mime, withBOM){
+  var parts = withBOM ? ["\uFEFF", content] : [content];
+  var blob = new Blob(parts, { type: mime });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+}
+
+// Item 6: CSV formula-injection protection. Any user-controlled value
+// beginning with =, +, -, or @ can be interpreted as a formula by Excel or
+// similar spreadsheet tools. Prefixing with a single quote neutralizes it
+// while leaving the visible text unchanged for the reader.
+function neutralizeSpreadsheetFormula(value){
+  var text = String(value == null ? "" : value);
+  return /^[=+\-@]/.test(text.replace(/^\s+/,"")) ? "'" + text : text;
+}
+
+function csvEscape(v){
+  // Export sequence: stringify -> neutralize formula prefixes -> escape
+  // quotes/commas/line breaks -> write cell.
+  var s = neutralizeSpreadsheetFormula(v);
+  if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
+  return s;
+}
+
+// Item 25: Markdown export escaping. Neutralizes characters that carry
+// structural meaning in Markdown (and raw HTML tags) so user-entered text
+// cannot alter document structure or be interpreted as markup/HTML when
+// the exported file is rendered elsewhere.
+function mdEscape(v){
+  var s = String(v == null ? "" : v);
+  s = s.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // neutralize raw HTML tags
+  s = s.replace(/\|/g, "\\|");                        // table cell delimiter
+  s = s.replace(/`/g, "\\`");                          // code span
+  s = s.replace(/\*/g, "\\*");                         // emphasis
+  s = s.replace(/_/g, "\\_");                          // emphasis
+  s = s.replace(/\[/g, "\\[").replace(/\]/g, "\\]");   // link syntax
+  s = s.replace(/\r?\n/g, " ");                        // keep table rows on one line
+  return s;
+}
+
+function buildSteeringBriefingText(){
+  var summary = buildExecutiveSummary(STATE.analysed, STATE.lastClosedCount||0, STATE.lastTotalLoaded||STATE.analysed.length);
+  var top3 = STATE.analysed.slice(0,3);
+  var decisions = STATE.analysed.filter(function(r){ return r.decisionRequired; });
+  var escalations = STATE.analysed.filter(function(r){ return r.governance.escalationRequired; });
+  var wsStats = computeWorkstreamStats(STATE.analysed);
+  var weakMit = STATE.analysed.filter(function(r){ return r.mitigationConfidence <= 2; });
+  var recs = buildRecommendations(STATE.analysed);
+
+  var lines = [];
+  lines.push("STEERING COMMITTEE BRIEFING");
+  lines.push("Executive Risk Prioritizer \u00b7 Executive AI Toolkit");
+  lines.push("Active risks analysed: " + summary.kpis.total + " (Closed risks excluded: " + summary.kpis.closedExcluded + ")");
+  lines.push("Overall risk posture: " + summary.kpis.execAttention + " of " + summary.kpis.total + " active risks require executive attention.");
+  lines.push("");
+  lines.push("Top 3 executive risks:");
+  top3.forEach(function(r){ lines.push("#" + r.executiveRank + " " + r.title + " (Score " + r.score + ", " + r.priorityLevel.label + ")"); });
+  lines.push("");
+  lines.push("Decisions required: " + decisions.length);
+  decisions.slice(0,5).forEach(function(r){ lines.push("- #" + r.executiveRank + " " + r.title + " \u2014 Confirmed Decision Owner: " + r.governance.confirmedDecisionOwnerDisplay); });
+  lines.push("");
+  lines.push("Immediate escalations required: " + escalations.length);
+  escalations.slice(0,5).forEach(function(r){ lines.push("- #" + r.executiveRank + " " + r.title + " (" + r.governance.suggestedGovernanceLevel + ")"); });
+  lines.push("");
+  lines.push("Most exposed workstream: " + (wsStats.length ? wsStats[0].workstream + " (Exposure Index " + wsStats[0].exposureIndex + ")" : "n/a"));
+  lines.push("Mitigation gaps: " + weakMit.length + " risk(s) with weak or unmitigated plans.");
+  lines.push("");
+  lines.push("Recommended leadership actions:");
+  recs.forEach(function(r){ lines.push("- " + r); });
+  lines.push("");
+  lines.push("This tool uses local, deterministic scoring logic \u2014 not a live AI model \u2014 and no data leaves the browser.");
+  return lines.join("\n");
+}
+
+function buildMarkdownExport(){
+  var closedCount = STATE.lastClosedCount||0, totalLoaded = STATE.lastTotalLoaded||STATE.analysed.length;
+  var summary = buildExecutiveSummary(STATE.analysed, closedCount, totalLoaded);
+  var wsStats = computeWorkstreamStats(STATE.analysed);
+  var escRows = computeEscalationMatrix(STATE.analysed);
+  var recs = buildRecommendations(STATE.analysed);
+  var md = [];
+  md.push("# Executive Risk Prioritizer \u2014 Executive Briefing");
+  md.push("_Executive AI Toolkit \u00b7 Generated locally on " + mdEscape(new Date().toLocaleString()) + " \u00b7 Tool version: 1.0_");
+  md.push("");
+  md.push("## Analysis Metadata");
+  md.push("- Risks loaded: " + totalLoaded);
+  md.push("- Active risks analysed: " + summary.kpis.total);
+  md.push("- Closed risks excluded: " + closedCount);
+  md.push("");
+  md.push("## Executive Summary");
+  md.push(mdEscape(summary.text));
+  md.push("");
+  md.push("## Ranked Risk Queue (Stable Executive Rank)");
+  md.push("| Rank | Risk | Score | Priority | Workstream | Owner | Suggested Governance | Exposure Areas |");
+  md.push("|---|---|---|---|---|---|---|---|");
+  STATE.analysed.forEach(function(r){
+    md.push("| " + r.executiveRank + " | " + mdEscape(r.title) + " | " + r.score + " | " + mdEscape(r.priorityLevel.label) + " | " + mdEscape(r.workstream) + " | " + mdEscape(r.owner||"Unassigned") + " | " + mdEscape(r.governance.suggestedGovernanceLevel) + " | " + mdEscape(r.exposureAreas.join(", ")) + " |");
+  });
+  md.push("");
+  md.push("## Decision Requirements");
+  var decisions = STATE.analysed.filter(function(r){ return r.decisionRequired; });
+  if (!decisions.length) md.push("No active risks currently require a leadership decision.");
+  decisions.forEach(function(r){ md.push("- **#" + r.executiveRank + " " + mdEscape(r.title) + "** \u2014 Confirmed Decision Owner: " + mdEscape(r.governance.confirmedDecisionOwnerDisplay) + " \u2014 due " + (r.dateState === "provided" ? mdEscape(fmtDate(r.targetDate)) : mdEscape(DATE_STATES.find(function(d){return d.value===r.dateState;}).label))); });
+  md.push("");
+  md.push("## Workstream Exposure (Exposure Index)");
+  md.push("| Workstream | Risks | Exposure Index | Avg Score | Highest | Decisions | Weak Mitigation | Exposure |");
+  md.push("|---|---|---|---|---|---|---|---|");
+  wsStats.forEach(function(s){ md.push("| " + mdEscape(s.workstream) + " | " + s.count + " | " + s.exposureIndex + " | " + s.avgScore + " | " + s.maxScore + " | " + s.decisions + " | " + s.weakMitigation + " | " + mdEscape(s.exposure) + " |"); });
+  md.push("");
+  md.push("## Escalation Summary");
+  md.push("| Suggested Governance Level | Risk Count | Critical | Decisions | Escalation Required | Overdue | Avg Score |");
+  md.push("|---|---|---|---|---|---|---|");
+  escRows.forEach(function(s){ md.push("| " + mdEscape(s.level) + " | " + s.count + " | " + s.critical + " | " + s.decisions + " | " + s.escalationRequired + " | " + s.overdue + " | " + s.avgScore + " |"); });
+  md.push("");
+  md.push("## Key Recommendations");
+  recs.forEach(function(r){ md.push("- " + mdEscape(r)); });
+  md.push("");
+  md.push("## Methodology Disclaimer");
+  md.push("The Executive Priority Score is a deterministic, weighted composite of business impact, urgency, strategic importance, dependency impact, mitigation confidence, and ownership/decision readiness. Probability is shown for context only and is not weighted in the score. Closed risks are excluded by default. This analysis is advisory and does not replace professional judgment, regulatory review, safety assessment, or formal organizational approval processes. The embedded assistant is a local, rules-based tool \u2014 not a live AI model, not generative AI, and not machine learning.");
+  md.push("");
+  md.push("## Privacy Note");
+  md.push("This report was generated entirely in your browser. No risk data was uploaded, transmitted, or stored on an external server.");
+  return md.join("\n");
+}
+
+function buildCSVExport(){
+  var headers = ["Risk ID","Risk Title","Risk Description","Owner","Action Owner","Workstream","Category","Probability","Business Impact","Urgency","Strategic Importance","Dependency Impact","Mitigation Confidence","Date Status","Target Date","Exposure Areas","Current Mitigation","Decision Required","Confirmed Decision Owner","Suggested Decision Authority","Escalation Required","Escalation Recipient","Executive Visibility","Status","Executive Rank","Executive Priority Score","Priority Classification","Score: Business Impact","Score: Urgency","Score: Strategic Importance","Score: Dependency Impact","Score: Mitigation Gap","Score: Ownership Gap","Suggested Governance Level","Score Explanation"];
+  var lines = [headers.map(csvEscape).join(",")];
+  STATE.analysed.forEach(function(r){
+    lines.push([
+      r.riskId, r.title, r.description, r.owner, r.actionOwner, r.workstream, r.category,
+      r.probability, r.businessImpact, r.urgency, r.strategicImportance, r.dependencyImpact, r.mitigationConfidence,
+      r.dateState, r.dateState==="provided" ? r.targetDate : "",
+      r.exposureAreas.join("; ") + (r.exposureAreasInferred ? " (inferred)" : ""),
+      r.currentMitigation, r.decisionRequired ? "Yes" : "No",
+      r.governance.confirmedDecisionOwnerDisplay, r.governance.suggestedDecisionAuthority,
+      r.governance.escalationRequired ? "Yes" : "No", r.governance.escalationRecipient,
+      r.governance.executiveVisibility ? "Yes" : "No", r.status,
+      r.executiveRank, r.score, r.priorityLevel.label,
+      r.components.businessImpact, r.components.urgency, r.components.strategicImportance, r.components.dependencyImpact, r.components.mitigationGap, r.components.ownershipGap,
+      r.governance.suggestedGovernanceLevel, r.explanation
+    ].map(csvEscape).join(","));
+  });
+  return lines.join("\n");
+}
+
+function buildCSVTemplate(){
+  var headers = ["Risk ID","Risk Title","Risk Description","Owner","Action Owner","Workstream","Category","Probability","Business Impact","Urgency","Strategic Importance","Dependency Impact","Mitigation Confidence","Target Date","Exposure Areas","Current Mitigation","Decision Required","Confirmed Decision Owner","Requested Decision Authority","Escalation Required","Escalation Recipient","Executive Visibility","Status"];
+  var example = ["R-101","Example: Supplier tooling delay","Describe the risk in enough detail for an executive reader.","Jane Doe","John Smith","Manufacturing","Supplier","High","Major","Within 7 days","4","3","Partial","2026-08-15","Schedule; Supply Continuity","Weekly recovery calls in place.","Yes","","Director of Procurement","No","","No","Open"];
+  return headers.map(csvEscape).join(",") + "\n" + example.map(csvEscape).join(",");
+}
+
+/* ---------------------------------------------------------------------
+   RUN ANALYSIS + RESULTS REFRESH
+   --------------------------------------------------------------------- */
+function runAnalysis(){
+  if (!STATE.queue.length){
+    toast("Add at least one risk before running the analysis.", "error");
+    announce("Cannot run analysis: the input queue is empty.");
+    return;
+  }
+  var totalLoaded = STATE.queue.length;
+  var closed = STATE.queue.filter(function(r){ return r.status === "Closed"; });
+  var activeSource = STATE.includeClosed ? STATE.queue : STATE.queue.filter(function(r){ return r.status !== "Closed"; });
+
+  if (!activeSource.length){
+    toast("All queued risks are Closed and excluded from analysis. Enable \u201cInclude closed risks\u201d or add an active risk.", "error");
+    announce("Cannot run analysis: no active risks are available.");
+    return;
+  }
+
+  STATE.lastClosedCount = STATE.includeClosed ? 0 : closed.length;
+  STATE.lastTotalLoaded = totalLoaded;
+  STATE.analysed = scoreAndClassify(activeSource);
+  STATE.analysisHasRun = true;
+  STATE.analysisStale = false;
+  $("#results-root").hidden = false;
+  populateWorkstreamFilterOptions();
+  refreshAllResultViews();
+  renderStatusBanner();
+  updateResultsAvailability();
+  toast("Executive analysis complete.");
+  announce("Executive analysis complete. " + STATE.analysed.length + " active risks analysed, " + STATE.lastClosedCount + " closed risks excluded.");
+  document.getElementById("summary-section").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+function refreshAllResultViews(){
+  var summary = buildExecutiveSummary(STATE.analysed, STATE.lastClosedCount||0, STATE.lastTotalLoaded||STATE.analysed.length);
+  renderKPIs(summary);
+  $("#exec-summary-text").textContent = summary.text;
+  $("#print-report-meta").textContent = "Analysis date: " + new Date().toLocaleString() + " \u00b7 " + summary.text.split(" \u00b7 ")[0];
+  renderPriorityQueue();
+  renderDecisionCards();
+  renderHeatmap();
+  renderWorkstreamAnalysis();
+  renderEscalationMatrix();
+}
+
+/* ---------------------------------------------------------------------
+   CHAT / ASSISTANT UI
+   --------------------------------------------------------------------- */
+function appendChatMessage(role, text, actions){
+  var win = $("#chat-window");
+  var msg = el("div", { class:"chat-msg " + role });
+  text.split("\n").forEach(function(line, i){
+    if (i>0) msg.appendChild(document.createElement("br"));
+    msg.appendChild(document.createTextNode(line));
+  });
+  if (actions && actions.length){
+    var actionsRow = el("div", { class:"msg-actions" });
+    actions.forEach(function(a){
+      actionsRow.appendChild(el("button", { type:"button", class:"btn small ghost", onclick:a.fn }, a.label));
+    });
+    msg.appendChild(actionsRow);
+  }
+  win.appendChild(msg);
+  win.scrollTop = win.scrollHeight;
+}
+
+function handleChatSubmit(e){
+  e.preventDefault();
+  var input = $("#chat-input");
+  var q = input.value.trim();
+  if (!q) return;
+  appendChatMessage("user", q);
+  input.value = "";
+  var resp = assistantRespond(q);
+  appendChatMessage("assistant", resp.text, resp.actions);
+}
+
+function renderSuggestedQuestions(){
+  var region = $("#suggested-questions");
+  clearNode(region);
+  SUGGESTED_QUESTIONS.forEach(function(q){
+    region.appendChild(el("button", { type:"button", onclick:function(){
+      appendChatMessage("user", q);
+      var resp = assistantRespond(q);
+      appendChatMessage("assistant", resp.text, resp.actions);
+    } }, q));
+  });
+}
+
+/* ---------------------------------------------------------------------
+   14. EVENT WIRING / INIT
+   --------------------------------------------------------------------- */
+function switchTab(which){
+  var manualTab = $("#tab-manual"), csvTab = $("#tab-csv");
+  var manualPanel = $("#panel-manual"), csvPanel = $("#panel-csv");
+  if (which === "manual"){
+    manualTab.setAttribute("aria-selected","true"); manualTab.setAttribute("tabindex","0");
+    csvTab.setAttribute("aria-selected","false"); csvTab.setAttribute("tabindex","-1");
+    manualPanel.hidden = false; csvPanel.hidden = true;
+  } else {
+    manualTab.setAttribute("aria-selected","false"); manualTab.setAttribute("tabindex","-1");
+    csvTab.setAttribute("aria-selected","true"); csvTab.setAttribute("tabindex","0");
+    manualPanel.hidden = true; csvPanel.hidden = false;
+  }
+}
+
+function wireTabKeyboardNav(){
+  var tabs = [$("#tab-manual"), $("#tab-csv")];
+  tabs.forEach(function(tab, idx){
+    tab.addEventListener("keydown", function(e){
+      var targetIdx = null;
+      if (e.key === "ArrowLeft") targetIdx = (idx - 1 + tabs.length) % tabs.length;
+      else if (e.key === "ArrowRight") targetIdx = (idx + 1) % tabs.length;
+      else if (e.key === "Home") targetIdx = 0;
+      else if (e.key === "End") targetIdx = tabs.length - 1;
+      if (targetIdx === null) return;
+      e.preventDefault();
+      var which = targetIdx === 0 ? "manual" : "csv";
+      switchTab(which);
+      tabs[targetIdx].focus();
+    });
+  });
+}
+
+function renderCSVSummary(result, fileName){
+  var region = $("#csv-summary");
+  clearNode(region);
+
+  if (result.blocking){
+    var blockBanner = el("div", { class:"banner stale" }, [ svgIcon("alert"), el("span", {}, fileName + ": import blocked \u2014 fix the issue(s) below and re-upload.") ]);
+    region.appendChild(blockBanner);
+    var issuesBox0 = el("div", { class:"panel" });
+    var ul0 = el("ul", { style:"margin:0;padding-left:18px;color:var(--text-dim);font-size:12.5px;" });
+    result.issues.forEach(function(i){ ul0.appendChild(el("li", {}, i)); });
+    issuesBox0.appendChild(ul0);
+    region.appendChild(issuesBox0);
+    return; // No Add button is offered while mandatory columns/parsing issues remain.
+  }
+
+  var banner = el("div", { class:"banner " + (result.rejected.length ? "stale" : "info") });
+  banner.appendChild(el("span", {}, fileName + ": " + result.imported.length + " row(s) imported, " + result.rejected.length + " row(s) rejected out of " + result.totalRows + " data row(s)." + (result.duplicateCount ? " " + result.duplicateCount + " likely duplicate(s) detected." : "")));
+  region.appendChild(banner);
+
+  if (result.issues.length){
+    var issuesBox = el("div", { class:"panel", style:"margin-bottom:12px;" });
+    issuesBox.appendChild(el("strong", { style:"color:var(--orange);" }, "Import notes"));
+    var ul = el("ul", { style:"margin:8px 0 0;padding-left:18px;color:var(--text-dim);font-size:12.5px;" });
+    result.issues.forEach(function(i){ ul.appendChild(el("li", {}, i)); });
+    issuesBox.appendChild(ul);
+    region.appendChild(issuesBox);
+  }
+
+  if (result.rejected.length){
+    var rejBox = el("div", { class:"panel", style:"margin-bottom:12px;" });
+    rejBox.appendChild(el("strong", { style:"color:var(--orange);" }, "Rejected rows"));
+    var table = el("table", { style:"margin-top:8px;" });
+    table.appendChild(el("thead", {}, el("tr", {}, ["Row","Title","Issues"].map(function(h){return el("th",{},h);}))));
+    var tbody = el("tbody", {});
+    result.rejected.forEach(function(r){
+      tbody.appendChild(el("tr", {}, [
+        el("td", { class:"mono" }, String(r.row)),
+        el("td", {}, r.title),
+        el("td", {}, Object.values(r.errors).join(" "))
+      ]));
+    });
+    table.appendChild(tbody);
+    rejBox.appendChild(table);
+    region.appendChild(rejBox);
+  }
+
+  if (result.imported.length){
+    var prevBox = el("div", { class:"panel" });
+    prevBox.appendChild(el("strong", { style:"color:var(--text);" }, "Preview of imported risks"));
+    var ptable = el("table", { style:"margin-top:8px;" });
+    ptable.appendChild(el("thead", {}, el("tr", {}, ["Title","Workstream","Owner","Target date","Duplicate?"].map(function(h){return el("th",{},h);}))));
+    var ptbody = el("tbody", {});
+    result.imported.slice(0,10).forEach(function(r){
+      ptbody.appendChild(el("tr", {}, [
+        el("td", { style:"color:var(--text);" }, r.title + (r._strategicDefaulted ? " \u00b7 strategic importance defaulted to 3" : "")),
+        el("td", {}, r.workstream),
+        el("td", {}, r.owner || "Unassigned"),
+        el("td", { class:"mono" }, r.dateState !== "provided" ? "\u2014" : fmtDate(r.targetDate)),
+        el("td", {}, r._likelyDuplicate ? el("span",{class:"badge p-immediate"},"Likely duplicate") : "\u2014")
+      ]));
+    });
+    ptable.appendChild(ptbody);
+    prevBox.appendChild(ptable);
+    if (result.imported.length > 10) prevBox.appendChild(el("p", { style:"margin:8px 0 0;font-size:11.5px;" }, "+ " + (result.imported.length-10) + " more row(s) not shown in preview."));
+    region.appendChild(prevBox);
+
+    var newCount = result.imported.filter(function(r){ return !r._likelyDuplicate; }).length;
+    var summaryLine = el("p", { style:"font-size:11.5px;color:var(--text-faint);margin:8px 0;" }, newCount + " new risk(s), " + result.duplicateCount + " likely duplicate(s).");
+    region.appendChild(summaryLine);
+
+    var addBtn = el("button", { type:"button", class:"btn primary", style:"margin-top:4px;" }, "Add " + result.imported.length + " imported risk(s) to queue");
+    addBtn.addEventListener("click", function(){
+      STATE.queue = STATE.queue.concat(result.imported);
+      STATE.lastCsvBatch = { batchId: result.batchId, addedToQueue: true };
+      renderQueueTable();
+      markStale();
+      toast(result.imported.length + " risk(s) added to the queue.");
+      announce(result.imported.length + " risks added to the input queue from CSV.");
+      addBtn.disabled = true;
+      addBtn.textContent = "Added to queue";
+    });
+    region.appendChild(addBtn);
+    STATE.lastCsvBatch = { batchId: result.batchId, addedToQueue: false };
+  }
+}
+
+function handleCSVFile(file){
+  if (!file) return;
+  if (!/\.csv$/i.test(file.name) && file.type !== "text/csv"){
+    toast("Unsupported file type. Please upload a .csv file.", "error");
+    return;
+  }
+  if (file.size > CSV_MAX_BYTES){
+    toast("File is too large. Maximum size is 3MB.", "error");
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(){
+    var text = String(reader.result || "");
+    if (!text.trim()){
+      clearNode($("#csv-summary"));
+      $("#csv-summary").appendChild(el("div", { class:"banner stale" }, "The uploaded file is empty."));
+      return;
+    }
+    var result = parseCSVFile(text);
+    renderCSVSummary(result, file.name);
+  };
+  reader.onerror = function(){ toast("Could not read the file. It may be corrupted.", "error"); };
+  reader.readAsText(file);
+}
+
+function wireEvents(){
+  $("#tab-manual").addEventListener("click", function(){ switchTab("manual"); });
+  $("#tab-csv").addEventListener("click", function(){ switchTab("csv"); });
+  wireTabKeyboardNav();
+
+  $("#risk-form").addEventListener("submit", handleFormSubmit);
+  $("#btn-reset-form").addEventListener("click", resetForm);
+
+  $("#f-date-state").addEventListener("change", function(){
+    var isProvided = this.value === "provided";
+    $("#f-date").disabled = !isProvided;
+    if (!isProvided) $("#f-date").value = "";
+  });
+
+  $("#chk-include-closed").addEventListener("change", function(){
+    STATE.includeClosed = this.checked;
+    renderQueueCount();
+    markStale();
+  });
+
+  $("#btn-load-sample").addEventListener("click", function(){
+    if (STATE.queue.length){
+      var proceed = confirm((STATE.sampleLoaded ? "Sample data is already loaded." : "The queue already contains risks.") + " Loading the sample dataset will REPLACE the current queue. Click OK to replace, or Cancel to keep your current queue.");
+      if (!proceed) return;
+    }
+    var sample = buildSampleRisks();
+    STATE.queue = sample;
+    STATE.sampleLoaded = true;
+    fullyResetInputState();
+    renderQueueTable();
+    markStale();
+    toast("Sample program dataset loaded (" + sample.length + " risks), replacing the previous queue.");
+    announce("Sample dataset loaded with " + sample.length + " risks, replacing the previous queue.");
+  });
+
+  $("#btn-clear-queue").addEventListener("click", function(){
+    if (!STATE.queue.length) return;
+    if (!confirm("Clear all " + STATE.queue.length + " queued risk(s)? This cannot be undone.")) return;
+    STATE.queue = [];
+    STATE.sampleLoaded = false;
+    fullyResetInputState();
+    renderQueueTable();
+    markStale();
+    toast("Input queue cleared.");
+  });
+
+  $("#csv-file-input").addEventListener("change", function(e){
+    var file = e.target.files && e.target.files[0];
+    handleCSVFile(file);
+    e.target.value = "";
+  });
+
+  $("#btn-download-template").addEventListener("click", function(){
+    downloadBlob(buildCSVTemplate(), "executive-risk-prioritizer-template.csv", "text/csv", true);
+    toast("CSV template downloaded.");
+  });
+
+  $("#btn-run-analysis").addEventListener("click", runAnalysis);
+
+  // Filters
+  $("#filter-search").addEventListener("input", function(){ STATE.filters.search = this.value; renderPriorityQueue(); });
+  $("#filter-priority").addEventListener("change", function(){ STATE.filters.priority = this.value; renderPriorityQueue(); });
+  $("#filter-workstream").addEventListener("change", function(){ STATE.filters.workstream = this.value; renderPriorityQueue(); });
+  $("#filter-decision").addEventListener("change", function(){ STATE.filters.decision = this.value; renderPriorityQueue(); });
+  $("#filter-escalation-required").addEventListener("change", function(){ STATE.filters.escalationRequired = this.value; renderPriorityQueue(); });
+  $("#filter-governance").addEventListener("change", function(){ STATE.filters.governance = this.value; renderPriorityQueue(); });
+  $("#filter-exposure").addEventListener("change", function(){ STATE.filters.exposure = this.value; renderPriorityQueue(); });
+  $("#filter-mitigation").addEventListener("change", function(){ STATE.filters.mitigation = this.value; renderPriorityQueue(); });
+  $("#filter-visibility").addEventListener("change", function(){ STATE.filters.visibility = this.value; renderPriorityQueue(); });
+  $("#btn-reset-filters").addEventListener("click", clearAllFilters);
+
+  // Assistant
+  $("#chat-form").addEventListener("submit", handleChatSubmit);
+
+  // Exports
+  $("#btn-export-pdf").addEventListener("click", function(){ window.print(); });
+  $("#btn-export-md").addEventListener("click", function(){
+    downloadBlob(buildMarkdownExport(), "executive-risk-briefing.md", "text/markdown");
+    toast("Markdown briefing downloaded.");
+  });
+  $("#btn-export-csv").addEventListener("click", function(){
+    downloadBlob(buildCSVExport(), "executive-risk-register-analysed.csv", "text/csv", true);
+    toast("Analysed CSV downloaded.");
+  });
+  $("#btn-copy-briefing").addEventListener("click", function(){
+    copyText(buildSteeringBriefingText()).then(function(ok){
+      toast(ok ? "Steering Committee briefing copied to clipboard." : "Copy failed. Select and copy the text manually.", ok?undefined:"error");
+    });
+  });
+  $("#btn-copy-summary").addEventListener("click", function(){
+    copyText($("#exec-summary-text").textContent).then(function(ok){
+      toast(ok ? "Executive summary copied to clipboard." : "Copy failed. Select and copy the text manually.", ok?undefined:"error");
+    });
+  });
+
+  // Methodology modal
+  ["#open-methodology-1","#open-methodology-2"].forEach(function(sel){
+    var b = $(sel); if (b) b.addEventListener("click", function(){ openModal($("#methodology-modal")); });
+  });
+  $("#methodology-modal-close").addEventListener("click", function(){ closeModal($("#methodology-modal")); });
+  $("#methodology-modal-ok").addEventListener("click", function(){ closeModal($("#methodology-modal")); });
+  $("#methodology-modal").addEventListener("click", function(e){ if (e.target === this) closeModal(this); });
+
+  // Detail modal
+  $("#detail-modal-close").addEventListener("click", function(){ closeModal($("#detail-modal")); });
+  $("#detail-modal").addEventListener("click", function(e){ if (e.target === this) closeModal(this); });
+}
+
+function init(){
+  renderExposureGrid();
+  wireEvents();
+  renderQueueTable();
+  renderStatusBanner();
+  renderSuggestedQuestions();
+  updateResultsAvailability();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+
+})();
+</script>
+</body>
+</html>

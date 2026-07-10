@@ -422,7 +422,7 @@
   .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
   :focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
 
-  /* ---------- AI Governance Toolkit (roadmap / placeholder section) ---------- */
+  /* ---------- Executive AI Toolkit (live tools + roadmap) ---------- */
   .toolkit-head{ max-width:720px; margin-bottom:48px; }
   .toolkit-head p{ font-size:16px; }
 
@@ -477,6 +477,23 @@
     content:""; width:5px; height:5px; border-radius:50%; background:var(--amber); flex-shrink:0;
   }
   .toolkit-tool-row.is-live .toolkit-tool-icon{ color:var(--navy); background:var(--amber); border-color:var(--amber); }
+  .toolkit-tool-badges{ display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+  .live-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--label); font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--navy); background:var(--amber);
+    padding:3px 9px; border-radius:100px; cursor:default; user-select:none;
+  }
+  .live-badge::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--navy); flex-shrink:0; }
+  .free-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--label); font-size:10px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--ink-faint); border:1px solid var(--line-strong); background:transparent;
+    padding:3px 9px; border-radius:100px; cursor:default; user-select:none;
+  }
+  .toolkit-tool-meta{
+    font-size:11.5px; color:var(--ink-faint); margin-bottom:10px; line-height:1.6;
+  }
   .toolkit-tool-link{
     display:inline-flex; align-items:center; gap:6px;
     font-family:var(--label); font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
@@ -901,13 +918,12 @@
 <section class="section ai-toolkit-section" id="ai-governance-toolkit" aria-labelledby="ai-toolkit-heading">
   <div class="wrap">
     <div class="section-head toolkit-head">
-      <div class="eyebrow">Platform Roadmap</div>
-      <h2 id="ai-toolkit-heading">AI Governance Toolkit</h2>
+      <div class="eyebrow">Executive AI Toolkit</div>
+      <h2 id="ai-toolkit-heading">Practical tools for faster governance and better executive decisions.</h2>
       <p>
-        Practical AI tools designed for executives, program managers, and PMOs to reduce reporting
-        effort, improve decision quality, and accelerate program governance. These focused AI
-        assistants transform meeting notes, project data, and governance information into
-        executive-ready insights in minutes.
+        A growing collection of browser-based tools built to improve prioritization, decision readiness,
+        and governance discipline. Each one runs locally, needs no API key, and turns program data into
+        leadership-ready action &mdash; distinct from the full operating views in the Command Centers above.
       </p>
     </div>
 
@@ -938,16 +954,21 @@
               <span class="coming-soon-badge" aria-label="Executive Brief Generator status: Coming soon">Coming Soon</span>
             </div>
           </div>
-          <div class="toolkit-tool-row">
+          <div class="toolkit-tool-row is-live">
             <div class="toolkit-tool-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
                 <path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/>
               </svg>
             </div>
             <div class="toolkit-tool-body">
-              <div class="toolkit-tool-name">Risk Prioritizer</div>
-              <p class="toolkit-tool-desc">Identify which risks deserve executive attention first based on impact, urgency, and dependencies.</p>
-              <span class="coming-soon-badge" aria-label="Risk Prioritizer status: Coming soon">Coming Soon</span>
+              <div class="toolkit-tool-name">Executive Risk Prioritizer</div>
+              <div class="toolkit-tool-badges">
+                <span class="live-badge" aria-label="Status: Live">Live</span>
+                <span class="free-badge" aria-label="Free tool">Free Tool</span>
+              </div>
+              <p class="toolkit-tool-desc">Convert a conventional risk register into an executive-ranked action queue using deterministic, local prioritization logic based on business impact, urgency, strategic importance, dependencies, mitigation confidence, and ownership clarity.</p>
+              <p class="toolkit-tool-meta">Executive Priority Queue &middot; Decision Cards &middot; Heat Map &middot; Local Intelligence Assistant</p>
+              <a class="toolkit-tool-link" href="./ai-toolkit/executive-risk-prioritizer/" target="_blank" rel="noopener noreferrer" aria-label="Open Executive Risk Prioritizer in a new tab">Open Risk Prioritizer <span aria-hidden="true">&#8599;</span></a>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -1101,7 +1122,7 @@
 
     </div>
 
-    <p class="toolkit-footnote">More AI governance tools are currently in development. New toolkits will be added as the platform evolves.</p>
+    <p class="toolkit-footnote">More Executive AI Toolkit tools are currently in development. New tools will be added as the platform evolves.</p>
   </div>
 </section>
 
