@@ -419,6 +419,7 @@
   .to-top svg{ width:16px; height:16px; }
 
   ::selection{ background:var(--amber-soft); color:var(--ink); }
+  .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
   :focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
 
   /* ---------- AI Governance Toolkit (roadmap / placeholder section) ---------- */
@@ -475,6 +476,18 @@
   .coming-soon-badge::before{
     content:""; width:5px; height:5px; border-radius:50%; background:var(--amber); flex-shrink:0;
   }
+  .toolkit-tool-row.is-live .toolkit-tool-icon{ color:var(--navy); background:var(--amber); border-color:var(--amber); }
+  .toolkit-tool-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--label); font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--navy); background:var(--amber);
+    padding:4px 10px; border-radius:100px; text-decoration:none;
+    transition:background .15s ease;
+  }
+  .toolkit-tool-link:hover{ background:var(--amber-bright); }
+  .toolkit-tool-link::before{
+    content:""; width:5px; height:5px; border-radius:50%; background:var(--navy); flex-shrink:0;
+  }
   .toolkit-footnote{
     margin-top:40px; padding-top:28px; border-top:1px solid var(--line);
     font-size:13.5px; font-style:italic; color:var(--ink-faint); text-align:center;
@@ -498,6 +511,7 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="#top">Home</a>
       <a href="#command-centers">Command Centers</a>
+      <a href="#ai-governance-toolkit">AI Toolkit</a>
       <a href="#about">About</a>
       <a href="#current-focus">Current Focus</a>
       <a href="#contact">Contact</a>
@@ -514,6 +528,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#top">Home</a>
     <a href="#command-centers">Command Centers</a>
+    <a href="#ai-governance-toolkit">AI Toolkit</a>
     <a href="#about">About</a>
     <a href="#current-focus">Current Focus</a>
     <a href="#contact">Contact</a>
@@ -778,9 +793,10 @@
           <span class="cc-tag">Decision Support</span>
           <span class="cc-tag">AI Insights</span>
         </div>
-        <a class="cc-launch" href="./executive-program-command-center/">
+        <a class="cc-launch" href="./executive-program-command-center/" target="_blank" rel="noopener noreferrer">
           Launch Demo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </article>
 
@@ -807,9 +823,10 @@
           <span class="cc-tag">Risk Management</span>
           <span class="cc-tag">Resources</span>
         </div>
-        <a class="cc-launch" href="./engineering-program-control-tower/">
+        <a class="cc-launch" href="./engineering-program-control-tower/" target="_blank" rel="noopener noreferrer">
           Launch Demo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </article>
 
@@ -838,9 +855,10 @@
           <span class="cc-tag">APQP</span>
           <span class="cc-tag">Launch Readiness</span>
         </div>
-        <a class="cc-launch" href="./npd-executive-command-center/">
+        <a class="cc-launch" href="./npd-executive-command-center/" target="_blank" rel="noopener noreferrer">
           Launch Demo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </article>
 
@@ -868,9 +886,10 @@
           <span class="cc-tag">Leadership Reporting</span>
           <span class="cc-tag">AI Insights</span>
         </div>
-        <a class="cc-launch" href="./executive-portfolio-command-center/">
+        <a class="cc-launch" href="./executive-portfolio-command-center/" target="_blank" rel="noopener noreferrer">
           Launch Demo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </article>
 
@@ -957,7 +976,7 @@
         <p class="toolkit-cat-positioning">Strengthen governance without adding bureaucracy.</p>
 
         <div class="toolkit-tools">
-          <div class="toolkit-tool-row">
+          <div class="toolkit-tool-row is-live">
             <div class="toolkit-tool-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
                 <rect x="6" y="4" width="12" height="17" rx="2"/>
@@ -966,9 +985,9 @@
               </svg>
             </div>
             <div class="toolkit-tool-body">
-              <div class="toolkit-tool-name">RAID Analyzer</div>
-              <p class="toolkit-tool-desc">Extract risks, assumptions, issues, and dependencies from project information.</p>
-              <span class="coming-soon-badge" aria-label="RAID Analyzer status: Coming soon">Coming Soon</span>
+              <div class="toolkit-tool-name">RAID Intelligence Analyzer</div>
+              <p class="toolkit-tool-desc">Transform unstructured meeting notes into an executive-ready view of risks, assumptions, issues, and dependencies &mdash; entirely in your browser.</p>
+              <a class="toolkit-tool-link" href="./ai-toolkit/raid-intelligence-analyzer/" target="_blank" rel="noopener noreferrer" aria-label="Launch RAID Intelligence Analyzer (opens in a new tab)">Launch Tool</a>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -1227,6 +1246,7 @@
       </div>
       <div class="footer-links">
         <a href="#command-centers">Command Centers</a>
+        <a href="#ai-governance-toolkit">AI Toolkit</a>
         <a href="#about">About</a>
         <a href="mailto:jaideepphatak16@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn</a>

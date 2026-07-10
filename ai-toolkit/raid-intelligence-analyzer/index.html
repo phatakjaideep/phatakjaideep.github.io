@@ -1,0 +1,3030 @@
+<!DOCTYPE html>
+<!--
+  RAID Intelligence Analyzer
+  Version 1.0
+
+  Executive Portfolio Demonstration
+  Created by Jaideep Phatak
+
+  Purpose:
+  Transform meeting notes into structured executive RAID intelligence
+  entirely in-browser.
+
+  Designed for GitHub Pages.
+  No external dependencies.
+  No network requests.
+  No data leaves the browser.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data:;
+    font-src 'self' data:;
+    connect-src 'none';
+    media-src 'none';
+    object-src 'none';
+    frame-src 'none';
+    worker-src 'none';
+    form-action 'none';
+    base-uri 'self';
+    manifest-src 'none';
+  " />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RAID Intelligence Analyzer</title>
+<meta name="description" content="Convert fragmented risks, assumptions, issues, and dependencies into an executive-ready view of program exposure, ownership, and leadership decisions." />
+<style>
+:root{
+  --ria-bg:#F8FAFC;
+  --ria-surface:#FFFFFF;
+  --ria-primary:#0A192F;
+  --ria-primary-soft:#1E293B;
+  --ria-text:#0F172A;
+  --ria-muted:#475569;
+  --ria-border:#E9EDF2;
+  --ria-border-strong:#94A3B8;
+  --green:#15803D; --green-soft:#DCFCE7;
+  --amber:#B45309; --amber-soft:#FEF3C7;
+  --red:#B91C1C; --red-soft:#FEE2E2;
+  --blue:#0369A1; --blue-soft:#E0F2FE;
+  --slate:#475569; --slate-soft:#F1F5F9;
+  --font-display:'Segoe UI Semibold','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --font-body:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --font-mono:'Cascadia Mono','SFMono-Regular',Consolas,'Liberation Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--ria-bg); color:var(--ria-text); font-family:var(--font-body);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;margin:0;}
+.mono{font-family:var(--font-mono);}
+.eyebrow{font-family:var(--font-body);font-weight:500;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:var(--ria-muted);}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+.container{max-width:1360px;margin:0 auto;padding:0 40px;}
+@media (max-width:900px){.container{padding:0 18px;}}
+a{color:var(--ria-primary);}
+:focus-visible{outline:2px solid var(--ria-primary);outline-offset:2px;}
+
+.app-header{position:sticky;top:0;z-index:80;background:#fff;border-bottom:1px solid var(--ria-border);}
+.header-top{height:56px;display:flex;align-items:center;gap:16px;max-width:1360px;margin:0 auto;padding:0 40px;}
+@media (max-width:900px){.header-top{padding:0 18px;height:auto;min-height:56px;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px;}}
+.back-link{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ria-primary);text-decoration:none;padding:8px 14px 8px 11px;border:1px solid var(--ria-border-strong);border-radius:2px;margin-right:10px;transition:background 150ms,border-color 150ms,color 150ms;flex-shrink:0;}
+.back-link:hover{background:var(--ria-primary);border-color:var(--ria-primary);color:#fff;}
+.back-link svg{width:13px;height:13px;flex-shrink:0;}
+.breadcrumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;}
+.breadcrumb .bc-tile{width:28px;height:28px;background:var(--ria-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:13px;border-radius:2px;flex-shrink:0;}
+.breadcrumb .bc-text{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+.breadcrumb .bc-toolkit{font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ria-muted);white-space:nowrap;}
+.breadcrumb .bc-app{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--ria-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-spacer{flex:1;}
+.privacy-badge-sm{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:500;color:var(--green);background:var(--green-soft);border-radius:999px;padding:5px 11px;white-space:nowrap;}
+.privacy-badge-sm svg{width:12px;height:12px;flex-shrink:0;}
+
+.step-nav-wrap{background:var(--ria-bg);border-top:1px solid var(--ria-border);}
+.step-nav{max-width:1360px;margin:0 auto;padding:0 40px;display:flex;gap:0;overflow-x:auto;}
+@media (max-width:900px){.step-nav{padding:0 18px;}}
+.step-btn{
+  display:flex;align-items:center;gap:9px;background:none;border:none;padding:13px 20px 13px 4px;margin-right:20px;
+  font-size:13px;font-weight:600;color:var(--ria-muted);border-bottom:2px solid transparent;white-space:nowrap;transition:color 150ms;
+}
+.step-btn .sb-num{width:20px;height:20px;border-radius:50%;background:var(--ria-border);color:var(--ria-muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-mono);flex-shrink:0;transition:background 150ms,color 150ms;}
+.step-btn.active{color:var(--ria-primary);border-bottom-color:var(--ria-primary);}
+.step-btn.active .sb-num{background:var(--ria-primary);color:#fff;}
+.step-btn.done .sb-num{background:var(--green);color:#fff;}
+.step-btn.done .sb-num::before{content:"\2713";}
+.step-btn:not(:disabled):hover{color:var(--ria-primary);}
+.step-btn:disabled{opacity:0.45;cursor:not-allowed;}
+
+main{max-width:1360px;margin:0 auto;padding:32px 40px 64px;}
+@media (max-width:900px){main{padding:22px 18px 48px;}}
+.section{margin-bottom:36px;}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:15px;flex-wrap:wrap;gap:8px;}
+.section-head h2{font-size:19px;color:var(--ria-primary);}
+.section-sub{font-size:12.5px;color:var(--ria-muted);margin-top:2px;}
+
+.hero{padding:26px 0 8px;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+.hero h1{font-size:28px;color:var(--ria-text);margin-bottom:8px;}
+.hero .hero-sub{font-size:15px;color:var(--ria-primary-soft);font-weight:500;max-width:640px;margin-bottom:6px;}
+.hero .hero-desc{font-size:13.5px;color:var(--ria-muted);max-width:640px;line-height:1.6;}
+.privacy-badge-lg{display:flex;align-items:center;gap:9px;background:var(--green-soft);border:1px solid #BBEBCB;border-radius:2px;padding:11px 16px;flex-shrink:0;max-width:260px;}
+.privacy-badge-lg svg{width:18px;height:18px;color:var(--green);flex-shrink:0;}
+.privacy-badge-lg .pb-t1{font-size:11.5px;font-weight:700;color:var(--green);}
+.privacy-badge-lg .pb-t2{font-size:10.5px;color:#166534;margin-top:1px;}
+.capability-badges{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;}
+.cap-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:var(--ria-muted);}
+.cap-badge .cap-check{color:var(--green);font-weight:700;}
+
+.card{background:var(--ria-surface);border:1px solid var(--ria-border);border-radius:2px;padding:22px;box-shadow:0 1px 2px rgba(15,23,42,0.03);}
+.card-lg{padding:26px 28px;}
+.card-hover:hover{border-color:var(--ria-border-strong);box-shadow:0 10px 22px -14px rgba(15,23,42,0.16);}
+.card h3{font-size:15px;color:var(--ria-text);}
+.card h4{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);}
+
+.btn-primary{background:var(--ria-primary);color:#fff;border:none;padding:11px 18px;font-size:13.5px;font-weight:500;border-radius:2px;display:inline-flex;align-items:center;gap:7px;transition:background 150ms;}
+.btn-primary:hover{background:var(--ria-primary-soft);}
+.btn-primary:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-outline{background:#fff;color:var(--ria-primary);border:1px solid var(--ria-border-strong);padding:10px 16px;font-size:13px;font-weight:500;border-radius:2px;display:inline-flex;align-items:center;gap:7px;transition:border-color 150ms,background 150ms;}
+.btn-outline.btn-copied{background:var(--green-soft);border-color:var(--green);color:var(--green);}
+.btn-outline:hover{background:var(--ria-bg);}
+.btn-outline:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-danger-outline{background:#fff;color:var(--red);border:1px solid #F3C6C6;padding:10px 16px;font-size:13px;font-weight:500;border-radius:2px;}
+.btn-danger-outline:hover{background:var(--red-soft);}
+.btn-sm{padding:7px 12px;font-size:12px;}
+.btn-icon{background:none;border:1px solid var(--ria-border);border-radius:2px;padding:7px;display:inline-flex;color:var(--ria-muted);}
+.btn-icon:hover{color:var(--ria-primary);border-color:var(--ria-border-strong);}
+.btn-icon svg{width:15px;height:15px;}
+svg{display:block;}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:4px 9px;border-radius:2px;white-space:nowrap;}
+.pill-green{background:var(--green-soft);color:var(--green);}
+.pill-amber{background:var(--amber-soft);color:var(--amber);}
+.pill-red{background:var(--red-soft);color:var(--red);}
+.pill-blue{background:var(--blue-soft);color:var(--blue);}
+.pill-slate{background:var(--slate-soft);color:var(--slate);}
+.pill-navy{background:#E7EBF3;color:var(--ria-primary);}
+/* Neutral outlined pill: used for priority/status/type labels so that
+   colour remains reserved for severity, the single strongest visual signal. */
+.pill-outline{background:#fff;color:var(--ria-text);border:1px solid var(--ria-border-strong);}
+.pill-outline.pill-urgent{border-color:var(--ria-primary);color:var(--ria-primary);font-weight:700;}
+
+#toastContainer{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:320px;}
+@media (max-width:600px){#toastContainer{left:16px;right:16px;bottom:16px;max-width:none;}}
+.toast{background:var(--ria-primary);color:#fff;padding:12px 16px;border-radius:2px;font-size:13px;box-shadow:0 10px 24px -8px rgba(10,25,47,0.4);animation:toastIn 200ms ease;display:flex;align-items:center;gap:9px;}
+.toast svg{width:15px;height:15px;flex-shrink:0;}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+[hidden]{display:none !important;}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+::selection{background:#DCE4F0;}
+</style>
+</head>
+<body>
+<span id="severityFormulaDesc" class="visually-hidden">Severity combines probability, impact, time criticality, and governance quality signals into a single 0 to 100 exposure score.</span>
+<style>
+/* ---------- Input method cards ---------- */
+.input-methods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px;}
+@media (max-width:1000px){.input-methods{grid-template-columns:1fr;}}
+.method-card{display:flex;flex-direction:column;gap:6px;}
+.method-card .mc-icon{width:34px;height:34px;border-radius:2px;background:var(--ria-bg);border:1px solid var(--ria-border);display:flex;align-items:center;justify-content:center;color:var(--ria-primary);margin-bottom:4px;}
+.method-card .mc-icon svg{width:17px;height:17px;}
+.method-card .mc-title{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--ria-text);}
+.method-card .mc-desc{font-size:12.5px;color:var(--ria-muted);line-height:1.55;flex:1;}
+.method-card .mc-badge{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:2px;}
+
+.paste-panel textarea{
+  width:100%;min-height:220px;border:1px solid var(--ria-border);border-radius:2px;padding:14px;
+  font-family:var(--font-mono);font-size:12.5px;line-height:1.6;color:var(--ria-text);resize:vertical;background:#fbfcfe;
+}
+.paste-panel textarea:focus{outline:2px solid var(--ria-primary);outline-offset:1px;}
+.paste-note{font-size:12px;color:var(--ria-muted);margin-top:8px;line-height:1.55;}
+.paste-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+.paste-count{font-size:11.5px;color:var(--ria-muted);margin-left:auto;font-family:var(--font-mono);}
+
+/* ---------- Manual form ---------- */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:16px;}
+@media (max-width:760px){.form-grid{grid-template-columns:1fr;}}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-field.full{grid-column:1 / -1;}
+.form-field label{font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ria-muted);font-weight:600;}
+.form-field input[type=text], .form-field input[type=date], .form-field select, .form-field textarea{
+  border:1px solid var(--ria-border);border-radius:2px;padding:9px 10px;font-size:13.5px;color:var(--ria-text);background:#fff;width:100%;
+}
+.form-field textarea{min-height:70px;resize:vertical;font-family:inherit;}
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus{outline:2px solid var(--ria-primary);outline-offset:1px;}
+.form-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+.queue-list{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.queue-item{display:flex;align-items:center;gap:12px;border:1px solid var(--ria-border);border-radius:2px;padding:11px 14px;background:#fff;}
+.queue-item .qi-type{flex-shrink:0;}
+.queue-item .qi-body{flex:1;min-width:0;}
+.queue-item .qi-title{font-size:13px;font-weight:600;color:var(--ria-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.queue-item .qi-meta{font-size:11px;color:var(--ria-muted);margin-top:2px;}
+.queue-item .qi-actions{display:flex;gap:6px;flex-shrink:0;}
+.queue-empty{border:1px dashed var(--ria-border-strong);border-radius:2px;padding:36px 20px;text-align:center;color:var(--ria-muted);}
+.queue-empty svg{width:30px;height:30px;margin:0 auto 12px;color:var(--ria-border-strong);}
+.queue-empty .es-title{font-size:14px;font-weight:600;color:var(--ria-text);margin-bottom:4px;}
+.queue-empty .es-desc{font-size:12.5px;max-width:380px;margin:0 auto;}
+
+.sample-preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.sample-chip{font-size:11px;color:var(--ria-muted);background:var(--ria-bg);border:1px solid var(--ria-border);border-radius:999px;padding:5px 11px;}
+
+.input-summary-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;background:var(--ria-primary);color:#fff;border-radius:2px;padding:16px 22px;margin-top:24px;}
+.input-summary-bar .isb-text{font-size:13.5px;}
+.input-summary-bar .isb-text .isb-num{font-family:var(--font-mono);font-weight:600;font-size:16px;margin-right:6px;}
+.input-summary-bar .isb-sub{font-size:11.5px;color:#B9C4D6;margin-top:2px;}
+
+/* ---------- Analysis processing state ---------- */
+.processing-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;}
+.processing-spinner{width:44px;height:44px;border-radius:50%;border:3px solid var(--ria-border);border-top-color:var(--ria-primary);animation:spin 900ms linear infinite;margin-bottom:22px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.processing-msg{font-family:var(--font-mono);font-size:13px;color:var(--ria-muted);min-height:20px;}
+@media (prefers-reduced-motion: reduce){.processing-spinner{animation:none;}}
+
+/* ---------- Analysis stage summary ---------- */
+.metric-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+@media (max-width:1100px){.metric-strip{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:560px){.metric-strip{grid-template-columns:repeat(2,1fr);}}
+.metric-tile{background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;}
+.metric-tile .mt-label{font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ria-muted);}
+.metric-tile .mt-value{font-family:var(--font-display);font-size:25px;font-weight:600;margin-top:6px;color:var(--ria-text);}
+.metric-tile .mt-value.c-red{color:var(--red);}
+.metric-tile .mt-value.c-amber{color:var(--amber);}
+  
+.metric-tile .mt-value.c-blue{color:var(--blue);}
+
+.filter-bar{background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:14px 18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.filter-chip{background:var(--ria-bg);border:1px solid var(--ria-border);color:var(--ria-muted);font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;transition:all 150ms;}
+.filter-chip.active{background:var(--ria-primary);color:#fff;border-color:var(--ria-primary);}
+.filter-chip:hover:not(.active){border-color:var(--ria-border-strong);color:var(--ria-text);}
+.filter-chip .fc-count{font-family:var(--font-mono);opacity:0.75;margin-left:4px;}
+
+.analysis-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.analysis-row{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:13px 16px;cursor:pointer;transition:border-color 150ms,box-shadow 150ms;}
+.analysis-row:hover{border-color:var(--ria-border-strong);box-shadow:0 8px 18px -14px rgba(15,23,42,0.25);}
+@media (max-width:800px){.analysis-row{grid-template-columns:1fr;gap:8px;}}
+.analysis-row .ar-body{min-width:0;}
+.analysis-row .ar-title{font-size:13.5px;font-weight:600;color:var(--ria-text);}
+.analysis-row .ar-meta{font-size:11.5px;color:var(--ria-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;}
+.analysis-row .ar-flag{font-size:11px;color:var(--amber);margin-top:4px;display:flex;align-items:center;gap:5px;}
+.analysis-row .ar-flag svg{width:12px;height:12px;flex-shrink:0;}
+.analysis-row .ar-score{text-align:right;}
+.analysis-row .ar-score .ars-num{font-family:var(--font-mono);font-size:17px;font-weight:600;}
+.analysis-row .ar-score .ars-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);}
+
+/* ---------- Empty state ---------- */
+.empty-state{border:1px dashed var(--ria-border-strong);border-radius:2px;padding:40px 20px;text-align:center;color:var(--ria-muted);}
+.empty-state svg{width:30px;height:30px;margin:0 auto 12px;color:var(--ria-border-strong);}
+.empty-state .es-title{font-size:14px;font-weight:600;color:var(--ria-text);margin-bottom:4px;}
+.empty-state .es-desc{font-size:12.5px;max-width:380px;margin:0 auto;}
+</style>
+<style>
+/* ---------- Executive view ---------- */
+.exec-health-band{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:var(--ria-primary);color:#fff;border-radius:2px;padding:22px 28px;margin-bottom:24px;}
+.exec-health-band .ehb-left{display:flex;flex-direction:column;gap:5px;}
+.exec-health-band .ehb-eyebrow{font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#93A4C2;}
+.exec-health-band .ehb-status{font-family:var(--font-display);font-size:24px;font-weight:600;}
+.exec-health-band .ehb-sub{font-size:12.5px;color:#B9C4D6;max-width:520px;line-height:1.55;}
+.exec-health-band .ehb-index{text-align:right;}
+.exec-health-band .ehb-index .ehbi-num{font-family:var(--font-mono);font-size:38px;font-weight:600;line-height:1;}
+.exec-health-band .ehb-index .ehbi-label{font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#93A4C2;margin-top:4px;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+@media (max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:640px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+.kpi-card{background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:16px 16px;}
+.kpi-card .kpi-label{font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ria-muted);}
+.kpi-card .kpi-value{font-family:var(--font-display);font-size:27px;font-weight:600;margin-top:8px;color:var(--ria-text);}
+
+.raid-dist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media (max-width:900px){.raid-dist-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:520px){.raid-dist-grid{grid-template-columns:1fr;}}
+.dist-card{border-top:3px solid var(--ria-border-strong);}
+.dist-card.type-risk{border-top-color:var(--red);}
+.dist-card.type-assumption{border-top-color:var(--blue);}
+.dist-card.type-issue{border-top-color:var(--amber);}
+.dist-card.type-dependency{border-top-color:var(--ria-primary);}
+.dist-card .dc-title{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--ria-text);}
+.dist-card .dc-total{font-family:var(--font-mono);font-size:30px;font-weight:600;margin:10px 0 12px;color:var(--ria-text);}
+.dist-card .dc-rows{display:flex;flex-direction:column;gap:6px;border-top:1px solid rgba(15,23,42,0.06);padding-top:10px;}
+.dist-card .dc-row{display:flex;justify-content:space-between;font-size:12px;color:var(--ria-muted);}
+.dist-card .dc-row b{color:var(--ria-text);font-family:var(--font-mono);}
+
+.priority-list{display:flex;flex-direction:column;gap:12px;}
+.priority-card2{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;padding:20px;cursor:pointer;}
+@media (max-width:760px){.priority-card2{grid-template-columns:1fr;}}
+.priority-card2 .pc-rank{font-family:var(--font-display);font-size:30px;font-weight:700;color:#E2E8F0;line-height:1;width:34px;flex-shrink:0;}
+.priority-card2 .pc-body .pc-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.priority-card2 .pc-title{font-size:15.5px;font-weight:600;color:var(--ria-text);margin-bottom:6px;}
+.priority-card2 .pc-why{font-size:12.5px;color:var(--ria-muted);line-height:1.55;margin-bottom:10px;}
+.priority-card2 .pc-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ria-text);}
+.priority-card2 .pc-meta .pcm-item{display:flex;align-items:center;gap:5px;}
+.priority-card2 .pc-meta svg{width:13px;height:13px;color:var(--ria-muted);}
+.priority-card2 .pc-score{text-align:right;flex-shrink:0;}
+.priority-card2 .pc-score .pcs-num{font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--ria-text);}
+.priority-card2 .pc-score .pcs-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);}
+.priority-card2 .pc-score .pcs-basis{font-size:9px;color:var(--ria-muted);opacity:0.75;margin-top:3px;max-width:80px;line-height:1.3;}
+
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media (max-width:900px){.decision-grid{grid-template-columns:1fr;}}
+.decision-card{border-left:3px solid var(--red);display:flex;flex-direction:column;gap:12px;}
+.decision-card .dcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.decision-card .dcard-title{font-size:14.5px;font-weight:600;color:var(--ria-text);line-height:1.4;}
+.decision-card .dcard-row{display:flex;flex-direction:column;gap:3px;}
+.decision-card .dcard-row .dr-label{font-size:9.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ria-muted);}
+.decision-card .dcard-row .dr-value{font-size:12.5px;color:var(--ria-text);line-height:1.5;}
+.decision-card .dcard-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid rgba(15,23,42,0.06);font-size:12px;color:var(--ria-muted);}
+
+.briefing-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.briefing-title{display:flex;flex-direction:column;gap:2px;}
+.briefing-title .bt1{font-size:15.5px;font-weight:600;font-family:var(--font-display);color:var(--ria-primary);}
+.briefing-title .bt2{font-size:11px;color:var(--ria-muted);}
+.briefing-text{font-size:13.5px;line-height:1.75;color:var(--ria-text);}
+
+.action-list{display:flex;flex-direction:column;gap:0;}
+.action-row{display:flex;gap:14px;padding:15px 0;border-top:1px solid rgba(15,23,42,0.06);}
+.action-row:first-child{border-top:none;padding-top:2px;}
+.action-num{width:26px;height:26px;border-radius:50%;background:var(--ria-bg);border:1px solid var(--ria-border);color:var(--ria-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;font-weight:600;flex-shrink:0;}
+.action-body{flex:1;min-width:0;}
+.action-body .ab-text{font-size:13.5px;font-weight:500;color:var(--ria-text);margin-bottom:5px;}
+.action-body .ab-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ria-muted);margin-bottom:4px;}
+.action-body .ab-meta b{color:var(--ria-text);font-weight:600;}
+.action-body .ab-rationale{font-size:12px;color:var(--ria-muted);line-height:1.5;}
+
+.talking-points{display:flex;flex-direction:column;gap:0;}
+.tp-row{display:flex;gap:12px;padding:12px 0;border-top:1px solid rgba(15,23,42,0.06);font-size:13.5px;color:var(--ria-text);line-height:1.5;}
+.tp-row:first-child{border-top:none;padding-top:2px;}
+.tp-row .tp-dot{width:6px;height:6px;border-radius:50%;background:var(--ria-primary);flex-shrink:0;margin-top:8px;}
+
+.acct-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
+@media (max-width:900px){.acct-grid{grid-template-columns:1fr;}}
+.owner-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(15,23,42,0.06);}
+.owner-row:first-child{border-top:none;padding-top:2px;}
+.owner-avatar{width:32px;height:32px;border-radius:50%;background:var(--ria-primary-soft);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:var(--font-display);flex-shrink:0;}
+.owner-body{flex:1;min-width:0;}
+.owner-name{font-size:13px;font-weight:600;color:var(--ria-text);}
+.owner-meta{font-size:11.5px;color:var(--ria-muted);margin-top:2px;}
+.owner-flags{display:flex;gap:6px;flex-shrink:0;}
+.gap-alert{display:flex;gap:10px;align-items:flex-start;background:var(--amber-soft);border-radius:2px;padding:12px 14px;margin-top:12px;}
+.gap-alert svg{width:15px;height:15px;color:var(--amber);flex-shrink:0;margin-top:1px;}
+.gap-alert p{margin:0;font-size:12px;color:#7A4008;line-height:1.5;}
+
+.timeline-bars{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
+.tl-bar-row{display:flex;flex-direction:column;gap:5px;}
+.tl-bar-top{display:flex;justify-content:space-between;font-size:12px;color:var(--ria-text);}
+.tl-bar-top b{font-family:var(--font-mono);}
+.tl-track{height:8px;background:var(--ria-bg);border-radius:2px;overflow:hidden;}
+.tl-fill{height:100%;border-radius:2px;background:var(--ria-primary);}
+.exposure-window-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;}
+@media (max-width:700px){.exposure-window-grid{grid-template-columns:1fr;}}
+.exposure-window{background:var(--ria-bg);border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;}
+.exposure-window .ew-num{font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--ria-text);}
+.exposure-window .ew-label{font-size:11.5px;color:var(--ria-muted);margin-top:4px;line-height:1.4;}
+
+.related-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.related-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ria-text);background:var(--ria-bg);border:1px solid var(--ria-border);border-radius:2px;padding:10px 12px;}
+</style>
+<style>
+/* ---------- RAID Register ---------- */
+.register-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;margin-bottom:14px;}
+.register-search{flex:1;min-width:180px;position:relative;}
+.register-search input{width:100%;border:1px solid var(--ria-border);border-radius:2px;padding:9px 10px 9px 32px;font-size:13px;}
+.register-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--ria-muted);}
+.register-toolbar select{border:1px solid var(--ria-border);border-radius:2px;padding:9px 10px;font-size:12.5px;color:var(--ria-text);background:#fff;}
+.register-toolbar label{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);display:block;margin-bottom:4px;}
+.rt-field{display:flex;flex-direction:column;gap:2px;}
+.register-count{font-size:11.5px;color:var(--ria-muted);margin-left:auto;font-family:var(--font-mono);}
+
+.register-table-wrap{background:#fff;border:1px solid var(--ria-border);border-radius:2px;overflow-x:auto;}
+table.register-table{width:100%;border-collapse:collapse;min-width:1080px;}
+table.register-table thead th{
+  text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);
+  padding:11px 12px;border-bottom:1px solid var(--ria-border);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;
+}
+table.register-table thead th:hover{color:var(--ria-primary);}
+table.register-table thead th.sorted::after{content:" \25BE";}
+table.register-table tbody td{padding:12px;border-bottom:1px solid rgba(15,23,42,0.06);vertical-align:middle;font-size:12.5px;color:var(--ria-text);}
+table.register-table tbody tr{cursor:pointer;transition:background 120ms;}
+table.register-table tbody tr:hover{background:var(--ria-bg);}
+table.register-table tbody tr:last-child td{border-bottom:none;}
+.reg-title-cell{max-width:230px;}
+.reg-title-cell .rtc-title{font-weight:600;color:var(--ria-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+mark.search-hl{background:var(--amber-soft);color:var(--ria-text);border-radius:2px;padding:0 1px;}
+
+.reg-score{font-family:var(--font-mono);font-weight:600;}
+
+.register-cards{display:none;flex-direction:column;gap:10px;}
+@media (max-width:860px){
+  .register-table-wrap{display:none;}
+  .register-cards{display:flex;}
+}
+.reg-card{background:#fff;border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;cursor:pointer;}
+.reg-card .rc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.reg-card .rc-title{font-size:13.5px;font-weight:600;color:var(--ria-text);}
+.reg-card .rc-id{font-family:var(--font-mono);font-size:10.5px;color:var(--ria-muted);margin-top:2px;}
+.reg-card .rc-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--ria-muted);margin-top:8px;}
+.reg-card .rc-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+
+/* ---------- Drawer / Modal ---------- */
+.overlay-bg{position:fixed;inset:0;background:rgba(10,25,47,0.5);z-index:400;display:flex;}
+.overlay-bg[hidden]{display:none;}
+.drawer-box{margin-left:auto;height:100%;background:#fff;width:520px;max-width:94vw;padding:0;border-left:1px solid var(--ria-border);overflow-y:auto;display:flex;flex-direction:column;animation:drawerIn 220ms ease;}
+@keyframes drawerIn{from{transform:translateX(24px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.drawer-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--ria-border);padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;z-index:2;}
+.drawer-head .dh-id{font-family:var(--font-mono);font-size:11px;color:var(--ria-muted);margin-bottom:4px;}
+.drawer-head .dh-title{font-size:16.5px;font-weight:600;color:var(--ria-text);line-height:1.4;}
+.drawer-close{background:none;border:none;color:var(--ria-muted);padding:4px;flex-shrink:0;}
+.drawer-close svg{width:18px;height:18px;}
+.drawer-body{padding:22px 24px 30px;flex:1;}
+.drawer-section{margin-bottom:24px;}
+.drawer-section h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ria-primary);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--ria-border);}
+.dfield{margin-bottom:12px;}
+.dfield:last-child{margin-bottom:0;}
+.dfield .df-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ria-muted);margin-bottom:3px;}
+.dfield .df-value{font-size:13px;color:var(--ria-text);line-height:1.55;}
+.severity-basis-note{font-size:11px;color:var(--ria-muted);margin-top:5px;line-height:1.5;}
+.dfield-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.missing-list{display:flex;flex-direction:column;gap:6px;}
+.missing-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#7A4008;background:var(--amber-soft);border-radius:2px;padding:8px 10px;}
+.missing-item svg{width:13px;height:13px;flex-shrink:0;}
+.missing-none{font-size:12.5px;color:var(--green);display:flex;align-items:center;gap:7px;}
+.callout-box{background:var(--ria-bg);border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;font-size:13px;line-height:1.6;color:var(--ria-text);}
+.callout-box.escalation{background:var(--red-soft);border-color:#F3C6C6;color:#7A1414;}
+.drawer-copy-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.drawer-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--ria-border);padding:16px 24px;display:flex;justify-content:flex-end;}
+
+.dialog-box{margin:auto;background:#fff;width:440px;max-width:92vw;border-radius:2px;padding:26px;border:1px solid var(--ria-border);}
+.dialog-box h3{font-size:16px;margin-bottom:10px;}
+.dialog-box p{font-size:13.5px;color:var(--ria-muted);line-height:1.6;margin:0 0 20px;}
+.dialog-actions{display:flex;gap:10px;justify-content:flex-end;}
+
+/* ---------- Data quality panel ---------- */
+.quality-panel{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;}
+@media (max-width:700px){.quality-panel{grid-template-columns:1fr;}}
+.quality-score-block{text-align:center;}
+.quality-score-block .qsb-num{font-family:var(--font-display);font-size:46px;font-weight:600;line-height:1;}
+.quality-score-block .qsb-denom{font-size:14px;color:var(--ria-muted);}
+.quality-score-block .qsb-band{margin-top:8px;}
+.quality-issues-list{display:flex;flex-direction:column;gap:7px;}
+.qi-row{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ria-text);}
+.qi-row .qir-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+.info-tip-button{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--ria-border);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:600;color:var(--ria-muted);}
+.info-tip-button:hover{color:var(--ria-primary);border-color:var(--ria-border-strong);}
+.info-tip-button svg{width:13px;height:13px;flex-shrink:0;}
+.methodology-panel{background:var(--ria-primary);color:#fff;border-radius:2px;padding:16px 18px;margin-bottom:16px;font-size:12.5px;line-height:1.65;}
+.methodology-panel .mp-block{margin-bottom:12px;}
+.methodology-panel .mp-block:last-child{margin-bottom:0;}
+.methodology-panel h4{font-size:10.5px;text-transform:uppercase;letter-spacing:0.07em;color:#B9C4D6;margin-bottom:5px;}
+.methodology-panel p{margin:0;color:#EAEFF7;}
+
+/* ---------- Disclaimer / footer ---------- */
+.disclaimer-box{display:flex;gap:10px;align-items:flex-start;background:var(--ria-bg);border:1px solid var(--ria-border);border-radius:2px;padding:14px 16px;margin-top:34px;}
+.disclaimer-box svg{width:15px;height:15px;color:var(--ria-muted);flex-shrink:0;margin-top:1px;}
+.disclaimer-box p{margin:0;font-size:11.5px;color:var(--ria-muted);line-height:1.55;}
+.privacy-footer-note{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ria-muted);margin-top:10px;}
+.privacy-footer-note svg{width:13px;height:13px;color:var(--green);flex-shrink:0;}
+
+.app-footer{background:#fff;border-top:1px solid var(--ria-border);margin-top:20px;}
+.app-footer .container{padding:24px 40px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;}
+.footer-col{display:flex;flex-direction:column;gap:3px;min-width:180px;}
+.footer-col.brand{flex-direction:row;align-items:center;gap:12px;}
+.footer-brand-tile{width:26px;height:26px;background:var(--ria-primary);color:#fff;border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:12px;flex-shrink:0;}
+.footer-col.brand .fb-name{font-size:13px;font-weight:600;color:var(--ria-text);}
+.footer-col.brand .fb-sub{font-size:11px;color:var(--ria-muted);margin-top:2px;}
+.footer-col.meta{align-items:flex-end;text-align:right;}
+.footer-line{font-size:11.5px;color:var(--ria-muted);line-height:1.5;}
+.footer-line.strong{color:var(--ria-text);font-weight:600;font-size:12px;}
+.footer-divider{width:100%;max-width:220px;height:1px;background:rgba(15,23,42,0.08);margin:8px 0;}
+.footer-tagline{font-size:10px;letter-spacing:0.04em;color:var(--ria-muted);opacity:0.85;}
+.footer-home-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ria-primary);text-decoration:none;margin-bottom:6px;}
+.footer-home-link svg{width:12px;height:12px;flex-shrink:0;}
+.footer-home-link:hover{text-decoration:underline;}
+
+@media (prefers-reduced-motion: reduce){.section{animation:none;}}
+</style>
+
+<!-- ============ HEADER ============ -->
+<header class="app-header">
+  <div class="header-top">
+    <a class="back-link" href="../../index.html" aria-label="Back to Executive Portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      Back to Executive Portfolio
+    </a>
+    <div class="breadcrumb">
+      <div class="bc-tile">R</div>
+      <div class="bc-text">
+        <span class="bc-toolkit">AI Governance Toolkit</span>
+        <span class="bc-app">RAID Intelligence Analyzer</span>
+      </div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="privacy-badge-sm">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/></svg>
+      Local Browser Analysis
+    </div>
+  </div>
+  <div class="step-nav-wrap">
+    <nav class="step-nav" id="stepNav" aria-label="Workflow steps">
+      <button class="step-btn active" data-step="input" id="stepBtn-input" type="button" aria-current="step">
+        <span class="sb-num">1</span> Add RAID Data
+      </button>
+      <button class="step-btn" data-step="analysis" id="stepBtn-analysis" type="button" disabled>
+        <span class="sb-num">2</span> Analysis
+      </button>
+      <button class="step-btn" data-step="executive" id="stepBtn-executive" type="button" disabled>
+        <span class="sb-num">3</span> Executive View
+      </button>
+      <button class="step-btn" data-step="register" id="stepBtn-register" type="button" disabled>
+        <span class="sb-num">4</span> RAID Register
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <div class="hero" id="heroSection">
+    <div class="hero-top">
+      <div>
+        <span class="eyebrow" style="margin-bottom:8px;display:inline-block;">Program Governance &middot; Executive Decision Support</span>
+        <h1>RAID Intelligence Analyzer</h1>
+        <div class="hero-sub">Executive Governance Intelligence for Risks, Assumptions, Issues and Decisions</div>
+        <div class="hero-desc">Transform unstructured meeting notes into executive-ready RAID intelligence entirely within your browser.</div>
+        <div class="capability-badges">
+          <span class="cap-badge"><span class="cap-check">&#10003;</span> Offline</span>
+          <span class="cap-badge"><span class="cap-check">&#10003;</span> Private</span>
+          <span class="cap-badge"><span class="cap-check">&#10003;</span> No AI Required</span>
+          <span class="cap-badge"><span class="cap-check">&#10003;</span> GitHub Pages Ready</span>
+          <span class="cap-badge"><span class="cap-check">&#10003;</span> Executive Decision Support</span>
+        </div>
+      </div>
+      <div class="privacy-badge-lg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/></svg>
+        <div>
+          <div class="pb-t1">Local Browser Analysis</div>
+          <div class="pb-t2">Governance data is not uploaded or stored.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STAGE: INPUT ============ -->
+  <section id="stage-input" class="stage-view">
+
+    <div class="section">
+      <div class="section-head">
+        <h2>Add RAID Data</h2>
+        <span class="section-sub">Choose any combination of the three input methods below, then run the analysis.</span>
+      </div>
+
+      <div class="input-methods">
+        <div class="card method-card">
+          <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2h6l1 3H8l1-3z"/><rect x="5" y="5" width="14" height="16" rx="1.5"/><path d="M9 11h6M9 15h4"/></svg></div>
+          <span class="mc-badge">Primary Method</span>
+          <div class="mc-title">Paste RAID Data</div>
+          <div class="mc-desc">Paste RAID logs, meeting minutes, status reports, emails, or spreadsheet exports. The analyzer identifies and classifies individual items automatically.</div>
+        </div>
+        <div class="card method-card">
+          <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
+          <span class="mc-badge">Structured Entry</span>
+          <div class="mc-title">Manual Entry Form</div>
+          <div class="mc-desc">Add one RAID item at a time using a structured form covering ownership, timing, exposure, and decision fields.</div>
+        </div>
+        <div class="card method-card">
+          <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h6l6 6v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M12 4v6h6"/></svg></div>
+          <span class="mc-badge">Instant Demo</span>
+          <div class="mc-title">Load Sample Program</div>
+          <div class="mc-desc">Populate the analyzer instantly with a realistic 16+ item RAID log from a fictional Next Generation EV Platform program.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paste panel -->
+    <div class="section">
+      <div class="card card-lg paste-panel">
+        <h3 style="margin-bottom:4px;">Paste RAID Data</h3>
+        <p class="paste-note">Paste structured RAID entries or unstructured program notes. The analyzer will identify and classify individual items.</p>
+        <textarea id="pasteInput" aria-label="Paste RAID data" placeholder="Risk: Battery validation may be delayed by three weeks.
+Owner: Validation Lead
+Probability: High
+Impact: High
+Due Date: 25 July 2026
+Mitigation: Engage an additional testing facility.
+
+Issue: Supplier tooling is currently two weeks late.
+Owner: Purchasing Manager
+Impact: High
+Due Date: 18 July 2026
+Action: Confirm supplier recovery plan."></textarea>
+        <div class="paste-actions">
+          <button class="btn-primary" id="parsePasteBtn" type="button">Parse &amp; Queue Items</button>
+          <button class="btn-outline" id="clearPasteBtn" type="button">Clear Input</button>
+          <span class="paste-count" id="pasteCharCount">0 characters</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual entry form -->
+    <div class="section">
+      <div class="card card-lg">
+        <h3 style="margin-bottom:4px;">Manual Entry Form</h3>
+        <p class="paste-note">Add one RAID item at a time with full structured detail.</p>
+        <form id="manualForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="f-title">Item Title</label>
+              <input type="text" id="f-title" name="title" maxlength="140" required aria-required="true" placeholder="e.g. Battery Validation Schedule Exposure" />
+            </div>
+            <div class="form-field">
+              <label for="f-type">RAID Type</label>
+              <select id="f-type" name="type">
+                <option>Risk</option><option>Assumption</option><option>Issue</option><option>Dependency</option><option>Unclassified</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="f-workstream">Program / Workstream</label>
+              <input type="text" id="f-workstream" name="workstream" placeholder="e.g. Battery Systems" />
+            </div>
+            <div class="form-field full">
+              <label for="f-desc">Description</label>
+              <textarea id="f-desc" name="description" required aria-required="true" minlength="15" placeholder="Describe the risk, assumption, issue, or dependency... (at least 15 characters)"></textarea>
+            </div>
+            <div class="form-field">
+              <label for="f-owner">Owner</label>
+              <input type="text" id="f-owner" name="owner" placeholder="e.g. Validation Lead" />
+            </div>
+            <div class="form-field">
+              <label for="f-status">Status</label>
+              <select id="f-status" name="status">
+                <option>Open</option><option>In Progress</option><option>Monitoring</option><option>Blocked</option><option>Resolved</option><option>Closed</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="f-dateid">Date Identified</label>
+              <input type="date" id="f-dateid" name="dateIdentified" />
+            </div>
+            <div class="form-field">
+              <label for="f-target">Target Resolution Date</label>
+              <input type="date" id="f-target" name="targetDate" />
+            </div>
+            <div class="form-field">
+              <label for="f-prob">Probability</label>
+              <select id="f-prob" name="probability">
+                <option>Low</option><option>Medium</option><option>High</option><option>Not Applicable</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="f-impact">Impact</label>
+              <select id="f-impact" name="impact">
+                <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="f-decision">Decision Required</label>
+              <select id="f-decision" name="decisionRequired">
+                <option>No</option><option>Potentially</option><option>Yes</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="f-escalation">Escalation Status</label>
+              <select id="f-escalation" name="escalation">
+                <option>Not Required</option><option>Monitor</option><option>Functional Escalation</option><option>Executive Escalation</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label for="f-mitigation">Mitigation / Action</label>
+              <textarea id="f-mitigation" name="mitigation" placeholder="What action is being taken, and by whom?"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" id="addItemBtn" type="submit">Add RAID Item</button>
+            <button class="btn-outline" id="clearFormBtn" type="button">Clear Form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sample data -->
+    <div class="section">
+      <div class="card card-lg">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+          <div>
+            <h3 style="margin-bottom:4px;">Load Sample Program</h3>
+            <p class="paste-note" style="margin-top:0;">Next Generation Electric Vehicle Platform &mdash; a realistic, intentionally imperfect 16+ item RAID log.</p>
+            <div class="sample-preview">
+              <span class="sample-chip">Battery Validation</span>
+              <span class="sample-chip">BMS Software</span>
+              <span class="sample-chip">Supplier Tooling</span>
+              <span class="sample-chip">Homologation</span>
+              <span class="sample-chip">Cybersecurity</span>
+              <span class="sample-chip">+11 more</span>
+            </div>
+          </div>
+          <button class="btn-primary" id="loadSampleBtn" type="button">Load Sample EV Program</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Queue -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Input Queue</h2>
+        <span class="section-sub" id="queueSubtitle">Items staged for analysis</span>
+      </div>
+      <div id="queueList" class="queue-list"></div>
+    </div>
+
+    <div class="input-summary-bar" id="inputSummaryBar">
+      <div>
+        <div class="isb-text"><span class="isb-num" id="isbCount">0</span>RAID items queued for analysis</div>
+        <div class="isb-sub">Add items from any method above, then run the analysis engine.</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" id="resetAppBtn" type="button" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.35);">Reset Application</button>
+        <button class="btn-primary" id="analyzeBtn" type="button" disabled style="background:#fff;color:var(--ria-primary);">Analyze RAID Data</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE: ANALYSIS ============ -->
+  <section id="stage-analysis" class="stage-view" hidden>
+    <div id="processingWrap" class="processing-wrap" hidden>
+      <div class="processing-spinner" aria-hidden="true"></div>
+      <div class="processing-msg" id="processingMsg" role="status" aria-live="polite">Classifying RAID entries...</div>
+    </div>
+    <div id="analysisContent" hidden>
+      <div class="section">
+        <div class="section-head"><h2>Analysis Overview</h2><span class="section-sub">Rules-based classification, exposure, and quality assessment</span></div>
+        <div class="metric-strip" id="analysisMetricStrip"></div>
+      </div>
+      <div class="section">
+        <div class="filter-bar" id="analysisFilterBar"></div>
+      </div>
+      <div class="section">
+        <div id="analysisListWrap"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button class="btn-outline" id="backToInputBtn" type="button">Return to Input</button>
+        <button class="btn-primary" id="toExecutiveBtn" type="button">View Executive Insights</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE: EXECUTIVE VIEW ============ -->
+  <section id="stage-executive" class="stage-view" hidden></section>
+
+  <!-- ============ STAGE: RAID REGISTER ============ -->
+  <section id="stage-register" class="stage-view" hidden></section>
+
+  <div class="disclaimer-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+    <p>This application is a portfolio demonstration of a rules-based RAID analysis and executive decision-support workflow. Outputs should be reviewed using professional judgment before being applied to live programs.</p>
+  </div>
+  <div class="privacy-footer-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/></svg>
+    Your governance data is processed locally in this browser session. The application does not upload, transmit, or persist the RAID information you enter.
+  </div>
+</main>
+
+<footer class="app-footer">
+  <div class="container">
+    <div class="footer-col brand">
+      <div class="footer-brand-tile">R</div>
+      <div>
+        <div class="fb-name">RAID Intelligence Analyzer</div>
+        <div class="fb-sub">AI Governance Toolkit</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <span class="footer-line strong">Created by Jaideep Phatak</span>
+      <span class="footer-line">Executive Portfolio Demonstration</span>
+      <span class="footer-line">AI Governance Toolkit</span>
+      <div class="footer-divider"></div>
+      <span class="footer-tagline">Offline &bull; Private &bull; GitHub Pages</span>
+    </div>
+    <div class="footer-col meta">
+      <a class="footer-home-link" href="../../index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Executive Portfolio Home
+      </a>
+      <span class="footer-line">Rules-Based Intelligence</span>
+      <span class="footer-line">Processed entirely in your browser</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Item detail drawer -->
+<div class="overlay-bg" id="drawerOverlay" hidden>
+  <div class="drawer-box" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" id="drawerBox"></div>
+</div>
+
+<!-- Confirm dialog -->
+<div class="overlay-bg" id="dialogOverlay" hidden>
+  <div class="dialog-box" role="alertdialog" aria-modal="true" aria-labelledby="dialogTitle" id="dialogBox"></div>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   APPLICATION STATE
+   ========================================================================= */
+var STATE = {
+  queue: [],            // raw items pending analysis (unanalyzed)
+  analyzed: [],          // computed/enriched items after Analyze
+  editingItemId: null,   // stable id of queue item being edited, or null
+  currentStep: 'input',
+  hasAnalyzed: false,
+  idCounter: 1,
+  analysisFilter: 'all',
+  register: { search:'', type:'all', severity:'all', status:'all', workstream:'all', owner:'all', decision:'all', overdue:'all', ownerGap:'all', sortKey:'severity', sortDir:'desc' },
+  briefingText: '', actionsText: '', talkingPointsText: '',
+  drawerItemId: null,
+  lastFocusedElement: null,
+  sampleLoadedOnce: false
+};
+
+function nextId(prefix){ return prefix + '-' + String(STATE.idCounter++).padStart(3,'0'); }
+function ensureItemId(item){
+  if(!item.id){
+    var prefix = item.type && item.type !== 'Unclassified' ? item.type.charAt(0).toUpperCase() : 'X';
+    item.id = nextId(prefix);
+  }
+  return item;
+}
+
+/* =========================================================================
+   UTILITIES
+   ========================================================================= */
+function esc(s){
+  var d = document.createElement('div');
+  d.textContent = (s===undefined||s===null) ? '' : String(s);
+  return d.innerHTML;
+}
+function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+/**
+ * Returns the value HTML-escaped via esc(), with any occurrence of `query`
+ * wrapped in <mark>. Both the source text and the query are escaped through
+ * the same esc() pass before matching, so highlighting can never introduce
+ * unescaped user HTML.
+ */
+function highlightMatch(text, query){
+  var escaped = esc(text);
+  if(!query || !query.trim()) return escaped;
+  var q = esc(query.trim());
+  if(!q) return escaped;
+  var re;
+  try{ re = new RegExp('(' + escapeRegex(q) + ')', 'ig'); } catch(e){ return escaped; }
+  return escaped.replace(re, '<mark class="search-hl">$1</mark>');
+}
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+function fmtDate(iso){
+  if(!iso) return '\u2014';
+  var d = new Date(iso + 'T00:00:00');
+  if(isNaN(d.getTime())) return '\u2014';
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+}
+function todayISO(){
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function addDaysISO(days){
+  var d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function daysBetween(iso){
+  if(!iso) return null;
+  var target = new Date(iso + 'T00:00:00');
+  var today = new Date(todayISO() + 'T00:00:00');
+  if(isNaN(target.getTime())) return null;
+  return Math.round((target - today) / 86400000);
+}
+function isOpenStatus(status){
+  return ['Open','In Progress','Monitoring','Blocked'].indexOf(status) !== -1;
+}
+function typePillClass(type){
+  var map = {Risk:'pill-red', Assumption:'pill-blue', Issue:'pill-amber', Dependency:'pill-navy', Unclassified:'pill-slate'};
+  return map[type] || 'pill-slate';
+}
+function severityPillClass(cat){
+  if(cat==='Critical') return 'pill-red';
+  if(cat==='High') return 'pill-amber';
+  if(cat==='Moderate') return 'pill-blue';
+  return 'pill-green';
+}
+function priorityPillClass(p){
+  if(p==='Executive Decision Required') return 'pill-outline pill-urgent';
+  return 'pill-outline';
+}
+function initials(name){
+  if(!name) return '?';
+  var parts = name.trim().split(/\s+/).filter(Boolean);
+  if(parts.length===0) return '?';
+  if(parts.length===1) return parts[0].substring(0,2).toUpperCase();
+  return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+}
+var GENERIC_OWNERS = ['team','function','tbd','unassigned','n/a','na','various','tbc','pending'];
+function isGenericOwner(owner){
+  if(!owner) return true;
+  return GENERIC_OWNERS.indexOf(owner.trim().toLowerCase()) !== -1;
+}
+function hasOwner(owner){
+  return !!(owner && owner.trim().length>0 && !isGenericOwner(owner));
+}
+function copyToClipboard(text, successMsg, btnEl){
+  function showCopiedState(){
+    if(!btnEl) return;
+    if(btnEl.dataset.copyResetTimer){ clearTimeout(parseInt(btnEl.dataset.copyResetTimer,10)); }
+    if(!btnEl.dataset.originalLabel){ btnEl.dataset.originalLabel = btnEl.innerHTML; }
+    btnEl.innerHTML = ICONS.check + ' Copied';
+    btnEl.classList.add('btn-copied');
+    var timerId = setTimeout(function(){
+      btnEl.innerHTML = btnEl.dataset.originalLabel;
+      btnEl.classList.remove('btn-copied');
+      delete btnEl.dataset.originalLabel;
+      delete btnEl.dataset.copyResetTimer;
+    }, 1000);
+    btnEl.dataset.copyResetTimer = String(timerId);
+  }
+  function fallback(){
+    try{
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      showCopiedState();
+      toast(successMsg || 'Copied to clipboard', 'copy');
+    }catch(e){ toast('Unable to copy automatically \u2014 please select and copy manually.', 'warn'); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ showCopiedState(); toast(successMsg || 'Copied to clipboard', 'copy'); }).catch(fallback);
+  } else { fallback(); }
+}
+
+var TOAST_ICONS = {
+  success:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="1"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+};
+function toast(msg, kind){
+  var c = document.getElementById('toastContainer');
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = (TOAST_ICONS[kind] || TOAST_ICONS.info) + '<span>' + esc(msg) + '</span>';
+  c.appendChild(el);
+  setTimeout(function(){
+    el.style.transition = 'opacity 250ms ease';
+    el.style.opacity = '0';
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 260);
+  }, 3200);
+}
+
+/* =========================================================================
+   OVERLAY FOCUS MANAGEMENT
+   Shared focus-trap, background-inert, and focus-restore utilities used
+   by both the item drawer and the confirmation dialogs.
+   ========================================================================= */
+STATE.overlayStack = [];
+
+function getFocusableIn(container){
+  return Array.from(container.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )).filter(function(el){ return !el.hidden && el.offsetParent !== null; });
+}
+function trapFocus(container, event){
+  if(event.key !== 'Tab') return;
+  var focusable = getFocusableIn(container);
+  if(!focusable.length) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if(event.shiftKey && document.activeElement === first){
+    event.preventDefault();
+    last.focus();
+  } else if(!event.shiftKey && document.activeElement === last){
+    event.preventDefault();
+    first.focus();
+  }
+}
+function setBackgroundInert(isInert){
+  ['header','main','footer'].forEach(function(tag){
+    var els = document.getElementsByTagName(tag);
+    for(var i=0;i<els.length;i++){
+      if(isInert){ els[i].setAttribute('inert',''); }
+      else { els[i].removeAttribute('inert'); }
+    }
+  });
+}
+function pushOverlay(type, container){
+  if(STATE.overlayStack.length === 0){
+    STATE.lastFocusedElement = document.activeElement;
+    setBackgroundInert(true);
+  }
+  STATE.overlayStack.push({type:type, container:container});
+}
+function popOverlay(expectedType){
+  var top = STATE.overlayStack[STATE.overlayStack.length-1];
+  if(top && (!expectedType || top.type===expectedType)){
+    STATE.overlayStack.pop();
+  }
+  if(STATE.overlayStack.length === 0){
+    setBackgroundInert(false);
+    if(STATE.lastFocusedElement && typeof STATE.lastFocusedElement.focus === 'function'){
+      STATE.lastFocusedElement.focus();
+    }
+    STATE.lastFocusedElement = null;
+  }
+}
+function topOverlayType(){
+  return STATE.overlayStack.length ? STATE.overlayStack[STATE.overlayStack.length-1].type : null;
+}
+
+</script>
+<script>
+/* =========================================================================
+   SAMPLE DATA — Next Generation Electric Vehicle Platform
+   Deliberately imperfect to demonstrate the analyzer's quality checks.
+   Dates are generated relative to today so the demo always feels current.
+   ========================================================================= */
+function generateSampleData(){
+  var items = [
+    {
+      title:'Battery Validation Schedule Exposure',
+      type:'Risk', workstream:'Battery Systems', owner:'Validation Lead',
+      description:'Battery validation may be delayed by three weeks because the primary test facility is fully booked through the next milestone window. Probability of slippage is increasing as bay availability tightens.',
+      dateIdentified: addDaysISO(-24), targetDate: addDaysISO(9),
+      probability:'High', impact:'High', status:'Open',
+      mitigation:'Engage an additional external testing facility to run parallel validation cycles.',
+      decisionRequired:'Yes', escalation:'Executive Escalation'
+    },
+    {
+      title:'Secondary Battery Test Capacity Constraint',
+      type:'Risk', workstream:'Battery Systems', owner:'Validation Lead',
+      description:'Test bay capacity for battery pack validation is nearly fully allocated, which could push out cell-to-pack qualification if any test cycle needs to be repeated.',
+      dateIdentified: addDaysISO(-20), targetDate: addDaysISO(11),
+      probability:'High', impact:'High', status:'Open',
+      mitigation:'Coordinate with validation lead on a capacity contingency plan.',
+      decisionRequired:'Potentially', escalation:'Monitor'
+    },
+    {
+      title:'BMS Software Defect in Thermal Cutoff Logic',
+      type:'Risk', workstream:'BMS Software', owner:'Embedded Software Lead',
+      description:'A defect has already occurred in the battery management system thermal cutoff logic during bench testing, causing an unexpected shutdown. Root cause analysis is currently underway.',
+      dateIdentified: addDaysISO(-6), targetDate: addDaysISO(-1),
+      probability:'High', impact:'Critical', status:'Blocked',
+      mitigation:'Software patch in development; regression test plan being scoped.',
+      decisionRequired:'No', escalation:'Functional Escalation'
+    },
+    {
+      title:'Vehicle Control Unit Integration Timing',
+      type:'Dependency', workstream:'Vehicle Control Unit', owner:'',
+      description:'Final VCU integration is contingent on receiving updated CAN matrix documentation from the electrical architecture team, which has not yet been confirmed.',
+      dateIdentified: addDaysISO(-15), targetDate: addDaysISO(6),
+      probability:'Medium', impact:'High', status:'Open',
+      mitigation:'',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Supplier Tooling Delivery Overdue',
+      type:'Issue', workstream:'Supplier Tooling', owner:'Purchasing Manager',
+      description:'Supplier tooling for the rear subframe stamping die is currently two weeks late, and the supplier has not confirmed a firm recovery date.',
+      dateIdentified: addDaysISO(-30), targetDate: addDaysISO(-4),
+      probability:'Not Applicable', impact:'High', status:'Blocked',
+      mitigation:'Confirm supplier recovery plan and evaluate a secondary tooling source.',
+      decisionRequired:'Yes', escalation:'Executive Escalation'
+    },
+    {
+      title:'Tooling Release Delay Affecting Body-in-White',
+      type:'Issue', workstream:'Supplier Tooling', owner:'Purchasing Manager',
+      description:'Tooling release for body-in-white fixtures has slipped, which is a related concern to the rear subframe stamping die delay and may compound prototype build risk.',
+      dateIdentified: addDaysISO(-18), targetDate: addDaysISO(3),
+      probability:'Not Applicable', impact:'Medium', status:'Open',
+      mitigation:'Weekly supplier recovery call in place.',
+      decisionRequired:'No', escalation:'Monitor'
+    },
+    {
+      title:'Prototype Vehicle Build 2 Parts Availability',
+      type:'Dependency', workstream:'Prototype Builds', owner:'Build Program Manager',
+      description:'Prototype Build 2 depends on supplier delivery of long-lead interior trim components, which are currently tracking against a tight delivery window.',
+      dateIdentified: addDaysISO(-12), targetDate: addDaysISO(21),
+      probability:'Medium', impact:'Medium', status:'In Progress',
+      mitigation:'Expedited freight arranged for the two highest-risk part numbers.',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Homologation Test Slot Assumption',
+      type:'Assumption', workstream:'Homologation', owner:'Homologation Lead',
+      description:'The program plan assumes homologation test slots at the accredited facility will be available in the originally requested window, but this has not yet been validated with the facility.',
+      dateIdentified: addDaysISO(-40), targetDate:'',
+      probability:'Medium', impact:'High', status:'Open',
+      mitigation:'Awaiting confirmation from facility; no validation plan currently defined.',
+      decisionRequired:'No', escalation:'Monitor'
+    },
+    {
+      title:'Thermal Management System Capacity Risk',
+      type:'Risk', workstream:'Thermal Management', owner:'Thermal Systems Engineer',
+      description:'The thermal management system may not provide sufficient cooling margin under sustained fast-charge conditions based on early simulation results.',
+      dateIdentified: addDaysISO(-9), targetDate: addDaysISO(35),
+      probability:'Medium', impact:'High', status:'Open',
+      mitigation:'Additional simulation runs scheduled; physical validation to follow.',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Embedded Software Resource Shortage',
+      type:'Risk', workstream:'Embedded Software Capacity', owner:'Embedded Software Lead',
+      description:'Embedded software team capacity may be insufficient to complete the next integration build on schedule given current open requisitions and competing priorities.',
+      dateIdentified: addDaysISO(-22), targetDate: addDaysISO(13),
+      probability:'High', impact:'High', status:'Open',
+      mitigation:'Evaluate contractor augmentation for the integration sprint.',
+      decisionRequired:'Yes', escalation:'Executive Escalation'
+    },
+    {
+      title:'Embedded Software Capacity for Charger Integration',
+      type:'Dependency', workstream:'Charger Integration', owner:'Embedded Software Lead',
+      description:'Charger integration bring-up work is contingent on embedded software capacity, which is a related concern given the broader software resourcing constraint on the program.',
+      dateIdentified: addDaysISO(-14), targetDate: addDaysISO(19),
+      probability:'Medium', impact:'Medium', status:'Open',
+      mitigation:'TBD',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'DC Fast Charger Communication Protocol Mismatch',
+      type:'Issue', workstream:'Charger Integration', owner:'Embedded Software Lead',
+      description:'Testing has revealed a communication protocol mismatch between the vehicle charge controller and the reference DC fast charger, currently blocking charge acceptance testing.',
+      dateIdentified: addDaysISO(-4), targetDate: addDaysISO(2),
+      probability:'Not Applicable', impact:'High', status:'Blocked',
+      mitigation:'Protocol stack under review with charger supplier engineering team.',
+      decisionRequired:'No', escalation:'Functional Escalation'
+    },
+    {
+      title:'Customer Specification Freeze Assumption',
+      type:'Assumption', workstream:'Customer Program', owner:'',
+      description:'The current build plan assumes the customer specification will be frozen by the planned gate date and presumed no further trim-level changes will be requested.',
+      dateIdentified: addDaysISO(-33), targetDate: addDaysISO(-2),
+      probability:'Medium', impact:'Critical', status:'Open',
+      mitigation:'',
+      decisionRequired:'Potentially', escalation:'Monitor'
+    },
+    {
+      title:'Component Cost Target Overrun Risk',
+      type:'Risk', workstream:'Cost Management', owner:'Program Cost Lead',
+      description:'Several battery pack components are tracking above the target cost, which could affect the program business case if the trend continues through sourcing finalization.',
+      dateIdentified: addDaysISO(-27), targetDate: addDaysISO(45),
+      probability:'Medium', impact:'Medium', status:'Monitoring',
+      mitigation:'Value engineering workshop scheduled with sourcing team.',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Production Line Readiness for Pilot Build',
+      type:'Dependency', workstream:'Production Readiness', owner:'Plant Program Manager',
+      description:'Pilot build readiness depends on final approval of the general assembly line layout, which requires facilities sign-off that has not yet been scheduled.',
+      dateIdentified: addDaysISO(-17), targetDate: addDaysISO(27),
+      probability:'Medium', impact:'High', status:'Open',
+      mitigation:'Facilities review meeting being scheduled.',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Cybersecurity Validation Findings on Telematics Module',
+      type:'Issue', workstream:'Cybersecurity Validation', owner:'Cybersecurity Lead',
+      description:'Penetration testing has identified a vulnerability in the telematics module authentication flow that has already failed a required control checkpoint.',
+      dateIdentified: addDaysISO(-8), targetDate: addDaysISO(1),
+      probability:'Not Applicable', impact:'Critical', status:'Open',
+      mitigation:'Remediation patch scoped; retest planned before gate review.',
+      decisionRequired:'Yes', escalation:'Executive Escalation'
+    },
+    {
+      title:'Supplier PPAP Readiness for Interior Trim',
+      type:'Risk', workstream:'Supplier PPAP Readiness', owner:'Purchasing Manager',
+      description:'Interior trim supplier PPAP submission may miss the planned date, as several dimensional checks are still outstanding at the supplier facility.',
+      dateIdentified: addDaysISO(-11), targetDate: addDaysISO(8),
+      probability:'Medium', impact:'Medium', status:'Open',
+      mitigation:'Monitor situation.',
+      decisionRequired:'No', escalation:'Monitor'
+    },
+    {
+      title:'Test Facility Availability for Homologation',
+      type:'Dependency', workstream:'Homologation', owner:'Team',
+      description:'Homologation testing requires confirmed slot allocation from the accredited external test facility, which has not yet provided a committed schedule.',
+      dateIdentified: addDaysISO(-19), targetDate: addDaysISO(-6),
+      probability:'Medium', impact:'High', status:'Open',
+      mitigation:'',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'Regulatory Homologation Timeline Assumption',
+      type:'Assumption', workstream:'Regulatory Affairs', owner:'Homologation Lead',
+      description:'The program plan is planning on the basis that regional type-approval processing times will match prior-generation program experience, though this has not been reconfirmed with regulators for this platform.',
+      dateIdentified: addDaysISO(-38), targetDate:'',
+      probability:'Low', impact:'High', status:'Open',
+      mitigation:'No validation plan currently in place.',
+      decisionRequired:'No', escalation:'Not Required'
+    },
+    {
+      title:'VCU Supplier Firmware Delivery Slip',
+      type:'Issue', workstream:'Vehicle Control Unit', owner:'',
+      description:'The VCU supplier has missed the agreed firmware delivery date for the integration build, and the revised date has not been confirmed.',
+      dateIdentified: addDaysISO(-5), targetDate: addDaysISO(-1),
+      probability:'Not Applicable', impact:'High', status:'Open',
+      mitigation:'Escalation email sent to supplier program manager.',
+      decisionRequired:'No', escalation:'Executive Escalation'
+    }
+  ];
+  items.forEach(function(it){
+    it.status = it.status || 'Open';
+    it.probability = it.probability || 'Medium';
+    it.impact = it.impact || 'Medium';
+    it.decisionRequired = it.decisionRequired || 'No';
+    it.escalation = it.escalation || 'Not Required';
+  });
+  return items;
+}
+</script>
+<script>
+/* =========================================================================
+   PARSING ENGINE
+   Converts pasted free text into an array of raw RAID item objects.
+   Designed to fail gracefully — never throws, always returns an array.
+   ========================================================================= */
+var FIELD_LABELS = [
+  {key:'owner', re:/^\s*owner\s*:\s*(.+)$/i},
+  {key:'workstream', re:/^\s*(?:workstream|program)\s*:\s*(.+)$/i},
+  {key:'targetDate', re:/^\s*(?:due date|target date|target)\s*:\s*(.+)$/i},
+  {key:'dateIdentified', re:/^\s*date identified\s*:\s*(.+)$/i},
+  {key:'probability', re:/^\s*probability\s*:\s*(.+)$/i},
+  {key:'impact', re:/^\s*impact\s*:\s*(.+)$/i},
+  {key:'mitigation', re:/^\s*(?:mitigation|action)\s*:\s*(.+)$/i},
+  {key:'status', re:/^\s*status\s*:\s*(.+)$/i},
+  {key:'decisionRequired', re:/^\s*decision(?:\s*required)?\s*:\s*(.+)$/i},
+  {key:'escalation', re:/^\s*escalation(?:\s*status)?\s*:\s*(.+)$/i}
+];
+var TYPE_LABEL_RE = /^\s*(risk|assumption|issue|dependency)\s*:\s*(.*)$/i;
+
+function normalizeProbability(v){
+  if(!v) return '';
+  v = v.trim().toLowerCase();
+  if(v.indexOf('high')===0) return 'High';
+  if(v.indexOf('med')===0) return 'Medium';
+  if(v.indexOf('low')===0) return 'Low';
+  if(v.indexOf('not app')===0 || v==='n/a') return 'Not Applicable';
+  return '';
+}
+function normalizeImpact(v){
+  if(!v) return '';
+  v = v.trim().toLowerCase();
+  if(v.indexOf('crit')===0) return 'Critical';
+  if(v.indexOf('high')===0) return 'High';
+  if(v.indexOf('med')===0) return 'Medium';
+  if(v.indexOf('low')===0) return 'Low';
+  return '';
+}
+function normalizeStatus(v){
+  if(!v) return '';
+  v = v.trim().toLowerCase();
+  if(v.indexOf('block')===0) return 'Blocked';
+  if(v.indexOf('progress')!==-1) return 'In Progress';
+  if(v.indexOf('monitor')===0) return 'Monitoring';
+  if(v.indexOf('resolv')===0) return 'Resolved';
+  if(v.indexOf('clos')===0) return 'Closed';
+  if(v.indexOf('open')===0) return 'Open';
+  return '';
+}
+function normalizeDecision(v){
+  if(!v) return '';
+  v = v.trim().toLowerCase();
+  if(v.indexOf('yes')===0) return 'Yes';
+  if(v.indexOf('potent')===0 || v.indexOf('maybe')===0) return 'Potentially';
+  if(v.indexOf('no')===0) return 'No';
+  return '';
+}
+function normalizeEscalation(v){
+  if(!v) return '';
+  v = v.trim().toLowerCase();
+  if(v.indexOf('exec')===0) return 'Executive Escalation';
+  if(v.indexOf('function')===0) return 'Functional Escalation';
+  if(v.indexOf('monitor')===0) return 'Monitor';
+  if(v.indexOf('not')===0) return 'Not Required';
+  return '';
+}
+function parseFreeDate(v){
+  if(!v) return '';
+  v = v.trim();
+  var iso = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(iso) return iso[1] + '-' + iso[2] + '-' + iso[3];
+  var months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11,
+    january:0,february:1,march:2,april:3,june:5,july:6,august:7,september:8,october:9,november:10,december:11};
+  var m = v.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+  if(m){
+    var mm = months[m[2].toLowerCase().substring(0,4)] !== undefined ? months[m[2].toLowerCase().substring(0,4)] : months[m[2].toLowerCase().substring(0,3)];
+    if(mm !== undefined){
+      var d = new Date(parseInt(m[3],10), mm, parseInt(m[1],10));
+      if(!isNaN(d.getTime())) return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    }
+  }
+  var m2 = v.match(/([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/);
+  if(m2){
+    var mm2 = months[m2[1].toLowerCase().substring(0,4)] !== undefined ? months[m2[1].toLowerCase().substring(0,4)] : months[m2[1].toLowerCase().substring(0,3)];
+    if(mm2 !== undefined){
+      var d2 = new Date(parseInt(m2[3],10), mm2, parseInt(m2[2],10));
+      if(!isNaN(d2.getTime())) return d2.getFullYear()+'-'+String(d2.getMonth()+1).padStart(2,'0')+'-'+String(d2.getDate()).padStart(2,'0');
+    }
+  }
+  return '';
+}
+
+var BULLET_PREFIX_RE = /^\s*(?:\d+[\.\)]|[-*\u2022])\s+/;
+function stripBulletPrefix(line){
+  return line.replace(BULLET_PREFIX_RE, '');
+}
+function isFieldLine(strippedLine){
+  for(var i=0;i<FIELD_LABELS.length;i++){
+    if(FIELD_LABELS[i].re.test(strippedLine)) return true;
+  }
+  return false;
+}
+
+/**
+ * Splits raw pasted text into an array of "entries", where each entry is
+ * an array of stripped, trimmed lines belonging to a single RAID item.
+ *
+ * Rules:
+ *  - A line beginning with Risk:/Assumption:/Issue:/Dependency: always
+ *    starts a new entry.
+ *  - A line matching a recognized field label (Owner:, Due Date:, etc.)
+ *    is always attached to the current entry, even if it carries a
+ *    bullet or numeric prefix — bulleted field records must not be
+ *    split apart.
+ *  - A blank line always closes the current entry.
+ *  - A bulleted or numbered line that is neither a type label nor a
+ *    recognized field is treated as an independent narrative entry
+ *    (e.g. meeting-note bullets), and starts a new entry.
+ *  - An unbulleted narrative line that is neither a type label nor a
+ *    field continues the current entry's description (line-wrapped text).
+ */
+function splitIntoEntries(text){
+  var raw = text.replace(/\r\n/g,'\n');
+  var rawLines = raw.split('\n');
+  var entries = [];
+  var current = null;
+
+  rawLines.forEach(function(rawLine){
+    var trimmedLine = rawLine.trim();
+    if(!trimmedLine){
+      current = null; // blank line always closes the current entry
+      return;
+    }
+    var hadBulletPrefix = BULLET_PREFIX_RE.test(rawLine);
+    var stripped = stripBulletPrefix(rawLine).trim();
+    var startsType = TYPE_LABEL_RE.test(stripped);
+    var isField = !startsType && isFieldLine(stripped);
+
+    if(current && isField){
+      current.push(stripped);
+      return;
+    }
+
+    var startsNew = startsType || !current || hadBulletPrefix;
+    if(startsNew){
+      current = [stripped];
+      entries.push(current);
+    } else {
+      current.push(stripped);
+    }
+  });
+
+  return entries;
+}
+
+function parseRaidText(text){
+  var items = [];
+  if(!text || !text.trim()) return items;
+  try{
+    var entries = splitIntoEntries(text);
+    entries.forEach(function(lines){
+      var item = {
+        title:'', type:'Unclassified', description:'', workstream:'', owner:'',
+        dateIdentified:'', targetDate:'', probability:'', impact:'', status:'',
+        mitigation:'', decisionRequired:'', escalation:''
+      };
+      var descLines = [];
+      var firstLineHandled = false;
+      lines.forEach(function(line){
+        if(!line) return;
+        var typeMatch = line.match(TYPE_LABEL_RE);
+        if(typeMatch && !firstLineHandled){
+          var t = typeMatch[1].toLowerCase();
+          item.type = t.charAt(0).toUpperCase() + t.slice(1);
+          var rest = typeMatch[2].trim();
+          if(rest) descLines.push(rest);
+          firstLineHandled = true;
+          return;
+        }
+        var matchedField = false;
+        for(var i=0;i<FIELD_LABELS.length;i++){
+          var fl = FIELD_LABELS[i];
+          var m = line.match(fl.re);
+          if(m){
+            var val = m[1].trim();
+            if(fl.key==='probability') item[fl.key] = normalizeProbability(val);
+            else if(fl.key==='impact') item[fl.key] = normalizeImpact(val);
+            else if(fl.key==='status') item[fl.key] = normalizeStatus(val);
+            else if(fl.key==='decisionRequired') item[fl.key] = normalizeDecision(val);
+            else if(fl.key==='escalation') item[fl.key] = normalizeEscalation(val);
+            else if(fl.key==='targetDate' || fl.key==='dateIdentified') item[fl.key] = parseFreeDate(val);
+            else item[fl.key] = val;
+            matchedField = true;
+            break;
+          }
+        }
+        if(!matchedField){
+          descLines.push(line);
+        }
+      });
+      item.description = descLines.join(' ').trim();
+      if(!item.description && !firstLineHandled && lines.length) item.description = lines.join(' ').trim();
+      item.title = item.description ? (item.description.length > 90 ? item.description.substring(0,87).trim() + '\u2026' : item.description) : '';
+      item.probability = item.probability || 'Medium';
+      item.impact = item.impact || 'Medium';
+      item.status = item.status || 'Open';
+      item.decisionRequired = item.decisionRequired || 'No';
+      item.escalation = item.escalation || 'Not Required';
+      if(item.description || item.owner || item.targetDate){
+        items.push(item);
+      }
+    });
+  }catch(e){
+    // Parsing must never crash the application.
+    console.warn('RAID parsing encountered an issue and skipped the remainder of the input.', e);
+  }
+  return items;
+}
+
+/* =========================================================================
+   CLASSIFICATION ENGINE
+   Suggests the most likely RAID type based on business-definition language.
+   ========================================================================= */
+var CLASSIFY_KEYWORDS = {
+  Risk: ['may ','might ','could ','potential','probability','at risk','possibility','expected risk','risk of','likely to'],
+  Issue: ['is delayed','has failed','currently blocked','overdue','defect exists','defect','missed','is late','late ','unavailable','has occurred','already','failing','blocked'],
+  Assumption: ['assumed','presumed','planning basis','pending confirmation','believed','not yet validated','is planning on the basis','assumes'],
+  Dependency: ['depends on','awaiting','requires input from','contingent on','external approval','supplier delivery','customer confirmation','prerequisite','is contingent']
+};
+function classifyText(text){
+  var t = (text || '').toLowerCase();
+  var scores = {Risk:0, Issue:0, Assumption:0, Dependency:0};
+  var matched = {Risk:[], Issue:[], Assumption:[], Dependency:[]};
+  Object.keys(CLASSIFY_KEYWORDS).forEach(function(type){
+    CLASSIFY_KEYWORDS[type].forEach(function(kw){
+      if(t.indexOf(kw) !== -1){ scores[type]++; matched[type].push(kw.trim()); }
+    });
+  });
+  var best = null, bestScore = 0;
+  Object.keys(scores).forEach(function(type){
+    if(scores[type] > bestScore){ bestScore = scores[type]; best = type; }
+  });
+  if(!best || bestScore === 0){
+    return { suggestedType:null, confidence:'Low', matched:[] };
+  }
+  var confidence = bestScore >= 3 ? 'High' : (bestScore === 2 ? 'Medium' : 'Low');
+  return { suggestedType:best, confidence:confidence, matched:matched[best] };
+}
+</script>
+<script>
+/* =========================================================================
+   SEVERITY SCORING
+   ========================================================================= */
+var PROB_SCORE = {Low:1, Medium:2, High:3, 'Not Applicable':2};
+var IMPACT_SCORE = {Low:1, Medium:2, High:3, Critical:4};
+
+function timingAdjustmentFor(days){
+  if(days === null || days === undefined) return 8;  // missing due date
+  if(days < 0) return 25;                             // overdue
+  if(days === 0) return 22;                            // due today
+  if(days <= 6) return 18;                             // 1-6 days away
+  if(days <= 14) return 12;                            // 7-14 days away
+  if(days <= 30) return 7;                             // 15-30 days away
+  return 0;                                            // more than 30 days away
+}
+
+/**
+ * Severity is primarily a function of probability x impact (worth up to
+ * 75 points) and time criticality (worth up to 25 points). Administrative
+ * weaknesses (no owner, no mitigation, blocked, escalated, decision
+ * pending) contribute only a small, capped adjustment — they influence
+ * executive priority and data quality far more than raw severity.
+ */
+function computeSeverity(item, daysToTarget){
+  var pScore = PROB_SCORE[item.probability] !== undefined ? PROB_SCORE[item.probability] : 2;
+  var iScore = IMPACT_SCORE[item.impact] !== undefined ? IMPACT_SCORE[item.impact] : 2;
+  var baseExposure = pScore * iScore; // max 3 x 4 = 12
+  var baseNormalized = (baseExposure / 12) * 75; // up to 75 points
+
+  var timingAdjustment = timingAdjustmentFor(daysToTarget); // up to 25 points
+
+  var contextual = 0;
+  if(item.status === 'Blocked') contextual += 4;
+  if(item.escalation === 'Executive Escalation') contextual += 3;
+  if(item.decisionRequired === 'Yes') contextual += 2;
+  if(!hasOwner(item.owner)) contextual += 1;
+  if(!item.mitigation || item.mitigation.trim().length < 6) contextual += 1;
+  contextual = Math.min(contextual, 10); // capped contextual adjustment
+
+  var score = clamp(Math.round(baseNormalized + timingAdjustment + contextual), 0, 100);
+  var category = score >= 75 ? 'Critical' : score >= 50 ? 'High' : score >= 25 ? 'Moderate' : 'Low';
+  return {
+    probScore:pScore, impactScore:iScore, baseExposure:baseExposure, baseNormalized:baseNormalized,
+    timingAdjustment:timingAdjustment, contextualAdjustment:contextual, score:score, category:category
+  };
+}
+
+function computeExecutivePriority(item, sev, daysToTarget, overdue){
+  var isOwnershipGap = !hasOwner(item.owner);
+  var noMitigation = !item.mitigation || item.mitigation.trim().length < 6;
+  if(item.decisionRequired === 'Yes' || item.escalation === 'Executive Escalation'){
+    return 'Executive Decision Required';
+  }
+  if(sev.category === 'Critical' || item.status === 'Blocked' || (overdue && (sev.category==='High'||sev.category==='Critical')) ){
+    return 'Escalation Required';
+  }
+  if(sev.category === 'High' || noMitigation || overdue || isOwnershipGap || (daysToTarget !== null && daysToTarget <= 14 && daysToTarget >= 0)){
+    return 'Action Required';
+  }
+  return 'Monitor';
+}
+
+/* =========================================================================
+   QUALITY ANALYSIS
+   ========================================================================= */
+function assessItemQuality(item){
+  var issues = [];
+  var checks = 0, passed = 0;
+
+  checks++; if(item.title && item.title.trim().length >= 8) passed++; else issues.push('title is unclear or too short');
+  checks++; if(['Risk','Assumption','Issue','Dependency'].indexOf(item.type) !== -1) passed++; else issues.push('RAID type is not classified');
+  checks++; if(item.description && item.description.trim().length >= 20) passed++; else issues.push('description lacks meaningful detail');
+  checks++; if(hasOwner(item.owner)) passed++; else issues.push('no accountable owner assigned');
+  checks++; if(item.targetDate) passed++; else issues.push('no target resolution date');
+  checks++; if(item.type!=='Assumption' ? (item.probability && item.probability!=='') : true) passed++; else issues.push('probability not recorded');
+  checks++; if(item.impact) passed++; else issues.push('impact not recorded');
+  checks++; if(item.mitigation && item.mitigation.trim().length >= 10) passed++; else issues.push('mitigation or action is vague or missing');
+  checks++; if(item.decisionRequired) passed++; else issues.push('decision requirement not specified');
+  checks++; if(item.status) passed++; else issues.push('status not specified');
+  checks++; if(item.originalWorkstream && item.originalWorkstream.trim().length) passed++; else issues.push('no program or workstream assigned');
+  if(item.type === 'Assumption'){
+    checks++; if(item.mitigation && /valid|confirm|test|review/i.test(item.mitigation)) passed++; else issues.push('assumption has no validation plan');
+  }
+  if(item.type === 'Dependency'){
+    checks++; if(item.description && /supplier|customer|team|function|facility|approval|from /i.test(item.description)) passed++; else issues.push('dependency has no clear supplying party');
+  }
+  if(item.type === 'Issue'){
+    checks++; if(item.mitigation && item.mitigation.trim().length >= 10) passed++; else issues.push('issue has no recovery plan');
+  }
+  if(item.type === 'Risk'){
+    checks++; if(item.mitigation && item.mitigation.trim().length >= 10) passed++; else issues.push('risk has no mitigation action');
+  }
+
+  var pct = checks > 0 ? Math.round((passed / checks) * 100) : 100;
+  return { score: pct, issues: issues, checks: checks, passed: passed };
+}
+
+function qualityBand(score){
+  if(score >= 85) return 'Strong';
+  if(score >= 70) return 'Adequate';
+  if(score >= 50) return 'Needs Improvement';
+  return 'Weak';
+}
+
+/* =========================================================================
+   ACCOUNTABILITY ANALYSIS
+   ========================================================================= */
+function buildAccountability(items){
+  var owners = {};
+  items.forEach(function(it){
+    var key = hasOwner(it.owner) ? it.owner.trim() : (it.owner && it.owner.trim() ? it.owner.trim() : 'Unassigned');
+    if(!owners[key]) owners[key] = { name:key, total:0, open:0, critical:0, overdue:0, generic: !hasOwner(it.owner), items:[] };
+    owners[key].total++;
+    owners[key].items.push(it.id);
+    if(it.isOpen) owners[key].open++;
+    if(it.severityCategory === 'Critical') owners[key].critical++;
+    if(it.dueStatus === 'Overdue') owners[key].overdue++;
+  });
+  var list = Object.keys(owners).map(function(k){ return owners[k]; });
+  list.sort(function(a,b){ return b.open - a.open || b.critical - a.critical; });
+  var concentration = list.filter(function(o){ return !o.generic && (o.open > 3 || o.critical > 1); });
+  var unassignedCount = items.filter(function(it){ return !hasOwner(it.owner); }).length;
+  var genericOwners = list.filter(function(o){ return o.generic && o.name !== 'Unassigned'; });
+  return { owners: list, concentration: concentration, unassignedCount: unassignedCount, genericOwners: genericOwners };
+}
+
+/* =========================================================================
+   TIMELINE ANALYSIS
+   ========================================================================= */
+function buildTimeline(items){
+  var buckets = { overdue:[], d0_7:[], d8_30:[], d31_60:[], d61_90:[], d90plus:[], noDate:[] };
+  items.forEach(function(it){
+    if(!it.isOpen) return;
+    var d = it.daysToTarget;
+    if(d === null) buckets.noDate.push(it);
+    else if(d < 0) buckets.overdue.push(it);
+    else if(d <= 7) buckets.d0_7.push(it);
+    else if(d <= 30) buckets.d8_30.push(it);
+    else if(d <= 60) buckets.d31_60.push(it);
+    else if(d <= 90) buckets.d61_90.push(it);
+    else buckets.d90plus.push(it);
+  });
+  return buckets;
+}
+
+/* =========================================================================
+   DUPLICATE / RELATED ITEM DETECTION
+   ========================================================================= */
+var STOPWORDS = ['the','a','an','is','are','may','might','of','to','for','on','in','and','or','be','has','have','with','by','at','this','that','will','not','yet','currently','which','from','required','requires'];
+function tokenize(text){
+  return (text||'').toLowerCase().replace(/[^\w\s]/g,' ').split(/\s+/).filter(function(w){
+    return w.length > 3 && STOPWORDS.indexOf(w) === -1;
+  });
+}
+function jaccardSimilarity(a, b){
+  var setA = new Set(tokenize(a.title + ' ' + a.description));
+  var setB = new Set(tokenize(b.title + ' ' + b.description));
+  if(setA.size===0 || setB.size===0) return 0;
+  var intersection = 0;
+  setA.forEach(function(w){ if(setB.has(w)) intersection++; });
+  var union = new Set([].concat(Array.from(setA), Array.from(setB))).size;
+  return union > 0 ? intersection / union : 0;
+}
+function findRelatedPairs(items){
+  var pairs = [];
+  for(var i=0;i<items.length;i++){
+    for(var j=i+1;j<items.length;j++){
+      var sim = jaccardSimilarity(items[i], items[j]);
+      if(sim >= 0.16){
+        pairs.push({ a: items[i], b: items[j], score: sim });
+      }
+    }
+  }
+  pairs.sort(function(x,y){ return y.score - x.score; });
+  return pairs.slice(0, 8);
+}
+</script>
+<script>
+/* =========================================================================
+   ANALYSIS PIPELINE
+   Runs every RAID item through classification, scoring, and quality checks
+   and produces the fully enriched dataset used by every downstream view.
+   ========================================================================= */
+function runAnalysis(rawItems){
+  var enriched = rawItems.map(function(raw){
+    var item = Object.assign({}, raw);
+    ensureItemId(item); // preserve queue-assigned id; only assigns if genuinely missing
+    item.type = ['Risk','Assumption','Issue','Dependency'].indexOf(item.type) !== -1 ? item.type : 'Unclassified';
+    item.owner = item.owner || '';
+    item.originalWorkstream = raw.workstream && raw.workstream.trim() ? raw.workstream.trim() : '';
+    item.workstream = item.originalWorkstream || 'Unassigned Workstream';
+    item.title = item.title && item.title.trim() ? item.title.trim() : 'Untitled RAID Item';
+    item.description = item.description || '';
+    item.probability = item.probability || 'Medium';
+    item.impact = item.impact || 'Medium';
+    item.status = item.status || 'Open';
+    item.decisionRequired = item.decisionRequired || 'No';
+    item.escalation = item.escalation || 'Not Required';
+    item.mitigation = item.mitigation || '';
+
+    // Classification validation
+    var cls = classifyText(item.title + ' ' + item.description);
+    item.suggestedType = cls.suggestedType;
+    item.classificationConfidence = cls.confidence;
+    item.classificationFlag = !!(cls.suggestedType && cls.suggestedType !== item.type && cls.confidence !== 'Low');
+    item.classificationExplanation = item.classificationFlag ?
+      ('This item is currently classified as ' + article(item.type) + ' ' + item.type + ', but the wording indicates ' + classificationReason(cls.suggestedType) + '. Consider reclassifying it as ' + article(cls.suggestedType) + ' ' + cls.suggestedType + '.') :
+      'The recorded classification is consistent with the language used in this entry.';
+
+    // Timing
+    item.daysToTarget = daysBetween(item.targetDate);
+    item.isOpen = isOpenStatus(item.status);
+    if(!item.isOpen) item.dueStatus = item.status;
+    else if(item.daysToTarget === null) item.dueStatus = 'No Due Date';
+    else if(item.daysToTarget < 0) item.dueStatus = 'Overdue';
+    else if(item.daysToTarget === 0) item.dueStatus = 'Due Today';
+    else item.dueStatus = 'Due in ' + item.daysToTarget + 'd';
+
+    // Severity
+    var sev = computeSeverity(item, item.daysToTarget);
+    item.probScore = sev.probScore; item.impactScore = sev.impactScore;
+    item.baseExposure = sev.baseExposure; item.timingAdjustment = sev.timingAdjustment;
+    item.contextualAdjustment = sev.contextualAdjustment;
+    item.severityScore = item.isOpen ? sev.score : Math.round(sev.score * 0.35);
+    item.severityCategory = item.isOpen ? sev.category : 'Low';
+
+    // Priority
+    item.executivePriority = item.isOpen ? computeExecutivePriority(item, {category:item.severityCategory}, item.daysToTarget, item.dueStatus==='Overdue') : 'Monitor';
+
+    // Quality
+    var q = assessItemQuality(item);
+    item.qualityScore = q.score; item.qualityIssues = q.issues;
+
+    // Ownership gap flag
+    item.ownerGap = !hasOwner(item.owner);
+
+    return item;
+  });
+
+  // Related item detection
+  var relatedPairs = findRelatedPairs(enriched);
+  var relatedMap = {};
+  relatedPairs.forEach(function(p){
+    relatedMap[p.a.id] = relatedMap[p.a.id] || [];
+    relatedMap[p.a.id].push(p.b.id);
+    relatedMap[p.b.id] = relatedMap[p.b.id] || [];
+    relatedMap[p.b.id].push(p.a.id);
+  });
+  enriched.forEach(function(it){ it.relatedIds = relatedMap[it.id] || []; });
+
+  return { items: enriched, relatedPairs: relatedPairs };
+}
+
+function article(word){
+  if(!word) return 'a';
+  return /^[aeiou]/i.test(word) ? 'an' : 'a';
+}
+function classificationReason(suggested){
+  if(suggested==='Issue') return 'the event has already occurred';
+  if(suggested==='Risk') return 'this describes a potential future event rather than a current one';
+  if(suggested==='Assumption') return 'this describes an unvalidated condition rather than a confirmed fact';
+  if(suggested==='Dependency') return 'this describes something required from another party';
+  return 'the wording does not match the recorded type';
+}
+
+/* =========================================================================
+   EXECUTIVE INSIGHT GENERATION
+   ========================================================================= */
+function computeExposureIndex(items, quality){
+  var open = items.filter(function(i){ return i.isOpen; });
+  if(open.length === 0) return { index:0, label:'Low Exposure' };
+  var avgSeverity = open.reduce(function(s,i){ return s+i.severityScore; },0) / open.length;
+  var criticalCount = open.filter(function(i){ return i.severityCategory==='Critical'; }).length;
+  var overdueCount = open.filter(function(i){ return i.dueStatus==='Overdue'; }).length;
+  var decisionCount = open.filter(function(i){ return i.decisionRequired==='Yes'; }).length;
+  var gapCount = open.filter(function(i){ return i.ownerGap; }).length;
+  var noMitCount = open.filter(function(i){ return !i.mitigation || i.mitigation.trim().length<6; }).length;
+
+  var index = avgSeverity * 0.4
+    + Math.min(criticalCount * 6, 24)
+    + Math.min(overdueCount * 4, 16)
+    + Math.min(decisionCount * 4, 12)
+    + Math.min(gapCount * 2, 10)
+    + Math.min(noMitCount * 1.5, 8)
+    + (100 - quality) * 0.10;
+  index = clamp(Math.round(index), 0, 100);
+  var label = index >= 75 ? 'Critical Exposure' : index >= 50 ? 'High Exposure' : index >= 25 ? 'Moderate Exposure' : 'Low Exposure';
+  return { index: index, label: label };
+}
+
+function topConcerns(items, n){
+  var open = items.filter(function(i){ return i.isOpen; });
+  var ranked = open.slice().sort(function(a,b){
+    var pa = priorityRank(a.executivePriority), pb = priorityRank(b.executivePriority);
+    if(pb !== pa) return pb - pa;
+    return b.severityScore - a.severityScore;
+  });
+  return ranked.slice(0, n||5);
+}
+function priorityRank(p){
+  if(p==='Executive Decision Required') return 4;
+  if(p==='Escalation Required') return 3;
+  if(p==='Action Required') return 2;
+  return 1;
+}
+function reasonForPriority(item){
+  var bits = [];
+  if(item.decisionRequired==='Yes') bits.push('requires a leadership decision');
+  if(item.escalation==='Executive Escalation') bits.push('has been flagged for executive escalation');
+  if(item.status==='Blocked') bits.push('is currently blocking downstream work');
+  if(item.dueStatus==='Overdue') bits.push('is overdue against its target resolution date');
+  if(item.ownerGap) bits.push('has no accountable owner assigned');
+  if(item.severityCategory==='Critical') bits.push('carries critical probability-impact exposure');
+  if(bits.length===0) bits.push('carries elevated exposure relative to other open items');
+  var text = bits.slice(0,2).join(' and ');
+  return text.charAt(0).toUpperCase() + text.slice(1) + '.';
+}
+
+function buildDecisionCenterItems(items){
+  return items.filter(function(i){
+    return i.isOpen && (i.decisionRequired === 'Yes' || i.escalation === 'Executive Escalation' || (i.severityCategory==='Critical' && i.executivePriority==='Executive Decision Required'));
+  }).sort(function(a,b){ return b.severityScore - a.severityScore; });
+}
+function decisionTrigger(item){
+  var isDecision = item.decisionRequired === 'Yes';
+  var isEscalation = item.escalation === 'Executive Escalation';
+  if(isDecision && isEscalation) return 'both';
+  if(isDecision) return 'decision';
+  if(isEscalation) return 'escalation';
+  return 'decision'; // safe fallback for critical items surfaced without an explicit flag
+}
+function decisionCenterLabel(item){
+  var trig = decisionTrigger(item);
+  if(trig==='both') return 'Decision & Executive Escalation';
+  if(trig==='escalation') return 'Executive Escalation';
+  return 'Decision Required';
+}
+function decisionLanguage(item){
+  var trig = decisionTrigger(item);
+  if(trig === 'escalation'){
+    var everb = item.type === 'Dependency' ? 'Direct cross-functional recovery for' : (item.status==='Blocked' ? 'Review and intervene on' : 'Escalate ownership and resolution of');
+    return everb + ' ' + decapitalizeFirst(item.title) + '.';
+  }
+  var verb = item.type === 'Dependency' ? 'Confirm and approve resolution path for' : (item.type==='Issue' ? 'Approve corrective action for' : 'Approve mitigation approach for');
+  return verb + ' ' + decapitalizeFirst(item.title) + '.';
+}
+function decapitalizeFirst(s){ return s ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
+function consequenceOfDelay(item){
+  var trig = decisionTrigger(item);
+  var timing = item.dueStatus==='Overdue' ? 'has already passed its target resolution date' : (item.daysToTarget!==null ? ('is due in ' + item.daysToTarget + ' day' + (item.daysToTarget===1?'':'s')) : 'has no confirmed resolution date');
+  var actionPhrase = trig === 'escalation' ? 'Without executive intervention' : 'Without a leadership decision';
+  return 'This item ' + timing + '. ' + actionPhrase + ', ' + (item.workstream||'the affected workstream') + ' may face schedule, cost, or delivery impact.';
+}
+function recommendedDirection(item){
+  var trig = decisionTrigger(item);
+  if(item.mitigation && item.mitigation.trim().length > 10){
+    var lead = trig === 'escalation' ? 'Support the proposed recovery path: ' : 'Approve the proposed path: ';
+    return lead + decapitalizeFirst(item.mitigation.trim().replace(/\.$/,'')) + '.';
+  }
+  return trig === 'escalation' ?
+    'Assign a cross-functional owner to define and drive a recovery plan within the next reporting cycle.' :
+    'Direct the accountable owner to define and approve a mitigation or recovery plan within the next reporting cycle.';
+}
+
+function generateBriefing(items, quality, exposure, accountability){
+  var open = items.filter(function(i){ return i.isOpen; });
+  var critical = open.filter(function(i){ return i.severityCategory==='Critical'; });
+  var overdue = open.filter(function(i){ return i.dueStatus==='Overdue'; });
+  var decisions = open.filter(function(i){ return i.decisionRequired==='Yes'; });
+  var gaps = open.filter(function(i){ return i.ownerGap; });
+  var interventionItems = open.filter(function(i){
+    return i.severityCategory === 'Critical' ||
+      i.decisionRequired === 'Yes' ||
+      i.escalation === 'Executive Escalation' ||
+      i.status === 'Blocked';
+  });
+  var interventionCount = interventionItems.length;
+  var topDrivers = topConcerns(items, 3).map(function(i){ return i.workstream; });
+  var uniqueDrivers = topDrivers.filter(function(v,i,a){ return a.indexOf(v)===i; }).slice(0,3);
+
+  var driverText = uniqueDrivers.length ? uniqueDrivers.join(', ') : 'multiple open workstreams';
+  var s = [];
+  s.push('The program currently carries ' + exposure.label.toLowerCase() + ', primarily driven by ' + driverText + '.');
+  if(interventionCount > 0){
+    var sentence = interventionCount + ' item' + (interventionCount===1?' requires':'s require') + ' immediate intervention';
+    if(decisions.length > 0){
+      sentence += ', including ' + decisions.length + ' pending leadership decision' + (decisions.length===1?'':'s') + '.';
+    } else {
+      sentence += '.';
+    }
+    s.push(sentence);
+  }
+  if(overdue.length > 0){
+    s.push(overdue.length + ' action' + (overdue.length===1?' is':'s are') + ' overdue, while ' + gaps.length + ' RAID entr' + (gaps.length===1?'y has':'ies have') + ' incomplete ownership.');
+  } else if(gaps.length > 0){
+    s.push(gaps.length + ' RAID entr' + (gaps.length===1?'y has':'ies have') + ' incomplete ownership or resolution plans.');
+  }
+  var focusItems = topConcerns(items, 2).map(function(i){ return decapitalizeFirst(i.title); });
+  if(focusItems.length){
+    s.push('Immediate leadership focus should be placed on ' + focusItems.join(' and ') + ', along with resolving open ownership and mitigation gaps across the register.');
+  }
+  s.push('Overall RAID data quality is ' + qualityBand(quality).toLowerCase() + ' at ' + quality + ' out of 100, which should be strengthened to improve the reliability of this assessment.');
+  return s.join(' ');
+}
+
+function generateRecommendedActions(items){
+  var candidates = items.filter(function(i){ return i.isOpen; }).slice().sort(function(a,b){
+    return priorityRank(b.executivePriority) - priorityRank(a.executivePriority) || b.severityScore - a.severityScore;
+  }).slice(0, 8);
+  return candidates.map(function(i){
+    var verb;
+    if(i.ownerGap) verb = 'Assign an accountable owner and confirm a recovery plan for';
+    else if(i.dueStatus==='Overdue') verb = 'Close out the overdue action on';
+    else if(!i.mitigation || i.mitigation.trim().length<6) verb = 'Define a clear mitigation plan for';
+    else if(i.decisionRequired==='Yes') verb = 'Secure a leadership decision on';
+    else verb = 'Confirm resolution progress on';
+    var deadline = i.dueStatus==='Overdue' ? 'immediately' : (i.daysToTarget!==null ? ('by ' + fmtDate(i.targetDate)) : 'within the next reporting cycle');
+    return {
+      action: verb + ' ' + decapitalizeFirst(i.title) + ' ' + deadline + '.',
+      owner: hasOwner(i.owner) ? i.owner : 'Owner to be assigned',
+      rationale: reasonForPriority(i),
+      itemId: i.id, itemTitle: i.title
+    };
+  });
+}
+
+function generateTalkingPoints(items, accountability, decisionItems, timeline){
+  var pts = [];
+  var top = topConcerns(items, 1)[0];
+  if(top) pts.push(decapitalizeFirst(top.title).replace(/\.$/,'') + ' remains the largest near-term exposure on the program.');
+  var byType = {};
+  items.filter(function(i){return i.isOpen;}).forEach(function(i){ byType[i.type]=(byType[i.type]||0)+1; });
+  if(byType.Issue) pts.push(byType.Issue + ' open issue' + (byType.Issue===1?'':'s') + ' require functional or supplier-level recovery action.');
+  if(byType.Dependency) pts.push(byType.Dependency + ' active dependenc' + (byType.Dependency===1?'y requires':'ies require') + ' confirmation from other parties before the next milestone.');
+  if(byType.Assumption) pts.push(byType.Assumption + ' assumption' + (byType.Assumption===1?'':'s') + ' remain unvalidated and should be closed before the next program gate.');
+  if(decisionItems.length) pts.push('Leadership decisions are pending on ' + decisionItems.length + ' item' + (decisionItems.length===1?'':'s') + ', including ' + decapitalizeFirst(decisionItems[0].title).replace(/\.$/,'') + '.');
+  if(accountability.concentration.length) pts.push(accountability.concentration[0].name + ' currently holds ' + accountability.concentration[0].open + ' open item' + (accountability.concentration[0].open===1?'':'s') + ' and may need support to sustain pace.');
+  if(timeline.overdue.length) pts.push(timeline.overdue.length + ' item' + (timeline.overdue.length===1?' is':'s are') + ' already overdue and need immediate closure or re-baselining.');
+  if(pts.length < 5) pts.push('Continued focus on ownership and mitigation completeness will materially improve program predictability.');
+  return pts.slice(0,7);
+}
+</script>
+<script>
+/* =========================================================================
+   RENDERING — Input Stage (Queue, Form, Paste)
+   ========================================================================= */
+var ICONS = {
+  owner:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="1"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  empty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg>',
+  clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/><path d="M9 11h6M9 15h4"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5.2c0 4.4-3 8.2-7 9.3-4-1.1-7-4.9-7-9.3V6l7-3z"/><path d="M9 12l2 2 4-4.4"/></svg>',
+  radar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 12L18 7"/></svg>',
+  dashboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3.5" width="8" height="8" rx="1.4"/><rect x="13" y="3.5" width="8" height="5" rx="1.4"/><rect x="13" y="10.5" width="8" height="10" rx="1.4"/><rect x="3" y="13.5" width="8" height="7" rx="1.4"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 14.6c2.9.4 5 2.2 5 5.4"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
+  gap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.5-2 1.8-2 3.5M12 17h.01"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+};
+
+function renderQueue(){
+  var wrap = document.getElementById('queueList');
+  var sub = document.getElementById('queueSubtitle');
+  if(STATE.queue.length === 0){
+    wrap.innerHTML = '<div class="queue-empty">'+ICONS.clipboard+'<div class="es-title">No governance items queued yet</div><div class="es-desc">Paste governance notes, use the manual entry form, or load the sample program to get started.</div></div>';
+    sub.textContent = 'Items staged for analysis';
+  } else {
+    sub.textContent = STATE.queue.length + ' item' + (STATE.queue.length===1?'':'s') + ' staged for analysis';
+    wrap.innerHTML = STATE.queue.map(function(it){
+      var metaBits = [];
+      metaBits.push(it.workstream || 'No workstream');
+      metaBits.push(hasOwner(it.owner) ? it.owner : 'No owner');
+      metaBits.push(it.targetDate ? ('Due ' + fmtDate(it.targetDate)) : 'No due date');
+      return '<div class="queue-item" data-id="'+esc(it.id)+'">'+
+        '<span class="pill '+typePillClass(it.type)+' qi-type">'+esc(it.type)+'</span>'+
+        '<div class="qi-body"><div class="qi-title">'+esc(it.title || it.description || 'Untitled item')+'</div>'+
+        '<div class="qi-meta">'+esc(metaBits.join('  \u00b7  '))+'</div></div>'+
+        '<div class="qi-actions">'+
+          '<button type="button" class="btn-icon queue-edit-btn" data-id="'+esc(it.id)+'" aria-label="Edit '+esc(it.title||'item')+'">'+ICONS.edit+'</button>'+
+          '<button type="button" class="btn-icon queue-delete-btn" data-id="'+esc(it.id)+'" aria-label="Delete '+esc(it.title||'item')+'">'+ICONS.trash+'</button>'+
+        '</div></div>';
+    }).join('');
+  }
+  updateInputSummary();
+}
+
+function updateInputSummary(){
+  document.getElementById('isbCount').textContent = STATE.queue.length;
+  document.getElementById('analyzeBtn').disabled = STATE.queue.length === 0;
+}
+
+/**
+ * Validates manual-entry data before it can be queued. Returns an array
+ * of user-friendly error messages; an empty array means the entry is valid.
+ * This mirrors and backs up the native `required`/`minlength` HTML
+ * validation so the app never queues a blank or meaningless item even if
+ * native validation is bypassed.
+ */
+function validateManualEntry(title, description){
+  var errors = [];
+  if(!title || !title.trim()){
+    errors.push('Enter a title before adding the governance item.');
+  }
+  if(!description || description.replace(/\s/g,'').length < 15){
+    errors.push('Add a meaningful description of at least 15 characters before adding the governance item.');
+  }
+  return errors;
+}
+
+function queueItemFromForm(){
+  var f = document.getElementById('manualForm');
+  var fd = new FormData(f);
+  var title = (fd.get('title')||'').toString().trim();
+  var description = (fd.get('description')||'').toString().trim();
+  return {
+    title: title,
+    type: fd.get('type'),
+    description: description,
+    workstream: (fd.get('workstream')||'').toString().trim(),
+    owner: (fd.get('owner')||'').toString().trim(),
+    dateIdentified: fd.get('dateIdentified') || '',
+    targetDate: fd.get('targetDate') || '',
+    probability: fd.get('probability'),
+    impact: fd.get('impact'),
+    status: fd.get('status'),
+    mitigation: (fd.get('mitigation')||'').toString().trim(),
+    decisionRequired: fd.get('decisionRequired'),
+    escalation: fd.get('escalation')
+  };
+}
+
+function fillFormFromItem(it){
+  document.getElementById('f-title').value = it.title || '';
+  document.getElementById('f-type').value = it.type || 'Risk';
+  document.getElementById('f-workstream').value = it.workstream || '';
+  document.getElementById('f-desc').value = it.description || '';
+  document.getElementById('f-owner').value = it.owner || '';
+  document.getElementById('f-status').value = it.status || 'Open';
+  document.getElementById('f-dateid').value = it.dateIdentified || '';
+  document.getElementById('f-target').value = it.targetDate || '';
+  document.getElementById('f-prob').value = it.probability || 'Medium';
+  document.getElementById('f-impact').value = it.impact || 'Medium';
+  document.getElementById('f-decision').value = it.decisionRequired || 'No';
+  document.getElementById('f-escalation').value = it.escalation || 'Not Required';
+  document.getElementById('f-mitigation').value = it.mitigation || '';
+}
+function clearManualForm(){
+  document.getElementById('manualForm').reset();
+}
+</script>
+<script>
+/* =========================================================================
+   RENDERING — Analysis Stage
+   ========================================================================= */
+function renderAnalysisMetrics(){
+  var items = STATE.analyzed;
+  var open = items.filter(function(i){return i.isOpen;});
+  var critical = open.filter(function(i){return i.severityCategory==='Critical';});
+  var flagged = items.filter(function(i){return i.classificationFlag;});
+  var missingInfo = items.filter(function(i){return i.qualityIssues.length>0;});
+  var overdue = open.filter(function(i){return i.dueStatus==='Overdue';});
+  var decisions = open.filter(function(i){return i.decisionRequired==='Yes';});
+
+  var tiles = [
+    {label:'Total Items Analyzed', value: items.length, cls:''},
+    {label:'Critical / High Exposure', value: open.filter(function(i){return i.severityCategory==='Critical'||i.severityCategory==='High';}).length, cls:'c-red'},
+    {label:'Classification Concerns', value: flagged.length, cls:'c-amber'},
+    {label:'Items Missing Information', value: missingInfo.length, cls:'c-amber'},
+    {label:'Overdue Actions', value: overdue.length, cls:'c-red'},
+    {label:'Decisions Required', value: decisions.length, cls:'c-blue'}
+  ];
+  document.getElementById('analysisMetricStrip').innerHTML = tiles.map(function(t){
+    return '<div class="metric-tile"><div class="mt-label">'+esc(t.label)+'</div><div class="mt-value '+t.cls+'">'+t.value+'</div></div>';
+  }).join('');
+}
+
+var ANALYSIS_FILTERS = [
+  {key:'all', label:'All'},
+  {key:'Risk', label:'Risks'},
+  {key:'Assumption', label:'Assumptions'},
+  {key:'Issue', label:'Issues'},
+  {key:'Dependency', label:'Dependencies'},
+  {key:'critical', label:'Critical'},
+  {key:'overdue', label:'Overdue'},
+  {key:'decision', label:'Decision Required'},
+  {key:'gap', label:'Ownership Gaps'}
+];
+function analysisFilterCount(key){
+  var items = STATE.analyzed;
+  if(key==='all') return items.length;
+  if(['Risk','Assumption','Issue','Dependency'].indexOf(key)!==-1) return items.filter(function(i){return i.type===key;}).length;
+  if(key==='critical') return items.filter(function(i){return i.severityCategory==='Critical';}).length;
+  if(key==='overdue') return items.filter(function(i){return i.dueStatus==='Overdue';}).length;
+  if(key==='decision') return items.filter(function(i){return i.decisionRequired==='Yes';}).length;
+  if(key==='gap') return items.filter(function(i){return i.ownerGap;}).length;
+  return 0;
+}
+function renderAnalysisFilterBar(){
+  document.getElementById('analysisFilterBar').innerHTML = ANALYSIS_FILTERS.map(function(f){
+    return '<button type="button" class="filter-chip'+(STATE.analysisFilter===f.key?' active':'')+'" data-filter="'+f.key+'">'+esc(f.label)+' <span class="fc-count">'+analysisFilterCount(f.key)+'</span></button>';
+  }).join('');
+}
+function filteredAnalysisItems(){
+  var key = STATE.analysisFilter;
+  var items = STATE.analyzed;
+  if(key==='all') return items;
+  if(['Risk','Assumption','Issue','Dependency'].indexOf(key)!==-1) return items.filter(function(i){return i.type===key;});
+  if(key==='critical') return items.filter(function(i){return i.severityCategory==='Critical';});
+  if(key==='overdue') return items.filter(function(i){return i.dueStatus==='Overdue';});
+  if(key==='decision') return items.filter(function(i){return i.decisionRequired==='Yes';});
+  if(key==='gap') return items.filter(function(i){return i.ownerGap;});
+  return items;
+}
+function renderAnalysisList(){
+  var list = filteredAnalysisItems().slice().sort(function(a,b){ return b.severityScore - a.severityScore; });
+  var wrap = document.getElementById('analysisListWrap');
+  if(list.length===0){
+    wrap.innerHTML = emptyStateHtml('No items match this filter', 'Try a different filter to see more RAID items.', 'radar');
+    return;
+  }
+  wrap.innerHTML = '<div class="analysis-list">' + list.map(function(it){
+    var flag = it.classificationFlag ? ('<div class="ar-flag">'+ICONS.flag+' Suggested reclassification: '+esc(it.suggestedType)+' ('+esc(it.classificationConfidence)+' confidence)</div>') : '';
+    return '<div class="analysis-row" data-id="'+it.id+'" tabindex="0" role="button" aria-label="Open details for '+esc(it.title)+'">'+
+      '<span class="pill '+typePillClass(it.type)+'">'+esc(it.type)+'</span>'+
+      '<div class="ar-body"><div class="ar-title">'+esc(it.title)+'</div>'+
+      '<div class="ar-meta"><span>'+esc(it.workstream)+'</span><span>'+esc(hasOwner(it.owner)?it.owner:'No owner')+'</span><span>'+esc(it.dueStatus)+'</span></div>'+
+      flag+'</div>'+
+      '<span class="pill '+priorityPillClass(it.executivePriority)+'">'+esc(it.executivePriority)+'</span>'+
+      '<span class="pill '+severityPillClass(it.severityCategory)+'">'+esc(it.severityCategory)+'</span>'+
+      '<div class="ar-score" aria-describedby="severityFormulaDesc"><div class="ars-num mono">'+it.severityScore+'</div><div class="ars-label">Severity</div></div>'+
+      '</div>';
+  }).join('') + '</div>';
+}
+function emptyStateHtml(title, desc, iconKey){
+  var icon = (iconKey && ICONS[iconKey]) ? ICONS[iconKey] : ICONS.empty;
+  return '<div class="empty-state">'+icon+'<div class="es-title">'+esc(title)+'</div><div class="es-desc">'+esc(desc)+'</div></div>';
+}
+</script>
+<script>
+/* =========================================================================
+   RENDERING — Executive View
+   ========================================================================= */
+var EXEC_CACHE = null;
+
+function computeExecCache(){
+  var items = STATE.analyzed;
+  var open = items.filter(function(i){return i.isOpen;});
+  var overallQuality = items.length ? Math.round(items.reduce(function(s,i){return s+i.qualityScore;},0)/items.length) : 100;
+  var accountability = buildAccountability(items);
+  var timeline = buildTimeline(items);
+  var exposure = computeExposureIndex(items, overallQuality);
+  var decisionItems = buildDecisionCenterItems(items);
+  var briefing = generateBriefing(items, overallQuality, exposure, accountability);
+  var actions = generateRecommendedActions(items);
+  var talkingPoints = generateTalkingPoints(items, accountability, decisionItems, timeline);
+  var top5 = topConcerns(items, 5);
+
+  var byType = {};
+  ['Risk','Assumption','Issue','Dependency'].forEach(function(t){
+    var typeItems = items.filter(function(i){return i.type===t;});
+    byType[t] = {
+      total: typeItems.length,
+      open: typeItems.filter(function(i){return i.isOpen;}).length,
+      highCrit: typeItems.filter(function(i){return i.severityCategory==='Critical'||i.severityCategory==='High';}).length,
+      overdue: typeItems.filter(function(i){return i.dueStatus==='Overdue';}).length
+    };
+  });
+
+  var qualityIssueCounts = {};
+  items.forEach(function(i){ i.qualityIssues.forEach(function(iss){ qualityIssueCounts[iss] = (qualityIssueCounts[iss]||0)+1; }); });
+  var qualityBreakdown = Object.keys(qualityIssueCounts).map(function(k){ return {issue:k, count:qualityIssueCounts[k]}; })
+    .sort(function(a,b){return b.count-a.count;}).slice(0,6);
+
+  return {
+    items: items, open: open, overallQuality: overallQuality, accountability: accountability,
+    timeline: timeline, exposure: exposure, decisionItems: decisionItems, briefing: briefing,
+    actions: actions, talkingPoints: talkingPoints, top5: top5, byType: byType, qualityBreakdown: qualityBreakdown
+  };
+}
+
+function renderExecutiveView(){
+  EXEC_CACHE = computeExecCache();
+  var c = EXEC_CACHE;
+  STATE.briefingText = c.briefing;
+  STATE.actionsText = c.actions.map(function(a,i){ return (i+1)+'. '+a.action+' Owner: '+a.owner+'. Rationale: '+a.rationale; }).join('\n\n');
+  STATE.talkingPointsText = c.talkingPoints.map(function(t){ return '\u2022 '+t; }).join('\n');
+
+  var html = '';
+
+  // Health band
+  html += '<div class="exec-health-band">'+
+    '<div class="ehb-left"><span class="ehb-eyebrow">RAID Health</span>'+
+    '<span class="ehb-status">'+esc(c.exposure.label.toUpperCase())+'</span>'+
+    '<span class="ehb-sub">'+c.open.length+' open RAID item'+(c.open.length===1?'':'s')+' across the program &mdash; '+c.decisionItems.length+' requiring leadership decision, '+c.timeline.overdue.length+' overdue.</span></div>'+
+    '<div class="ehb-index"><div class="ehbi-num mono">'+c.exposure.index+'<span style="font-size:16px;color:#93A4C2;">/100</span></div><div class="ehbi-label">RAID Exposure Index</div></div>'+
+    '</div>';
+
+  // KPI grid
+  var kpis = [
+    {label:'Total Active Items', value:c.open.length},
+    {label:'Critical Items', value:c.open.filter(function(i){return i.severityCategory==='Critical';}).length},
+    {label:'Overdue Actions', value:c.timeline.overdue.length},
+    {label:'Decisions Required', value:c.decisionItems.length},
+    {label:'Ownership Gaps', value:c.open.filter(function(i){return i.ownerGap;}).length},
+    {label:'RAID Quality Score', value:c.overallQuality}
+  ];
+  html += '<div class="section"><div class="section-head"><h2>Executive Summary</h2><span class="section-sub">Program health at a glance</span></div>'+
+    '<div class="kpi-grid">'+kpis.map(function(k){return '<div class="kpi-card"><div class="kpi-label">'+esc(k.label)+'</div><div class="kpi-value">'+k.value+'</div></div>';}).join('')+'</div></div>';
+
+  // RAID distribution
+  html += '<div class="section"><div class="section-head"><h2>RAID Distribution</h2><span class="section-sub">Category-level exposure across the program</span></div>'+
+    '<div class="raid-dist-grid">'+['Risk','Assumption','Issue','Dependency'].map(function(t){
+      var d = c.byType[t];
+      return '<div class="card dist-card type-'+t.toLowerCase()+'"><div class="dc-title">'+t+'s</div><div class="dc-total mono">'+d.total+'</div>'+
+        '<div class="dc-rows"><div class="dc-row"><span>Open</span><b>'+d.open+'</b></div>'+
+        '<div class="dc-row"><span>High / Critical</span><b>'+d.highCrit+'</b></div>'+
+        '<div class="dc-row"><span>Overdue</span><b>'+d.overdue+'</b></div></div></div>';
+    }).join('')+'</div></div>';
+
+  // Top executive concerns
+  html += '<div class="section"><div class="section-head"><h2>Top Executive Concerns</h2><span class="section-sub">The five highest-priority items on the program</span></div>';
+  if(c.top5.length===0){
+    html += emptyStateHtml('No open items', 'All RAID items are currently resolved or closed.', 'shield');
+  } else {
+    html += '<div class="priority-list">'+c.top5.map(function(it, idx){
+      return '<div class="card card-hover priority-card2" data-id="'+it.id+'" tabindex="0" role="button" aria-label="View details for '+esc(it.title)+'">'+
+        '<div class="pc-rank">'+(idx+1)+'</div>'+
+        '<div class="pc-body"><div class="pc-badges"><span class="pill '+severityPillClass(it.severityCategory)+'">'+esc(it.severityCategory)+'</span>'+
+        '<span class="pill '+priorityPillClass(it.executivePriority)+'">'+esc(it.executivePriority)+'</span>'+
+        (it.dueStatus==='Overdue'?'<span class="pill pill-red">Overdue</span>':'<span class="pill pill-slate">'+esc(it.dueStatus)+'</span>')+'</div>'+
+        '<div class="pc-title">'+esc(it.title)+'</div>'+
+        '<div class="pc-why"><strong>Why this is prioritized:</strong> '+esc(reasonForPriority(it))+'</div>'+
+        '<div class="pc-meta"><span class="pcm-item">'+ICONS.owner+' '+esc(hasOwner(it.owner)?it.owner:'No owner assigned')+'</span>'+
+        '<span class="pcm-item">'+ICONS.calendar+' '+esc(it.targetDate?fmtDate(it.targetDate):'No due date')+'</span>'+
+        '<span class="pcm-item">'+esc(it.workstream)+'</span></div></div>'+
+        '<div class="pc-score" aria-describedby="severityFormulaDesc"><div class="pcs-num mono">'+it.severityScore+'</div><div class="pcs-label">Severity</div><div class="pcs-basis">Prob &times; Impact &times; Timing</div></div>'+
+        '</div>';
+    }).join('')+'</div>';
+  }
+  html += '</div>';
+
+  // Decision center
+  html += '<div class="section"><div class="section-head"><h2>Decision Center</h2><span class="section-sub">Items requiring explicit leadership decisions or executive intervention</span></div>';
+  if(c.decisionItems.length===0){
+    html += emptyStateHtml('No decisions pending', 'No items are currently marked as requiring a leadership decision or executive escalation.', 'shield');
+  } else {
+    html += '<div class="decision-grid">'+c.decisionItems.map(function(it){
+      var labelPill = decisionCenterLabel(it) === 'Executive Escalation' ? 'pill-outline pill-urgent' : 'pill-outline';
+      return '<div class="card decision-card" data-id="'+it.id+'">'+
+        '<div class="dcard-top"><span class="pill '+labelPill+'">'+esc(decisionCenterLabel(it))+'</span><span class="pill '+severityPillClass(it.severityCategory)+'">'+esc(it.severityCategory)+'</span></div>'+
+        '<div class="dcard-title">'+esc(decisionLanguage(it))+'</div>'+
+        '<div class="dcard-row"><span class="dr-label">Target Deadline</span><span class="dr-value">'+esc(it.targetDate?fmtDate(it.targetDate):'No confirmed date \u2014 recommend setting one')+'</span></div>'+
+        '<div class="dcard-row"><span class="dr-label">Consequence of Delay</span><span class="dr-value">'+esc(consequenceOfDelay(it))+'</span></div>'+
+        '<div class="dcard-row"><span class="dr-label">Recommended Direction</span><span class="dr-value">'+esc(recommendedDirection(it))+'</span></div>'+
+        '<div class="dcard-footer"><span>RAID Item Owner</span><span>'+esc(hasOwner(it.owner)?it.owner:'To be assigned')+'</span></div>'+
+        '<button type="button" class="btn-outline btn-sm view-item-btn" data-id="'+it.id+'" style="align-self:flex-start;" aria-label="Open details for '+esc(it.title)+'">View Full Item</button>'+
+        '</div>';
+    }).join('')+'</div>';
+  }
+  html += '</div>';
+
+  // Executive briefing
+  html += '<div class="section"><div class="card card-lg"><div class="briefing-head">'+
+    '<div class="briefing-title"><span class="bt1">Executive Briefing</span><span class="bt2 mono">Rules-Based Program Intelligence</span></div>'+
+    '<button type="button" class="btn-outline" id="copyBriefingBtn">'+ICONS.copy+' Copy Executive Briefing</button></div>'+
+    '<div class="briefing-text">'+esc(c.briefing)+'</div></div></div>';
+
+  // Recommended actions
+  html += '<div class="section"><div class="card card-lg"><div class="briefing-head">'+
+    '<div class="briefing-title"><span class="bt1">Recommended Actions</span><span class="bt2 mono">Prioritized next steps</span></div>'+
+    '<button type="button" class="btn-outline" id="copyActionsBtn">'+ICONS.copy+' Copy Recommended Actions</button></div>'+
+    '<div class="action-list">'+c.actions.map(function(a, idx){
+      return '<div class="action-row"><div class="action-num">'+(idx+1)+'</div><div class="action-body">'+
+        '<div class="ab-text">'+esc(a.action)+'</div>'+
+        '<div class="ab-meta"><span><b>Owner:</b> '+esc(a.owner)+'</span></div>'+
+        '<div class="ab-rationale">'+esc(a.rationale)+'</div></div></div>';
+    }).join('')+'</div></div></div>';
+
+  // Steering committee talking points
+  html += '<div class="section"><div class="card card-lg"><div class="briefing-head">'+
+    '<div class="briefing-title"><span class="bt1">Steering Committee Talking Points</span><span class="bt2 mono">Leadership-ready summary</span></div>'+
+    '<button type="button" class="btn-outline" id="copyTalkingBtn">'+ICONS.copy+' Copy Talking Points</button></div>'+
+    '<div class="talking-points">'+c.talkingPoints.map(function(t){ return '<div class="tp-row"><span class="tp-dot"></span><span>'+esc(t)+'</span></div>'; }).join('')+'</div></div></div>';
+
+  // Accountability + timeline
+  html += '<div class="section"><div class="section-head"><h2>Accountability &amp; Timeline Exposure</h2><span class="section-sub">Ownership concentration and near-term exposure windows</span></div>'+
+    '<div class="acct-grid">';
+
+  html += '<div class="card"><h4 style="margin-bottom:6px;">Ownership Concentration</h4>'+
+    (c.accountability.owners.length ? c.accountability.owners.slice(0,8).map(function(o){
+      var flags = '';
+      if(o.critical>0) flags += '<span class="pill pill-red">'+o.critical+' Critical</span>';
+      if(o.overdue>0) flags += '<span class="pill pill-amber">'+o.overdue+' Overdue</span>';
+      if(o.generic) flags += '<span class="pill pill-slate">Generic Label</span>';
+      return '<div class="owner-row"><div class="owner-avatar">'+esc(initials(o.name))+'</div>'+
+        '<div class="owner-body"><div class="owner-name">'+esc(o.name)+'</div><div class="owner-meta">'+o.open+' open item'+(o.open===1?'':'s')+' &middot; '+o.total+' total</div></div>'+
+        '<div class="owner-flags">'+flags+'</div></div>';
+    }).join('') : emptyStateHtml('No owner data', 'No RAID items are currently loaded.', 'clipboard'))+
+    (c.accountability.concentration.length ? '<div class="gap-alert">'+ICONS.users+'<p>'+esc(c.accountability.concentration[0].name)+' owns '+c.accountability.concentration[0].total+' active item'+(c.accountability.concentration[0].total===1?'':'s')+', including '+c.accountability.concentration[0].critical+' critical item'+(c.accountability.concentration[0].critical===1?'':'s')+' and '+c.accountability.concentration[0].overdue+' overdue action'+(c.accountability.concentration[0].overdue===1?'':'s')+'.</p></div>' : '')+
+    '</div>';
+
+  html += '<div class="card"><h4 style="margin-bottom:6px;">Exposure Timeline</h4>'+
+    '<div class="timeline-bars">'+timelineBarsHtml(c.timeline)+'</div>'+
+    '<div class="exposure-window-grid">'+
+      '<div class="exposure-window"><div class="ew-num mono">'+ (c.timeline.overdue.length + c.timeline.d0_7.length + c.timeline.d8_30.length) +'</div><div class="ew-label">Next 30 Days</div></div>'+
+      '<div class="exposure-window"><div class="ew-num mono">'+c.timeline.d31_60.length+'</div><div class="ew-label">31&ndash;60 Days</div></div>'+
+      '<div class="exposure-window"><div class="ew-num mono">'+c.timeline.d61_90.length+'</div><div class="ew-label">61&ndash;90 Days</div></div>'+
+    '</div></div>';
+
+  html += '</div></div>';
+
+  // Data quality panel
+  html += '<div class="section"><div class="section-head"><h2>RAID Log Quality Score</h2>'+
+    '<button type="button" class="info-tip-button" id="qualityMethodologyBtn" aria-expanded="false" aria-controls="qualityMethodologyPanel">Scoring methodology '+ICONS.info+'</button></div>'+
+    '<div id="qualityMethodologyPanel" class="methodology-panel" hidden>'+
+      '<div class="mp-block"><h4>Severity Score</h4><p>Severity is calculated primarily from probability &times; impact (up to 75 points), plus a time-criticality adjustment of up to 25 points based on how close or overdue the target date is. Administrative weaknesses &mdash; blocked status, executive escalation, a pending decision, no owner, or no mitigation &mdash; add a capped adjustment of no more than 10 points combined, so they influence executive priority and data quality more than raw severity. Closed or resolved items always display at Low current exposure.</p></div>'+
+      '<div class="mp-block"><h4>RAID Log Quality Score</h4><p>Each item is checked for title clarity, correct classification, description depth, ownership, dates, mitigation, and type-specific fields (validation plans, recovery plans, dependency sources, and an assigned workstream). The overall score is the average pass rate across all items.</p></div>'+
+    '</div>'+
+    '<div class="card card-lg quality-panel"><div class="quality-score-block"><div class="qsb-num mono">'+c.overallQuality+'<span class="qsb-denom">/100</span></div>'+
+    '<div class="qsb-band"><span class="pill '+(c.overallQuality>=85?'pill-green':c.overallQuality>=70?'pill-blue':c.overallQuality>=50?'pill-amber':'pill-red')+'">'+esc(qualityBand(c.overallQuality))+'</span></div></div>'+
+    '<div class="quality-issues-list">'+ (c.qualityBreakdown.length ? c.qualityBreakdown.map(function(q){
+      return '<div class="qi-row"><span class="qir-dot"></span><span>'+q.count+' item'+(q.count===1?' has':'s have')+' '+esc(q.issue)+'</span></div>';
+    }).join('') : '<div class="qi-row"><span class="qir-dot" style="background:var(--green);"></span><span>No significant data quality gaps detected.</span></div>')+'</div></div></div>';
+
+  // Related items
+  var pairs = STATE.relatedPairs || [];
+  html += '<div class="section"><div class="section-head"><h2>Potentially Related Items</h2><span class="section-sub">Keyword-similarity detection &mdash; review before merging or closing</span></div>';
+  if(pairs.length===0){
+    html += emptyStateHtml('No related items detected', 'The analyzer did not find items with significant keyword overlap.', 'radar');
+  } else {
+    html += '<div class="card"><div class="related-list">'+pairs.map(function(p){
+      return '<div class="related-row"><span class="pill pill-slate">'+Math.round(p.score*100)+'% similar</span><span>'+esc(p.a.title)+'</span><span style="color:var(--ria-muted);">&harr;</span><span>'+esc(p.b.title)+'</span></div>';
+    }).join('')+'</div></div>';
+  }
+  html += '</div>';
+
+  document.getElementById('stage-executive').innerHTML = html;
+}
+function timelineBarsHtml(timeline){
+  var buckets = [
+    {label:'Overdue', arr:timeline.overdue}, {label:'Due 0\u20137 Days', arr:timeline.d0_7},
+    {label:'Due 8\u201330 Days', arr:timeline.d8_30}, {label:'Due 31\u201360 Days', arr:timeline.d31_60},
+    {label:'Due 61\u201390 Days', arr:timeline.d61_90}, {label:'More Than 90 Days', arr:timeline.d90plus},
+    {label:'No Due Date', arr:timeline.noDate}
+  ];
+  var max = Math.max.apply(null, buckets.map(function(b){return b.arr.length;}).concat([1]));
+  return buckets.map(function(b){
+    var pct = Math.round((b.arr.length/max)*100);
+    return '<div class="tl-bar-row"><div class="tl-bar-top"><span>'+esc(b.label)+'</span><b>'+b.arr.length+'</b></div>'+
+      '<div class="tl-track"><div class="tl-fill" style="width:'+pct+'%;'+(b.label==='Overdue'?'background:var(--red);':'')+'"></div></div></div>';
+  }).join('');
+}
+
+/**
+ * Toggles the accessible scoring-methodology panel. Works identically for
+ * mouse, touch, and keyboard (Enter/Space) since it is a native <button>;
+ * no hover dependency. Pass forceClose=true to always collapse it.
+ */
+function toggleMethodologyPanel(forceClose){
+  var btn = document.getElementById('qualityMethodologyBtn');
+  var panel = document.getElementById('qualityMethodologyPanel');
+  if(!btn || !panel) return;
+  var shouldOpen = forceClose ? false : panel.hidden;
+  panel.hidden = !shouldOpen;
+  btn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+}
+</script>
+<script>
+
+/* =========================================================================
+   RENDERING — RAID Register
+   ========================================================================= */
+function uniqueValues(items, key){
+  var vals = items.map(function(i){ return i[key]; }).filter(function(v){ return v && v.trim && v.trim().length; });
+  return Array.from(new Set(vals)).sort();
+}
+function registerFilteredSorted(){
+  var items = STATE.analyzed.slice();
+  var f = STATE.register;
+  if(f.search.trim()){
+    var q = f.search.trim().toLowerCase();
+    items = items.filter(function(i){
+      return (i.title+' '+i.description+' '+i.owner+' '+i.workstream).toLowerCase().indexOf(q) !== -1;
+    });
+  }
+  if(f.type!=='all') items = items.filter(function(i){return i.type===f.type;});
+  if(f.severity!=='all') items = items.filter(function(i){return i.severityCategory===f.severity;});
+  if(f.status!=='all') items = items.filter(function(i){return i.status===f.status;});
+  if(f.workstream!=='all') items = items.filter(function(i){return i.workstream===f.workstream;});
+  if(f.owner!=='all') items = items.filter(function(i){return i.owner===f.owner;});
+  if(f.decision!=='all') items = items.filter(function(i){return i.decisionRequired===f.decision;});
+  if(f.overdue==='yes') items = items.filter(function(i){return i.dueStatus==='Overdue';});
+  if(f.ownerGap==='yes') items = items.filter(function(i){return i.ownerGap;});
+
+  var dir = f.sortDir==='asc' ? 1 : -1;
+  items.sort(function(a,b){
+    var av, bv;
+    switch(f.sortKey){
+      case 'severity': av=a.severityScore; bv=b.severityScore; break;
+      case 'due': av = a.daysToTarget===null?999999:a.daysToTarget; bv = b.daysToTarget===null?999999:b.daysToTarget; break;
+      case 'overdue': av = a.dueStatus==='Overdue' ? (a.daysToTarget||0) : 999999; bv = b.dueStatus==='Overdue' ? (b.daysToTarget||0) : 999999; break;
+      case 'type': av=a.type; bv=b.type; break;
+      case 'owner': av=(a.owner||'zzz'); bv=(b.owner||'zzz'); break;
+      case 'workstream': av=a.workstream; bv=b.workstream; break;
+      case 'priority': av=priorityRank(a.executivePriority); bv=priorityRank(b.executivePriority); break;
+      default: av=a.severityScore; bv=b.severityScore;
+    }
+    if(typeof av==='string'){ av=av.toLowerCase(); bv=bv.toLowerCase(); }
+    if(av<bv) return -1*dir; if(av>bv) return 1*dir; return 0;
+  });
+  return items;
+}
+
+var REGISTER_COLS = [
+  {key:'id', label:'ID'}, {key:'priority', label:'Priority'}, {key:'type', label:'Type'},
+  {key:'title', label:'Title'}, {key:'workstream', label:'Workstream'}, {key:'owner', label:'Owner'},
+  {key:'status', label:'Status'}, {key:'probability', label:'Probability'}, {key:'impact', label:'Impact'},
+  {key:'due', label:'Due Date'}, {key:'severity', label:'Severity'}, {key:'decision', label:'Decision'},
+  {key:'quality', label:'Quality'}, {key:'action', label:'Recommended Action'}
+];
+
+function renderRegisterStage(){
+  var items = STATE.analyzed;
+  var f = STATE.register;
+  var owners = uniqueValues(items,'owner');
+  var workstreams = uniqueValues(items,'workstream');
+
+  var html = '<div class="section"><div class="section-head"><h2>RAID Register</h2><span class="section-sub">Full sortable, filterable, and searchable RAID log</span></div>';
+
+  html += '<div class="register-toolbar">'+
+    '<div class="register-search">'+ICONS.search+'<input type="text" id="regSearch" placeholder="Search title, description, owner, workstream..." value="'+esc(f.search)+'" aria-label="Search RAID register" /></div>'+
+    selectField('regType','RAID Category', ['all','Risk','Assumption','Issue','Dependency'], f.type, function(v){return v==='all'?'All':v+'s';})+
+    selectField('regSeverity','Severity', ['all','Critical','High','Moderate','Low'], f.severity)+
+    selectField('regStatus','Status', ['all','Open','In Progress','Monitoring','Blocked','Resolved','Closed'], f.status)+
+    selectField('regWorkstream','Workstream', ['all'].concat(workstreams), f.workstream)+
+    selectField('regOwner','Owner', ['all'].concat(owners), f.owner)+
+    selectField('regDecision','Decision Required', ['all','Yes','Potentially','No'], f.decision)+
+    selectField('regOverdue','Overdue Only', ['all','yes'], f.overdue, function(v){return v==='all'?'All':'Overdue Only';})+
+    selectField('regGap','Ownership Missing', ['all','yes'], f.ownerGap, function(v){return v==='all'?'All':'Missing Only';})+
+    '</div>';
+
+  var filtered = registerFilteredSorted();
+  html += '<div style="margin-bottom:10px;" class="register-count">'+filtered.length+' of '+items.length+' items shown</div>';
+
+  if(filtered.length===0){
+    html += emptyStateHtml('No matching items', 'Adjust your filters or search term to see RAID items.', 'dashboard');
+  } else {
+    html += '<div class="register-table-wrap"><table class="register-table"><thead><tr>'+
+      REGISTER_COLS.map(function(c){ return '<th data-sort="'+c.key+'" class="'+(f.sortKey===c.key?'sorted':'')+'" tabindex="0" role="button" aria-label="Sort by '+esc(c.label)+'">'+esc(c.label)+'</th>'; }).join('')+
+      '</tr></thead><tbody>'+
+      filtered.map(function(it){
+        return '<tr data-id="'+it.id+'" tabindex="0" role="button" aria-label="Open details for '+esc(it.title)+'">'+
+          '<td class="mono">'+esc(it.id)+'</td>'+
+          '<td><span class="pill '+priorityPillClass(it.executivePriority)+'">'+esc(it.executivePriority)+'</span></td>'+
+          '<td><span class="pill '+typePillClass(it.type)+'">'+esc(it.type)+'</span></td>'+
+          '<td class="reg-title-cell"><div class="rtc-title">'+highlightMatch(it.title, f.search)+'</div></td>'+
+          '<td>'+highlightMatch(it.workstream, f.search)+'</td>'+
+          '<td>'+(hasOwner(it.owner)?highlightMatch(it.owner, f.search):'\u2014')+'</td>'+
+          '<td>'+esc(it.status)+'</td>'+
+          '<td>'+esc(it.probability)+'</td>'+
+          '<td>'+esc(it.impact)+'</td>'+
+          '<td class="'+(it.dueStatus==='Overdue'?'mono':'')+'" style="'+(it.dueStatus==='Overdue'?'color:var(--red);font-weight:600;':'')+'">'+esc(it.targetDate?fmtDate(it.targetDate):'\u2014')+'</td>'+
+          '<td class="reg-score">'+it.severityScore+'</td>'+
+          '<td>'+esc(it.decisionRequired)+'</td>'+
+          '<td>'+it.qualityScore+'</td>'+
+          '<td style="max-width:220px;">'+esc(shortAction(it))+'</td>'+
+          '</tr>';
+      }).join('')+
+      '</tbody></table></div>';
+
+    html += '<div class="register-cards">'+filtered.map(function(it){
+      return '<div class="reg-card" data-id="'+it.id+'" tabindex="0" role="button" aria-label="Open details for '+esc(it.title)+'">'+
+        '<div class="rc-top"><div><div class="rc-title">'+highlightMatch(it.title, f.search)+'</div><div class="rc-id mono">'+esc(it.id)+'</div></div>'+
+        '<span class="pill '+severityPillClass(it.severityCategory)+'">'+it.severityScore+'</span></div>'+
+        '<div class="rc-badges"><span class="pill '+typePillClass(it.type)+'">'+esc(it.type)+'</span><span class="pill '+priorityPillClass(it.executivePriority)+'">'+esc(it.executivePriority)+'</span></div>'+
+        '<div class="rc-meta"><span>'+highlightMatch(it.workstream, f.search)+'</span><span>'+(hasOwner(it.owner)?highlightMatch(it.owner, f.search):'No owner')+'</span><span>'+esc(it.dueStatus)+'</span></div>'+
+        '</div>';
+    }).join('')+'</div>';
+  }
+  html += '</div>';
+  document.getElementById('stage-register').innerHTML = html;
+}
+function selectField(id, label, options, current, labelFn){
+  return '<div class="rt-field"><label for="'+id+'">'+esc(label)+'</label><select id="'+id+'">'+
+    options.map(function(o){ return '<option value="'+esc(o)+'"'+(o===current?' selected':'')+'>'+esc(labelFn?labelFn(o):o)+'</option>'; }).join('')+
+    '</select></div>';
+}
+function shortAction(it){
+  if(it.ownerGap) return 'Assign an accountable owner.';
+  if(it.dueStatus==='Overdue') return 'Close out overdue action immediately.';
+  if(!it.mitigation || it.mitigation.trim().length<6) return 'Define a mitigation or recovery plan.';
+  if(it.decisionRequired==='Yes') return 'Secure leadership decision.';
+  return 'Continue monitoring per current plan.';
+}
+</script>
+<script>
+/* =========================================================================
+   RENDERING — Item Detail Drawer
+   ========================================================================= */
+function missingInfoList(it){
+  var list = [];
+  if(it.ownerGap) list.push('Owner missing');
+  if(!it.targetDate) list.push('Resolution date missing');
+  if(!it.mitigation || it.mitigation.trim().length<10) list.push('Mitigation or action is vague or missing');
+  if(it.type==='Risk' && (!it.mitigation || it.mitigation.trim().length<10)) list.push('Risk trigger / mitigation not clearly defined');
+  if(it.type==='Dependency' && !/supplier|customer|team|function|facility|approval|from /i.test(it.description||'')) list.push('Dependency source or supplying party not specified');
+  if(it.type==='Assumption' && !(it.mitigation && /valid|confirm|test|review/i.test(it.mitigation))) list.push('Assumption validation date or plan missing');
+  return list;
+}
+function escalationStatement(it){
+  var deadline = it.targetDate ? fmtDate(it.targetDate) : 'a confirmed date';
+  return decapitalizeFirst(it.title).replace(/\.$/,'').charAt(0).toUpperCase() + decapitalizeFirst(it.title).replace(/\.$/,'').slice(1) + ' must be resolved by ' + deadline + ' to protect ' + (it.workstream||'the affected workstream') + '. Leadership intervention is required if resolution cannot be completed by this date.';
+}
+function recommendedActionText(it){
+  if(it.ownerGap) return 'Assign an accountable owner for this item within the current reporting cycle.';
+  if(it.dueStatus==='Overdue') return 'Escalate for immediate closure; the target resolution date has already passed.';
+  if(!it.mitigation || it.mitigation.trim().length<10) return 'Define a specific, measurable mitigation or recovery action with an owner and date.';
+  return 'Continue tracking against the current mitigation plan and confirm progress at the next review.';
+}
+
+function renderDrawer(itemId){
+  var it = STATE.analyzed.find(function(i){ return i.id===itemId; });
+  if(!it) return;
+  STATE.drawerItemId = itemId;
+  var missing = missingInfoList(it);
+  var box = document.getElementById('drawerBox');
+  box.innerHTML =
+    '<div class="drawer-head"><div><div class="dh-id mono">'+esc(it.id)+'</div><div class="dh-title" id="drawerTitle">'+esc(it.title)+'</div></div>'+
+    '<button type="button" class="drawer-close" id="drawerCloseBtn" aria-label="Close details">'+ICONS.close+'</button></div>'+
+    '<div class="drawer-body">'+
+
+    '<div class="drawer-section"><h4>Original Item</h4>'+
+      '<div class="dfield"><div class="df-label">Description</div><div class="df-value">'+esc(it.description||'No description provided.')+'</div></div>'+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Recorded Type</div><div class="df-value"><span class="pill '+typePillClass(it.type)+'">'+esc(it.type)+'</span></div></div>'+
+        '<div class="dfield"><div class="df-label">Workstream</div><div class="df-value">'+esc(it.workstream)+'</div></div>'+
+      '</div>'+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Owner</div><div class="df-value">'+esc(hasOwner(it.owner)?it.owner:'Not assigned')+'</div></div>'+
+        '<div class="dfield"><div class="df-label">Status</div><div class="df-value">'+esc(it.status)+'</div></div>'+
+      '</div>'+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Date Identified</div><div class="df-value">'+esc(it.dateIdentified?fmtDate(it.dateIdentified):'\u2014')+'</div></div>'+
+        '<div class="dfield"><div class="df-label">Target Resolution Date</div><div class="df-value">'+esc(it.targetDate?fmtDate(it.targetDate):'\u2014')+'</div></div>'+
+      '</div>'+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Probability</div><div class="df-value">'+esc(it.probability)+'</div></div>'+
+        '<div class="dfield"><div class="df-label">Impact</div><div class="df-value">'+esc(it.impact)+'</div></div>'+
+      '</div>'+
+      '<div class="dfield"><div class="df-label">Recorded Mitigation / Action</div><div class="df-value">'+esc(it.mitigation||'None recorded.')+'</div></div>'+
+    '</div>'+
+
+    '<div class="drawer-section"><h4>Analyzer Assessment</h4>'+
+      '<div class="dfield"><div class="df-label">Classification</div><div class="df-value">'+esc(it.classificationExplanation)+'</div></div>'+
+      (it.classificationFlag ? '<div class="dfield"><div class="df-label">Suggested Classification</div><div class="df-value"><span class="pill '+typePillClass(it.suggestedType)+'">'+esc(it.suggestedType)+'</span> &nbsp; Confidence: '+esc(it.classificationConfidence)+'</div></div>' : '')+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Severity Score</div><div class="df-value"><span class="pill '+severityPillClass(it.severityCategory)+'">'+it.severityScore+' &middot; '+esc(it.severityCategory)+'</span><div class="severity-basis-note">Calculated from probability &times; impact, time criticality, and governance quality signals.</div></div></div>'+
+        '<div class="dfield"><div class="df-label">Executive Priority</div><div class="df-value"><span class="pill '+priorityPillClass(it.executivePriority)+'">'+esc(it.executivePriority)+'</span></div></div>'+
+      '</div>'+
+      '<div class="dfield"><div class="df-label">Reason for Prioritization</div><div class="df-value">'+esc(reasonForPriority(it))+'</div></div>'+
+      '<div class="dfield-row">'+
+        '<div class="dfield"><div class="df-label">Due-Date Status</div><div class="df-value">'+esc(it.dueStatus)+'</div></div>'+
+        '<div class="dfield"><div class="df-label">Accountability Status</div><div class="df-value">'+esc(it.ownerGap?'Ownership gap':'Owner assigned')+'</div></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="drawer-section"><h4>Missing Information</h4>'+
+      (missing.length ? '<div class="missing-list">'+missing.map(function(m){ return '<div class="missing-item">'+ICONS.gap+' '+esc(m)+'</div>'; }).join('')+'</div>' : '<div class="missing-none">'+ICONS.check+' No missing information detected.</div>')+
+    '</div>'+
+
+    '<div class="drawer-section"><h4>Recommended Action</h4>'+
+      '<div class="callout-box" id="drawerActionText">'+esc(recommendedActionText(it))+'</div>'+
+      '<div class="drawer-copy-row"><button type="button" class="btn-outline btn-sm" id="copyActionDrawerBtn">'+ICONS.copy+' Copy Recommended Action</button></div>'+
+    '</div>'+
+
+    '<div class="drawer-section"><h4>Executive Escalation Statement</h4>'+
+      '<div class="callout-box escalation" id="drawerEscalationText">'+esc(escalationStatement(it))+'</div>'+
+      '<div class="drawer-copy-row"><button type="button" class="btn-outline btn-sm" id="copyEscalationDrawerBtn">'+ICONS.copy+' Copy Escalation Statement</button></div>'+
+    '</div>'+
+
+    '</div>'+
+    '<div class="drawer-foot"><button type="button" class="btn-primary" id="drawerCloseBtn2">Close</button></div>';
+
+  document.getElementById('drawerOverlay').hidden = false;
+  pushOverlay('drawer', box);
+  document.getElementById('drawerCloseBtn').focus();
+}
+function closeDrawer(){
+  if(document.getElementById('drawerOverlay').hidden) return;
+  document.getElementById('drawerOverlay').hidden = true;
+  STATE.drawerItemId = null;
+  popOverlay('drawer');
+}
+</script>
+<script>
+/* =========================================================================
+   STEP NAVIGATION
+   ========================================================================= */
+var STEP_ORDER = ['input','analysis','executive','register'];
+function goToStep(step){
+  var allowed = (step==='input') || STATE.hasAnalyzed || (step==='analysis' && STATE.queue.length>0);
+  if(!allowed) return;
+  STATE.currentStep = step;
+  STEP_ORDER.forEach(function(s){
+    document.getElementById('stage-'+s).hidden = (s!==step);
+    var btn = document.getElementById('stepBtn-'+s);
+    btn.classList.toggle('active', s===step);
+    btn.setAttribute('aria-current', s===step ? 'step' : 'false');
+  });
+  document.getElementById('heroSection').hidden = (step!=='input');
+  if(step==='register') renderRegisterStage();
+  if(step==='executive') renderExecutiveView();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function unlockSteps(){
+  STATE.hasAnalyzed = true;
+  ['analysis','executive','register'].forEach(function(s){
+    document.getElementById('stepBtn-'+s).disabled = false;
+  });
+  document.getElementById('stepBtn-input').classList.add('done');
+}
+
+/**
+ * Invalidates any completed analysis whenever the input queue changes.
+ * This guarantees the Executive View and RAID Register can never show
+ * stale results after the underlying RAID data has been edited.
+ * Does NOT fire on navigation, filtering, sorting, searching, copying,
+ * or opening item details — only on genuine queue mutation.
+ */
+function invalidateAnalysis(options){
+  if(!STATE.hasAnalyzed) return;
+
+  STATE.analyzed = [];
+  STATE.relatedPairs = [];
+  STATE.hasAnalyzed = false;
+  EXEC_CACHE = null;
+  STATE.analysisFilter = 'all';
+
+  ['analysis','executive','register'].forEach(function(step){
+    document.getElementById('stepBtn-' + step).disabled = true;
+  });
+  document.getElementById('stepBtn-input').classList.remove('done');
+
+  if(!options || options.notify !== false){
+    toast('Governance data updated. Run the analysis again to refresh the results.', 'info');
+  }
+}
+
+/* =========================================================================
+   ANALYZE SEQUENCE
+   ========================================================================= */
+var PROCESSING_MESSAGES = [
+  'Classifying RAID entries...',
+  'Assessing exposure and urgency...',
+  'Checking ownership and due dates...',
+  'Identifying leadership decisions...',
+  'Generating executive insights...'
+];
+function runAnalyzeSequence(){
+  if(STATE.queue.length===0) return;
+  goToStep('analysis');
+  document.getElementById('processingWrap').hidden = false;
+  document.getElementById('analysisContent').hidden = true;
+  var msgEl = document.getElementById('processingMsg');
+  var i = 0;
+  msgEl.textContent = PROCESSING_MESSAGES[0];
+  var interval = setInterval(function(){
+    i++;
+    if(i < PROCESSING_MESSAGES.length) msgEl.textContent = PROCESSING_MESSAGES[i];
+  }, 190);
+  setTimeout(function(){
+    clearInterval(interval);
+    var result = runAnalysis(STATE.queue);
+    STATE.analyzed = result.items;
+    STATE.relatedPairs = result.relatedPairs;
+    unlockSteps();
+    document.getElementById('processingWrap').hidden = true;
+    document.getElementById('analysisContent').hidden = false;
+    renderAnalysisMetrics();
+    renderAnalysisFilterBar();
+    renderAnalysisList();
+    toast('Analysis complete \u2014 ' + STATE.analyzed.length + ' governance items processed.', 'success');
+  }, 1000);
+}
+
+/* =========================================================================
+   DIALOGS
+   ========================================================================= */
+function showConfirmDialog(title, msg, confirmLabel, onConfirm){
+  var box = document.getElementById('dialogBox');
+  box.innerHTML = '<h3 id="dialogTitle">'+esc(title)+'</h3><p>'+esc(msg)+'</p>'+
+    '<div class="dialog-actions"><button type="button" class="btn-outline" id="dialogCancelBtn">Cancel</button>'+
+    '<button type="button" class="btn-danger-outline" id="dialogConfirmBtn" style="background:var(--red);color:#fff;border-color:var(--red);">'+esc(confirmLabel)+'</button></div>';
+  document.getElementById('dialogOverlay').hidden = false;
+  pushOverlay('dialog', box);
+  document.getElementById('dialogCancelBtn').focus();
+  document.getElementById('dialogCancelBtn').onclick = closeDialog;
+  document.getElementById('dialogConfirmBtn').onclick = function(){ closeDialog(); onConfirm(); };
+}
+function closeDialog(){
+  if(document.getElementById('dialogOverlay').hidden) return;
+  document.getElementById('dialogOverlay').hidden = true;
+  popOverlay('dialog');
+}
+
+/* =========================================================================
+   SAMPLE DATA LOADING
+   Prevents accidental duplication of the sample RAID program: an empty
+   queue loads it directly, but a populated queue always requires an
+   explicit Replace / Append / Cancel choice.
+   ========================================================================= */
+var SAMPLE_KEY = 'ev-ngp-sample-v1';
+function sampleAlreadyInQueue(){
+  return STATE.queue.some(function(it){ return it.sampleKey === SAMPLE_KEY; });
+}
+function loadSampleData(mode){
+  var sample = generateSampleData().map(function(it){
+    it.sampleKey = SAMPLE_KEY;
+    ensureItemId(it);
+    return it;
+  });
+  invalidateAnalysis({notify:false});
+  if(mode === 'replace'){
+    STATE.queue = sample;
+    STATE.editingItemId = null;
+    clearManualForm();
+    document.getElementById('addItemBtn').textContent = 'Add RAID Item';
+    toast('Sample EV Program loaded \u2014 ' + sample.length + ' governance items added.', 'success');
+  } else {
+    STATE.queue = STATE.queue.concat(sample);
+    toast('Sample EV Program appended \u2014 ' + sample.length + ' governance items added.', 'success');
+  }
+  renderQueue();
+}
+function showSampleLoadDialog(){
+  var alreadyLoaded = sampleAlreadyInQueue();
+  var box = document.getElementById('dialogBox');
+  var warn = alreadyLoaded ? '<p style="color:var(--amber);font-weight:600;margin-top:-10px;">The sample EV program is already in the queue.</p>' : '';
+  box.innerHTML = '<h3 id="dialogTitle">Load Sample Program</h3>'+
+    '<p>The input queue already contains governance items. Would you like to replace the current queue with the sample program, or append the sample items?</p>'+
+    warn+
+    '<div class="dialog-actions" style="flex-wrap:wrap;">'+
+      '<button type="button" class="btn-outline" id="dialogCancelBtn">Cancel</button>'+
+      '<button type="button" class="btn-outline" id="dialogAppendBtn">Append Sample Data</button>'+
+      '<button type="button" class="btn-primary" id="dialogReplaceBtn">Replace Current Data</button>'+
+    '</div>';
+  document.getElementById('dialogOverlay').hidden = false;
+  pushOverlay('dialog', box);
+  document.getElementById('dialogCancelBtn').focus();
+  document.getElementById('dialogCancelBtn').onclick = closeDialog;
+  document.getElementById('dialogAppendBtn').onclick = function(){ closeDialog(); loadSampleData('append'); };
+  document.getElementById('dialogReplaceBtn').onclick = function(){ closeDialog(); loadSampleData('replace'); };
+}
+
+/* =========================================================================
+   RESET APPLICATION
+   ========================================================================= */
+function resetApplication(){
+  STATE.queue = [];
+  STATE.analyzed = [];
+  STATE.relatedPairs = [];
+  STATE.hasAnalyzed = false;
+  STATE.analysisFilter = 'all';
+  STATE.editingItemId = null;
+  STATE.drawerItemId = null;
+  EXEC_CACHE = null;
+  STATE.register = { search:'', type:'all', severity:'all', status:'all', workstream:'all', owner:'all', decision:'all', overdue:'all', ownerGap:'all', sortKey:'severity', sortDir:'desc' };
+  document.getElementById('pasteInput').value = '';
+  document.getElementById('pasteCharCount').textContent = '0 characters';
+  clearManualForm();
+  document.getElementById('addItemBtn').textContent = 'Add RAID Item';
+  ['analysis','executive','register'].forEach(function(s){ document.getElementById('stepBtn-'+s).disabled = true; });
+  document.getElementById('stepBtn-input').classList.remove('done');
+  renderQueue();
+  goToStep('input');
+  toast('Application reset.', 'info');
+}
+</script>
+<script>
+/* =========================================================================
+   EVENT LISTENERS
+   ========================================================================= */
+function initEventListeners(){
+
+  // Step navigation
+  document.getElementById('stepNav').addEventListener('click', function(e){
+    var btn = e.target.closest('.step-btn');
+    if(!btn || btn.disabled) return;
+    goToStep(btn.getAttribute('data-step'));
+  });
+
+  // Paste input
+  var pasteInput = document.getElementById('pasteInput');
+  pasteInput.addEventListener('input', function(){
+    document.getElementById('pasteCharCount').textContent = pasteInput.value.length + ' characters';
+  });
+  document.getElementById('parsePasteBtn').addEventListener('click', function(){
+    var text = pasteInput.value;
+    if(!text.trim()){ toast('Paste governance notes before parsing.', 'warn'); return; }
+    var parsed = parseRaidText(text);
+    if(parsed.length===0){ toast('No governance items could be identified in the pasted text.', 'warn'); return; }
+    invalidateAnalysis({notify:false});
+    parsed.forEach(function(p){ ensureItemId(p); STATE.queue.push(p); });
+    renderQueue();
+    toast(parsed.length + ' governance item' + (parsed.length===1?'':'s') + ' parsed and added to the queue.', 'success');
+    pasteInput.value = '';
+    document.getElementById('pasteCharCount').textContent = '0 characters';
+  });
+  document.getElementById('clearPasteBtn').addEventListener('click', function(){
+    pasteInput.value = '';
+    document.getElementById('pasteCharCount').textContent = '0 characters';
+    toast('Paste input cleared.', 'info');
+  });
+
+  // Manual form
+  document.getElementById('manualForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var item = queueItemFromForm();
+    var errors = validateManualEntry(item.title, item.description);
+    if(errors.length){
+      toast(errors[0], 'warn');
+      return;
+    }
+    invalidateAnalysis({notify:false});
+    if(STATE.editingItemId !== null){
+      var idx = STATE.queue.findIndex(function(q){ return q.id === STATE.editingItemId; });
+      if(idx !== -1){
+        item.id = STATE.queue[idx].id; // preserve stable id
+        STATE.queue[idx] = item;
+        toast('Governance item updated.', 'success');
+      } else {
+        ensureItemId(item);
+        STATE.queue.push(item);
+        toast('Governance item added to the queue.', 'success');
+      }
+      STATE.editingItemId = null;
+      document.getElementById('addItemBtn').textContent = 'Add RAID Item';
+    } else {
+      ensureItemId(item);
+      STATE.queue.push(item);
+      toast('Governance item added to the queue.', 'success');
+    }
+    clearManualForm();
+    renderQueue();
+  });
+  document.getElementById('clearFormBtn').addEventListener('click', function(){
+    clearManualForm();
+    STATE.editingItemId = null;
+    document.getElementById('addItemBtn').textContent = 'Add RAID Item';
+    toast('Form cleared.', 'info');
+  });
+
+  // Sample data — replace/append confirmation to prevent accidental duplication
+  document.getElementById('loadSampleBtn').addEventListener('click', function(){
+    if(STATE.queue.length === 0){
+      loadSampleData('replace', false);
+      return;
+    }
+    showSampleLoadDialog();
+  });
+
+  // Queue actions (edit/delete) via delegation, keyed by stable id
+  document.getElementById('queueList').addEventListener('click', function(e){
+    var editBtn = e.target.closest('.queue-edit-btn');
+    var delBtn = e.target.closest('.queue-delete-btn');
+    if(editBtn){
+      var id = editBtn.getAttribute('data-id');
+      var item = STATE.queue.find(function(q){ return q.id === id; });
+      if(!item) return;
+      fillFormFromItem(item);
+      STATE.editingItemId = id;
+      document.getElementById('addItemBtn').textContent = 'Update RAID Item';
+      var formEl = document.getElementById('manualForm');
+      if(formEl.scrollIntoView){ formEl.scrollIntoView({behavior:'smooth', block:'center'}); }
+    } else if(delBtn){
+      var did = delBtn.getAttribute('data-id');
+      invalidateAnalysis({notify:false});
+      STATE.queue = STATE.queue.filter(function(q){ return q.id !== did; });
+      if(STATE.editingItemId === did){
+        STATE.editingItemId = null;
+        clearManualForm();
+        document.getElementById('addItemBtn').textContent = 'Add RAID Item';
+      }
+      renderQueue();
+      toast('Governance item removed from queue.', 'info');
+    }
+  });
+
+  // Analyze
+  document.getElementById('analyzeBtn').addEventListener('click', runAnalyzeSequence);
+  document.getElementById('backToInputBtn').addEventListener('click', function(){ goToStep('input'); });
+  document.getElementById('toExecutiveBtn').addEventListener('click', function(){ goToStep('executive'); });
+
+  // Reset
+  document.getElementById('resetAppBtn').addEventListener('click', function(){
+    showConfirmDialog('Reset Application?', 'This will permanently clear all queued and analyzed governance data from this session. This action cannot be undone.', 'Reset Application', resetApplication);
+  });
+
+  // Analysis filter bar (delegated, re-rendered each time)
+  document.getElementById('stage-analysis').addEventListener('click', function(e){
+    var chip = e.target.closest('.filter-chip');
+    if(chip){
+      STATE.analysisFilter = chip.getAttribute('data-filter');
+      renderAnalysisFilterBar();
+      renderAnalysisList();
+      return;
+    }
+    var row = e.target.closest('.analysis-row');
+    if(row){ renderDrawer(row.getAttribute('data-id')); }
+  });
+  document.getElementById('stage-analysis').addEventListener('keydown', function(e){
+    if(e.key==='Enter' || e.key===' '){
+      var row = e.target.closest('.analysis-row');
+      if(row){ e.preventDefault(); renderDrawer(row.getAttribute('data-id')); }
+    }
+  });
+
+  // Executive view (delegated)
+  document.getElementById('stage-executive').addEventListener('click', function(e){
+    if(e.target.closest('#copyBriefingBtn')){ copyToClipboard(STATE.briefingText, 'Executive briefing copied.', document.getElementById('copyBriefingBtn')); return; }
+    if(e.target.closest('#copyActionsBtn')){ copyToClipboard(STATE.actionsText, 'Recommended actions copied.', document.getElementById('copyActionsBtn')); return; }
+    if(e.target.closest('#copyTalkingBtn')){ copyToClipboard(STATE.talkingPointsText, 'Talking points copied.', document.getElementById('copyTalkingBtn')); return; }
+    if(e.target.closest('#qualityMethodologyBtn')){ toggleMethodologyPanel(); return; }
+    var viewBtn = e.target.closest('.view-item-btn');
+    if(viewBtn){ renderDrawer(viewBtn.getAttribute('data-id')); return; }
+    var pc = e.target.closest('.priority-card2');
+    if(pc){ renderDrawer(pc.getAttribute('data-id')); return; }
+    // Decision Center cards intentionally do not open on card click; the
+    // explicit "View Full Item" button is the sole interactive control so
+    // keyboard and screen-reader users are not given two conflicting actions.
+  });
+  document.getElementById('stage-executive').addEventListener('keydown', function(e){
+    if(e.key==='Enter' || e.key===' '){
+      var pc = e.target.closest('.priority-card2');
+      if(pc){ e.preventDefault(); renderDrawer(pc.getAttribute('data-id')); }
+    }
+    if(e.key==='Escape'){
+      var panel = document.getElementById('qualityMethodologyPanel');
+      if(panel && !panel.hidden && panel.contains(e.target)){
+        toggleMethodologyPanel(true);
+        document.getElementById('qualityMethodologyBtn').focus();
+      }
+    }
+  });
+
+  // Register (delegated)
+  document.getElementById('stage-register').addEventListener('click', function(e){
+    var th = e.target.closest('th[data-sort]');
+    if(th){
+      var key = th.getAttribute('data-sort');
+      if(STATE.register.sortKey === key){ STATE.register.sortDir = STATE.register.sortDir==='asc'?'desc':'asc'; }
+      else { STATE.register.sortKey = key; STATE.register.sortDir = 'desc'; }
+      renderRegisterStage();
+      return;
+    }
+    var row = e.target.closest('tr[data-id]') || e.target.closest('.reg-card[data-id]');
+    if(row){ renderDrawer(row.getAttribute('data-id')); }
+  });
+  document.getElementById('stage-register').addEventListener('keydown', function(e){
+    if(e.key==='Enter' || e.key===' '){
+      var th = e.target.closest('th[data-sort]');
+      if(th){
+        e.preventDefault();
+        var key = th.getAttribute('data-sort');
+        if(STATE.register.sortKey === key){ STATE.register.sortDir = STATE.register.sortDir==='asc'?'desc':'asc'; }
+        else { STATE.register.sortKey = key; STATE.register.sortDir = 'desc'; }
+        renderRegisterStage();
+        return;
+      }
+      var row = e.target.closest('tr[data-id]') || e.target.closest('.reg-card[data-id]');
+      if(row){ e.preventDefault(); renderDrawer(row.getAttribute('data-id')); }
+    }
+  });
+  document.getElementById('stage-register').addEventListener('input', function(e){
+    if(e.target.id==='regSearch'){ STATE.register.search = e.target.value; renderRegisterStage(); preserveFocus('regSearch'); }
+  });
+  document.getElementById('stage-register').addEventListener('change', function(e){
+    var map = {regType:'type', regSeverity:'severity', regStatus:'status', regWorkstream:'workstream', regOwner:'owner', regDecision:'decision', regOverdue:'overdue', regGap:'ownerGap'};
+    if(map[e.target.id]){ STATE.register[map[e.target.id]] = e.target.value; renderRegisterStage(); }
+  });
+
+  // Drawer
+  document.getElementById('drawerOverlay').addEventListener('click', function(e){
+    if(e.target.id==='drawerOverlay') closeDrawer();
+  });
+  document.getElementById('drawerBox').addEventListener('click', function(e){
+    if(e.target.closest('#drawerCloseBtn') || e.target.closest('#drawerCloseBtn2')){ closeDrawer(); return; }
+    if(e.target.closest('#copyActionDrawerBtn')){
+      var actionText = document.getElementById('drawerActionText').textContent;
+      copyToClipboard(actionText, 'Recommended action copied.', document.getElementById('copyActionDrawerBtn'));
+      return;
+    }
+    if(e.target.closest('#copyEscalationDrawerBtn')){
+      var escText = document.getElementById('drawerEscalationText').textContent;
+      copyToClipboard(escText, 'Escalation statement copied.', document.getElementById('copyEscalationDrawerBtn'));
+      return;
+    }
+  });
+
+  // Global keyboard handling for overlays: Escape closes only the topmost
+  // active overlay, and Tab is trapped within it so focus never escapes
+  // to the inert page behind it.
+  document.addEventListener('keydown', function(e){
+    var top = topOverlayType();
+    if(!top) return;
+    if(e.key === 'Escape'){
+      if(top === 'drawer') closeDrawer();
+      else if(top === 'dialog') closeDialog();
+      return;
+    }
+    if(e.key === 'Tab'){
+      var entry = STATE.overlayStack[STATE.overlayStack.length-1];
+      if(entry) trapFocus(entry.container, e);
+    }
+  });
+}
+function preserveFocus(id){
+  var el = document.getElementById(id);
+  if(el && document.activeElement !== el){
+    var val = el.value;
+    el.focus();
+    el.value = val;
+    el.setSelectionRange(val.length, val.length);
+  }
+}
+
+/* =========================================================================
+   INITIALIZATION
+   ========================================================================= */
+function init(){
+  initEventListeners();
+  renderQueue();
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
