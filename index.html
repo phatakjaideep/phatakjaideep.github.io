@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jaideep Phatak — Executive Program Operating Systems</title>
 <meta name="description" content="Portfolio of original program command centers, delivery frameworks, and decision-support systems built by Jaideep Phatak to demonstrate structured program leadership, technical execution, and AI-enabled reporting.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
 
 <!-- ==========================================================
      JAIDEEP PHATAK — EXECUTIVE PORTFOLIO
      Single-file, dependency-free homepage.
-     Design language v1.1: dark navy + amber accent (matches
+     Visual Design Language Version: 1.1 (intentionally distinct from the
+     EmbedOps Commercial Package version below — this refers only to the
+     dark navy + amber visual system, matches
      Executive Portfolio Brand Style Guide v1.1 / LinkedIn banner),
      bold display type paired with a quiet system sans, hairline
      rules on dark surfaces, no gradients, no external assets.
@@ -150,7 +153,7 @@
   }
   .mobile-menu.open{ display:flex; }
 
-  @media (max-width: 880px){
+  @media (max-width: 999px){
     .nav-links, .nav-cta .btn-secondary{ display:none; }
     .nav-toggle{ display:flex; }
   }
@@ -391,6 +394,30 @@
   .contact-card a.c-val:hover{ color:var(--amber); }
   @media (max-width: 780px){ .contact-grid{ grid-template-columns:1fr; } }
 
+  /* ---------- EmbedOps services: pathway + pricing ---------- */
+  .pathway-steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:44px; }
+  .pathway-step{ background:var(--surface); padding:26px 22px; }
+  .pathway-step .p-num{ font-family:var(--label); font-size:12px; color:var(--amber); letter-spacing:.1em; margin-bottom:10px; }
+  .pathway-step .p-title{ font-size:15px; font-weight:700; color:var(--ink); margin-bottom:6px; }
+  .pathway-step .p-sub{ font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  @media (max-width: 880px){ .pathway-steps{ grid-template-columns:1fr 1fr; } }
+  @media (max-width: 520px){ .pathway-steps{ grid-template-columns:1fr; } }
+
+  .pricing-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:28px; }
+  .pricing-card{ background:var(--surface); padding:30px 28px; }
+  .pricing-card .pc-eyebrow{ font-family:var(--label); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:10px; }
+  .pricing-card .pc-title{ font-size:19px; font-weight:700; color:var(--ink); margin-bottom:8px; }
+  .pricing-card .pc-price{ font-size:26px; font-weight:800; color:var(--amber); margin-bottom:10px; }
+  .pricing-card .pc-price small{ font-size:13px; color:var(--ink-faint); font-weight:500; }
+  .pricing-card .pc-desc{ font-size:14px; color:var(--ink-soft); line-height:1.6; margin-bottom:14px; }
+  .pricing-card .pc-terms{ font-size:12.5px; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:12px; line-height:1.6; }
+  @media (max-width: 780px){ .pricing-grid{ grid-template-columns:1fr; } }
+
+  .retainer-note{ background:var(--surface); border:1px solid var(--line); padding:26px 28px; font-size:14px; color:var(--ink-soft); line-height:1.7; }
+  .retainer-note strong{ color:var(--ink); }
+
+  .services-note{ font-size:12.5px; color:var(--ink-faint); margin-top:18px; line-height:1.6; }
+
   /* ---------- Footer ---------- */
   .site-footer{ background:var(--surface); color:var(--ink-soft); padding:48px 0 32px; border-top:1px solid var(--line); }
   .footer-top{
@@ -427,16 +454,21 @@
   .toolkit-head p{ font-size:16px; }
 
   .toolkit-grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:22px; align-items:stretch;
+    display:flex; flex-direction:column; gap:18px;
   }
   .toolkit-category-card{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:30px 26px; display:flex; flex-direction:column; gap:14px;
+    padding:30px 34px;
+    display:grid; grid-template-columns:236px 1fr; gap:36px; align-items:start;
     transition:border-color .18s ease, box-shadow .18s ease;
   }
   .toolkit-category-card:hover{
     border-color:var(--line-strong);
     box-shadow:0 18px 40px -24px rgba(0,0,0,.55);
+  }
+  .toolkit-cat-head{
+    display:flex; flex-direction:column; gap:12px;
+    border-right:1px solid var(--line); padding-right:36px;
   }
   .toolkit-cat-icon{
     width:44px; height:44px; border:1px solid var(--line-strong); border-radius:var(--radius);
@@ -446,26 +478,26 @@
   .toolkit-cat-icon svg{ width:22px; height:22px; }
   .toolkit-category-card h3{ margin-top:2px; }
   .toolkit-cat-positioning{
-    font-size:13.5px; font-style:italic; color:var(--ink-soft); text-align:justify; text-align-last:left;
-    padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:2px;
+    font-size:13.5px; font-style:italic; color:var(--ink-soft); text-align:left; margin:0;
   }
-  .toolkit-tools{ display:flex; flex-direction:column; }
+  .toolkit-tools{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px 32px; align-items:stretch; }
   .toolkit-tool-row{
-    display:flex; gap:12px; padding:16px 0; border-top:1px solid var(--line);
+    display:flex; gap:12px; padding:0; border:none;
   }
-  .toolkit-tool-row:first-child{ border-top:none; padding-top:0; }
   .toolkit-tool-icon{
     width:30px; height:30px; flex-shrink:0; margin-top:1px;
     display:flex; align-items:center; justify-content:center;
     border:1px solid var(--line); border-radius:6px; background:var(--navy-2); color:var(--amber-bright);
   }
   .toolkit-tool-icon svg{ width:15px; height:15px; }
-  .toolkit-tool-body{ flex:1; min-width:0; }
+  .toolkit-tool-body{ flex:1; min-width:0; display:flex; flex-direction:column; }
   .toolkit-tool-name{
     font-family:var(--display); font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:4px;
+    min-height:36px; display:flex; align-items:flex-start;
   }
   .toolkit-tool-desc{
-    font-size:12.5px; line-height:1.55; color:var(--ink-faint); text-align:justify; text-align-last:left; margin-bottom:10px;
+    font-size:12.5px; line-height:1.55; color:var(--ink-faint); text-align:left; margin-bottom:10px;
+    min-height:58px;
   }
   .coming-soon-badge{
     display:inline-flex; align-items:center; gap:6px;
@@ -510,27 +542,182 @@
     font-size:13.5px; font-style:italic; color:var(--ink-faint); text-align:center;
   }
 
-  @media (max-width: 980px){
-    .toolkit-grid{ grid-template-columns:repeat(2,1fr); }
+  @media (max-width: 1180px){
+    .toolkit-category-card{ grid-template-columns:1fr; padding:28px 26px; }
+    .toolkit-cat-head{
+      border-right:none; border-bottom:1px solid var(--line);
+      padding-right:0; padding-bottom:20px;
+    }
   }
-  @media (max-width: 600px){
-    .toolkit-grid{ grid-template-columns:1fr; gap:20px; }
-    .toolkit-category-card{ padding:26px 22px; }
+  @media (max-width: 560px){
+    .toolkit-tools{ grid-template-columns:1fr; }
+    .toolkit-category-card{ padding:24px 22px; }
   }
+
+  /* ---------- Left navigation panel (desktop executive-app shell) ---------- */
+  .side-nav{
+    display:none;
+    position:fixed; top:0; left:0; bottom:0; width:252px;
+    background:var(--surface); border-right:1px solid var(--line);
+    flex-direction:column; z-index:200; overflow-y:auto;
+  }
+  .side-nav-brand{ padding:26px 22px 18px; display:flex; align-items:center; gap:10px; }
+  .side-nav-brand .mark{ width:10px; height:10px; background:var(--amber); flex-shrink:0; }
+  .side-nav-brand .brand-name{
+    font-family:var(--display); font-weight:800; font-size:14.5px; letter-spacing:.05em; color:var(--ink);
+  }
+  .side-nav .divider{ margin:0 22px; }
+  .side-nav-links{ display:flex; flex-direction:column; gap:1px; padding:14px 10px; }
+  .side-nav-links a{
+    display:block; padding:10px 12px; border-radius:6px;
+    border-left:2px solid transparent;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .side-nav-links a:hover{ background:rgba(255,255,255,.035); }
+  .side-nav-links a.is-active{ background:var(--amber-soft); border-left-color:var(--amber); }
+  .snl-title{
+    font-family:var(--label); font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .side-nav-links a.is-active .snl-title{ color:var(--amber-bright); }
+  .side-nav-links a:hover .snl-title{ color:var(--ink); }
+  .snl-desc{ font-size:11.5px; color:var(--ink-faint); margin-top:3px; line-height:1.4; }
+  .side-nav-foot{ margin-top:auto; padding:18px 22px 24px; display:flex; flex-direction:column; gap:9px; }
+  .side-nav-foot .btn{ width:100%; justify-content:center; }
+  .side-nav-meta{ font-size:10.5px; color:var(--ink-faint); letter-spacing:.03em; line-height:1.6; }
+
+  @media (min-width: 1000px){
+    .side-nav{ display:flex; }
+    .site-header{ display:none; }
+    .page-content{ margin-left:252px; }
+  }
+
+  /* ---------- Toolkit status badges ---------- */
+  .status-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--label); font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    padding:4px 10px; border-radius:100px; cursor:default; user-select:none;
+  }
+  .status-badge::before{ content:""; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .status-live{ color:var(--navy); background:var(--amber); }
+  .status-live::before{ background:var(--navy); }
+  .status-dev{ color:var(--amber-bright); border:1px solid rgba(212,137,26,.4); background:rgba(212,137,26,.08); }
+  .status-dev::before{ background:var(--amber-bright); }
+  .status-planned{ color:var(--ink-faint); border:1px solid var(--line-strong); background:var(--navy-2); }
+  .status-planned::before{ background:var(--ink-faint); }
+
+  /* ---------- "New" badge (section header accent) ---------- */
+  .new-badge{
+    display:inline-flex; align-items:center;
+    font-family:var(--label); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--amber-bright); border:1px solid rgba(212,137,26,.4); background:rgba(212,137,26,.08);
+    padding:3px 9px; border-radius:100px; cursor:default; user-select:none;
+  }
+
+  /* ---------- Flagship (live) toolkit cards ---------- */
+  .toolkit-flagship-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-bottom:22px; align-items:stretch; }
+  .toolkit-flagship-card{
+    background:var(--surface); border:1px solid var(--amber); border-radius:var(--radius);
+    padding:32px 30px; display:flex; flex-direction:column; gap:14px;
+    transition:box-shadow .18s ease, transform .18s ease;
+  }
+  .toolkit-flagship-card:hover{ box-shadow:0 20px 44px -24px rgba(0,0,0,.6); transform:translateY(-2px); }
+  .toolkit-flagship-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .toolkit-flagship-icon{
+    width:46px; height:46px; border-radius:var(--radius); background:var(--amber); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .toolkit-flagship-icon svg{ width:23px; height:23px; }
+  .toolkit-flagship-badges{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .toolkit-flagship-card h3{ font-size:20px; margin-top:4px; }
+  .toolkit-flagship-card .tf-desc{ font-size:14.5px; color:var(--ink-soft); }
+  .toolkit-flagship-card .tf-meta{ font-size:12px; color:var(--ink-faint); line-height:1.6; }
+  .toolkit-flagship-card .toolkit-tool-link{
+    margin-top:auto; align-self:flex-start; padding:10px 18px; font-size:11px;
+  }
+  @media (max-width: 780px){ .toolkit-flagship-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Toolkit progress indicator ---------- */
+  .toolkit-progress{
+    display:flex; gap:28px; flex-wrap:wrap; align-items:center;
+    padding:16px 22px; margin-bottom:36px; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--navy-2);
+  }
+  .toolkit-progress-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); }
+  .toolkit-progress-item .tp-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .toolkit-progress-item .tp-count{ font-family:var(--display); font-weight:800; color:var(--ink); }
+
+  /* ---------- Footer ecosystem identity blocks ---------- */
+  .footer-ecosystem{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); margin-bottom:28px;
+  }
+  .footer-eco-block{ background:var(--surface); padding:22px 24px; }
+  .footer-eco-block .fe-label{
+    font-family:var(--label); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:8px;
+  }
+  .footer-eco-block .fe-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin-bottom:10px; }
+  .footer-eco-block a{ font-size:12.5px; color:var(--ink); font-weight:600; }
+  .footer-eco-block a:hover{ color:var(--amber); }
+  @media (max-width: 780px){ .footer-ecosystem{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 
+<!-- ================= LEFT NAVIGATION PANEL (desktop) ================= -->
+<nav class="side-nav" id="sideNav" aria-label="Primary">
+  <a href="#top" class="side-nav-brand">
+    <span class="mark"></span>
+    <span class="brand-name">EXECUTIVE PORTFOLIO</span>
+  </a>
+  <hr class="divider">
+  <div class="side-nav-links">
+    <a href="#top" data-section="top">
+      <div class="snl-title">Overview</div>
+      <div class="snl-desc">Executive portfolio introduction</div>
+    </a>
+    <a href="#command-centers" data-section="command-centers">
+      <div class="snl-title">Command Centers</div>
+      <div class="snl-desc">Interactive governance systems</div>
+    </a>
+    <a href="#ai-governance-toolkit" data-section="ai-governance-toolkit">
+      <div class="snl-title">Executive AI Toolkit</div>
+      <div class="snl-desc">Free executive AI applications</div>
+    </a>
+    <a href="#services" data-section="services">
+      <div class="snl-title">EmbedOps</div>
+      <div class="snl-desc">Executive visibility consulting</div>
+    </a>
+    <a href="#about" data-section="about">
+      <div class="snl-title">About</div>
+      <div class="snl-desc">Experience and leadership philosophy</div>
+    </a>
+    <a href="#contact" data-section="contact">
+      <div class="snl-title">Contact</div>
+      <div class="snl-desc">Let's connect</div>
+    </a>
+  </div>
+  <hr class="divider">
+  <div class="side-nav-foot">
+    <a class="btn btn-secondary" href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn btn-ghost" style="width:100%; justify-content:center;" href="./resume/Jaideep_Phatak_Resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+    <hr class="divider" style="margin:6px 0 0;">
+    <div class="side-nav-meta">Version 1.4<br>July 2026</div>
+  </div>
+</nav>
+
+<div class="page-content" id="pageContent">
 <!-- ================= HEADER ================= -->
 <header class="site-header" id="siteHeader">
   <div class="wrap">
     <a href="#top" class="brand"><span class="mark"></span>JAIDEEP PHATAK</a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#top">Home</a>
+      <a href="#top">Overview</a>
       <a href="#command-centers">Command Centers</a>
       <a href="#ai-governance-toolkit">AI Toolkit</a>
+      <a href="#services">EmbedOps</a>
       <a href="#about">About</a>
-      <a href="#current-focus">Current Focus</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
@@ -543,12 +730,13 @@
     </div>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#top">Home</a>
+    <a href="#top">Overview</a>
     <a href="#command-centers">Command Centers</a>
     <a href="#ai-governance-toolkit">AI Toolkit</a>
+    <a href="#services">EmbedOps</a>
     <a href="#about">About</a>
-    <a href="#current-focus">Current Focus</a>
     <a href="#contact">Contact</a>
+    <a href="./resume/Jaideep_Phatak_Resume.pdf" target="_blank" rel="noopener">Download Resume ↗</a>
     <a href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn ↗</a>
   </div>
 </header>
@@ -565,7 +753,7 @@
         The systems on this site demonstrate how I approach complex program delivery: the structures,
         review cadence, decision logic, and reporting discipline that keep cross-functional teams moving.
         Across 10+ years in the industry, including more than 7 years leading engineering initiatives
-        across the USA, EU, UAE, India, and APAC, I built these demonstrations to make my operating model
+        across the USA, UAE, and India, I built these demonstrations to make my operating model
         visible—not merely described.
       </p>
       <div class="hero-actions">
@@ -672,11 +860,11 @@
     <div class="highlight-grid">
       <div class="highlight-item"><div class="h-label">PMP® Certified</div><div class="h-sub">Project Management Institute</div></div>
       <div class="highlight-item"><div class="h-label">Global Program Delivery</div><div class="h-sub">10+ years, 7+ in complex programs</div></div>
-      <div class="highlight-item"><div class="h-label">$8M–$10M+ Portfolio Governance</div><div class="h-sub">35+ OEM &amp; Tier-1 programs</div></div>
-      <div class="highlight-item"><div class="h-label">80+ Engineers Led</div><div class="h-sub">Across USA, UAE &amp; India</div></div>
+      <div class="highlight-item"><div class="h-label">Automotive &amp; Engineering OEM Delivery</div><div class="h-sub">Global programme governance</div></div>
+      <div class="highlight-item"><div class="h-label">80+ People Led</div><div class="h-sub">Across USA, UAE &amp; India</div></div>
       <div class="highlight-item"><div class="h-label">AI-Augmented Delivery</div><div class="h-sub">GenAI-enabled reporting</div></div>
       <div class="highlight-item"><div class="h-label">Leadership Reporting</div><div class="h-sub">Power BI &amp; Excel dashboards</div></div>
-      <div class="highlight-item"><div class="h-label">Cost &amp; Weight Optimization</div><div class="h-sub">~$200/vehicle, ~20kg/vehicle (VAVE)</div></div>
+      <div class="highlight-item"><div class="h-label">Cost &amp; Weight Optimization</div><div class="h-sub">VAVE programme experience</div></div>
       <div class="highlight-item"><div class="h-label">M.S. Mechanical Engineering</div><div class="h-sub">Lamar University, USA</div></div>
     </div>
   </div>
@@ -811,7 +999,7 @@
           <span class="cc-tag">AI Insights</span>
         </div>
         <a class="cc-launch" href="./executive-program-command-center/" target="_blank" rel="noopener noreferrer">
-          Launch Demo
+          Explore Command Center
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           <span class="visually-hidden">(opens in a new tab)</span>
         </a>
@@ -841,7 +1029,7 @@
           <span class="cc-tag">Resources</span>
         </div>
         <a class="cc-launch" href="./engineering-program-control-tower/" target="_blank" rel="noopener noreferrer">
-          Launch Demo
+          Explore Command Center
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           <span class="visually-hidden">(opens in a new tab)</span>
         </a>
@@ -873,7 +1061,7 @@
           <span class="cc-tag">Launch Readiness</span>
         </div>
         <a class="cc-launch" href="./npd-executive-command-center/" target="_blank" rel="noopener noreferrer">
-          Launch Demo
+          Explore Command Center
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           <span class="visually-hidden">(opens in a new tab)</span>
         </a>
@@ -904,7 +1092,7 @@
           <span class="cc-tag">AI Insights</span>
         </div>
         <a class="cc-launch" href="./executive-portfolio-command-center/" target="_blank" rel="noopener noreferrer">
-          Launch Demo
+          Explore Command Center
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           <span class="visually-hidden">(opens in a new tab)</span>
         </a>
@@ -918,7 +1106,10 @@
 <section class="section ai-toolkit-section" id="ai-governance-toolkit" aria-labelledby="ai-toolkit-heading">
   <div class="wrap">
     <div class="section-head toolkit-head">
-      <div class="eyebrow">Executive AI Toolkit</div>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
+        <div class="eyebrow" style="margin-bottom:0;">Executive AI Toolkit</div>
+        <span class="new-badge">New &middot; July 2026</span>
+      </div>
       <h2 id="ai-toolkit-heading">Practical tools for faster governance and better executive decisions.</h2>
       <p>
         A growing collection of browser-based tools built to improve prioritization, decision readiness,
@@ -927,18 +1118,67 @@
       </p>
     </div>
 
+    <div class="toolkit-progress" role="status" aria-label="Executive AI Toolkit build progress">
+      <div class="toolkit-progress-item"><span class="tp-dot" style="background:var(--amber);"></span><span class="tp-count">2</span>&nbsp;Live Tools</div>
+      <div class="toolkit-progress-item"><span class="tp-dot" style="background:var(--amber-bright);"></span><span class="tp-count">3</span>&nbsp;In Development</div>
+      <div class="toolkit-progress-item"><span class="tp-dot" style="background:var(--ink-faint);"></span><span class="tp-count">5</span>&nbsp;Planned</div>
+    </div>
+
+    <!-- Flagship: the two live tools, given visual priority -->
+    <div class="toolkit-flagship-grid">
+      <article class="toolkit-flagship-card">
+        <div class="toolkit-flagship-top">
+          <div class="toolkit-flagship-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/>
+            </svg>
+          </div>
+          <div class="toolkit-flagship-badges">
+            <span class="status-badge status-live" aria-label="Status: Live">Live</span>
+            <span class="free-badge" aria-label="Free tool">Free Tool</span>
+          </div>
+        </div>
+        <h3>Executive Risk Prioritizer</h3>
+        <p class="tf-desc">Convert a conventional risk register into an executive-ranked action queue using deterministic, local prioritization logic based on business impact, urgency, strategic importance, dependencies, mitigation confidence, and ownership clarity.</p>
+        <p class="tf-meta">Executive Priority Queue &middot; Decision Cards &middot; Heat Map &middot; Local Intelligence Assistant</p>
+        <a class="toolkit-tool-link" href="./ai-toolkit/executive-risk-prioritizer/" target="_blank" rel="noopener noreferrer" aria-label="Explore Risk Prioritizer (opens in a new tab)">Explore Risk Prioritizer <span aria-hidden="true">&#8599;</span></a>
+      </article>
+
+      <article class="toolkit-flagship-card">
+        <div class="toolkit-flagship-top">
+          <div class="toolkit-flagship-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="6" y="4" width="12" height="17" rx="2"/>
+              <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="toolkit-flagship-badges">
+            <span class="status-badge status-live" aria-label="Status: Live">Live</span>
+            <span class="free-badge" aria-label="Free tool">Free Tool</span>
+          </div>
+        </div>
+        <h3>RAID Intelligence Analyzer</h3>
+        <p class="tf-desc">Transform unstructured meeting notes into an executive-ready view of risks, assumptions, issues, and dependencies &mdash; entirely in your browser.</p>
+        <p class="tf-meta">Risk &middot; Assumption &middot; Issue &middot; Dependency Extraction &middot; Local Intelligence Assistant</p>
+        <a class="toolkit-tool-link" href="./ai-toolkit/raid-intelligence-analyzer/" target="_blank" rel="noopener noreferrer" aria-label="Explore RAID Intelligence Analyzer (opens in a new tab)">Explore RAID Intelligence Analyzer <span aria-hidden="true">&#8599;</span></a>
+      </article>
+    </div>
+
     <div class="toolkit-grid">
 
       <!-- Category 1: Executive Decision Making -->
       <article class="toolkit-category-card">
-        <div class="toolkit-cat-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M14.6 9.4l-2.1 5.2-5.2 2.1 2.1-5.2 5.2-2.1z"/>
-          </svg>
+        <div class="toolkit-cat-head">
+          <div class="toolkit-cat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M14.6 9.4l-2.1 5.2-5.2 2.1 2.1-5.2 5.2-2.1z"/>
+            </svg>
+          </div>
+          <h3>Executive Decision Making</h3>
+          <p class="toolkit-cat-positioning">For leaders who need better decisions, not more data.</p>
         </div>
-        <h3>Executive Decision Making</h3>
-        <p class="toolkit-cat-positioning">For leaders who need better decisions, not more data.</p>
 
         <div class="toolkit-tools">
           <div class="toolkit-tool-row">
@@ -951,24 +1191,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Executive Brief Generator</div>
               <p class="toolkit-tool-desc">Create concise executive-ready summaries from project updates, meeting notes, or status reports.</p>
-              <span class="coming-soon-badge" aria-label="Executive Brief Generator status: Coming soon">Coming Soon</span>
-            </div>
-          </div>
-          <div class="toolkit-tool-row is-live">
-            <div class="toolkit-tool-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/>
-              </svg>
-            </div>
-            <div class="toolkit-tool-body">
-              <div class="toolkit-tool-name">Executive Risk Prioritizer</div>
-              <div class="toolkit-tool-badges">
-                <span class="live-badge" aria-label="Status: Live">Live</span>
-                <span class="free-badge" aria-label="Free tool">Free Tool</span>
-              </div>
-              <p class="toolkit-tool-desc">Convert a conventional risk register into an executive-ranked action queue using deterministic, local prioritization logic based on business impact, urgency, strategic importance, dependencies, mitigation confidence, and ownership clarity.</p>
-              <p class="toolkit-tool-meta">Executive Priority Queue &middot; Decision Cards &middot; Heat Map &middot; Local Intelligence Assistant</p>
-              <a class="toolkit-tool-link" href="./ai-toolkit/executive-risk-prioritizer/" target="_blank" rel="noopener noreferrer" aria-label="Open Executive Risk Prioritizer in a new tab">Open Risk Prioritizer <span aria-hidden="true">&#8599;</span></a>
+              <span class="status-badge status-dev" aria-label="Executive Brief Generator status: In development">In Development</span>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -980,7 +1203,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Decision Latency Calculator</div>
               <p class="toolkit-tool-desc">Measure approval delays and decision cycle times that slow program execution.</p>
-              <span class="coming-soon-badge" aria-label="Decision Latency Calculator status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-planned" aria-label="Decision Latency Calculator status: Planned">Planned</span>
             </div>
           </div>
         </div>
@@ -988,29 +1211,17 @@
 
       <!-- Category 2: Program Governance -->
       <article class="toolkit-category-card">
-        <div class="toolkit-cat-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 10l9-6 9 6"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9"/><path d="M3 21h18"/>
-          </svg>
+        <div class="toolkit-cat-head">
+          <div class="toolkit-cat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 10l9-6 9 6"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9"/><path d="M3 21h18"/>
+            </svg>
+          </div>
+          <h3>Program Governance</h3>
+          <p class="toolkit-cat-positioning">Strengthen governance without adding bureaucracy.</p>
         </div>
-        <h3>Program Governance</h3>
-        <p class="toolkit-cat-positioning">Strengthen governance without adding bureaucracy.</p>
 
         <div class="toolkit-tools">
-          <div class="toolkit-tool-row is-live">
-            <div class="toolkit-tool-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <rect x="6" y="4" width="12" height="17" rx="2"/>
-                <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-            </div>
-            <div class="toolkit-tool-body">
-              <div class="toolkit-tool-name">RAID Intelligence Analyzer</div>
-              <p class="toolkit-tool-desc">Transform unstructured meeting notes into an executive-ready view of risks, assumptions, issues, and dependencies &mdash; entirely in your browser.</p>
-              <a class="toolkit-tool-link" href="./ai-toolkit/raid-intelligence-analyzer/" target="_blank" rel="noopener noreferrer" aria-label="Launch RAID Intelligence Analyzer (opens in a new tab)">Launch Tool</a>
-            </div>
-          </div>
           <div class="toolkit-tool-row">
             <div class="toolkit-tool-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -1020,7 +1231,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Program Health Score</div>
               <p class="toolkit-tool-desc">Assess delivery, financial, stakeholder, and execution health in one governance view.</p>
-              <span class="coming-soon-badge" aria-label="Program Health Score status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-dev" aria-label="Program Health Score status: In development">In Development</span>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -1032,7 +1243,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Stage Gate Checker</div>
               <p class="toolkit-tool-desc">Validate readiness before major gate reviews, steering committees, or approval milestones.</p>
-              <span class="coming-soon-badge" aria-label="Stage Gate Checker status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-dev" aria-label="Stage Gate Checker status: In development">In Development</span>
             </div>
           </div>
         </div>
@@ -1040,13 +1251,15 @@
 
       <!-- Category 3: Communication -->
       <article class="toolkit-category-card">
-        <div class="toolkit-cat-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 5h16v11H8l-4 4V5z"/>
-          </svg>
+        <div class="toolkit-cat-head">
+          <div class="toolkit-cat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 5h16v11H8l-4 4V5z"/>
+            </svg>
+          </div>
+          <h3>Communication</h3>
+          <p class="toolkit-cat-positioning">Improve stakeholder communication with less manual effort.</p>
         </div>
-        <h3>Communication</h3>
-        <p class="toolkit-cat-positioning">Improve stakeholder communication with less manual effort.</p>
 
         <div class="toolkit-tools">
           <div class="toolkit-tool-row">
@@ -1061,7 +1274,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Stakeholder Update Generator</div>
               <p class="toolkit-tool-desc">Generate tailored updates for executives, sponsors, customers, and delivery teams.</p>
-              <span class="coming-soon-badge" aria-label="Stakeholder Update Generator status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-planned" aria-label="Stakeholder Update Generator status: Planned">Planned</span>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -1074,7 +1287,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Status Report Writer</div>
               <p class="toolkit-tool-desc">Turn project updates into polished weekly or monthly executive status reports.</p>
-              <span class="coming-soon-badge" aria-label="Status Report Writer status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-planned" aria-label="Status Report Writer status: Planned">Planned</span>
             </div>
           </div>
         </div>
@@ -1082,14 +1295,16 @@
 
       <!-- Category 4: Intelligence -->
       <article class="toolkit-category-card">
-        <div class="toolkit-cat-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M9 3a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.8A3 3 0 0 0 7 18h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/>
-            <path d="M15 3a3 3 0 0 1 3 3v1a3 3 0 0 1 1 5.8A3 3 0 0 1 17 18h-2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
-          </svg>
+        <div class="toolkit-cat-head">
+          <div class="toolkit-cat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 3a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.8A3 3 0 0 0 7 18h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/>
+              <path d="M15 3a3 3 0 0 1 3 3v1a3 3 0 0 1 1 5.8A3 3 0 0 1 17 18h-2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
+            </svg>
+          </div>
+          <h3>Intelligence</h3>
+          <p class="toolkit-cat-positioning">Transform project information into actionable insight.</p>
         </div>
-        <h3>Intelligence</h3>
-        <p class="toolkit-cat-positioning">Transform project information into actionable insight.</p>
 
         <div class="toolkit-tools">
           <div class="toolkit-tool-row">
@@ -1102,7 +1317,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Meeting Analyzer</div>
               <p class="toolkit-tool-desc">Extract decisions, actions, owners, risks, and follow-ups from meeting transcripts or minutes.</p>
-              <span class="coming-soon-badge" aria-label="Meeting Analyzer status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-planned" aria-label="Meeting Analyzer status: Planned">Planned</span>
             </div>
           </div>
           <div class="toolkit-tool-row">
@@ -1114,7 +1329,7 @@
             <div class="toolkit-tool-body">
               <div class="toolkit-tool-name">Dashboard Generator</div>
               <p class="toolkit-tool-desc">Convert project data into leadership-ready dashboards with key metrics and visual summaries.</p>
-              <span class="coming-soon-badge" aria-label="Dashboard Generator status: Coming soon">Coming Soon</span>
+              <span class="status-badge status-planned" aria-label="Dashboard Generator status: Planned">Planned</span>
             </div>
           </div>
         </div>
@@ -1123,6 +1338,60 @@
     </div>
 
     <p class="toolkit-footnote">More Executive AI Toolkit tools are currently in development. New tools will be added as the platform evolves.</p>
+  </div>
+</section>
+
+<!-- ================= EMBEDOPS SERVICES ================= -->
+<section class="section section-alt" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">EmbedOps, a consulting practice led by Jaideep Phatak</div>
+      <h2>Turn fragmented program reporting into decision-ready executive visibility.</h2>
+      <p>
+        EmbedOps helps leadership see the true state of a program and surface the decisions and risks
+        that need attention — replacing reporting volume with decision clarity. Pune-first, with
+        selected remote engagements.
+      </p>
+    </div>
+
+    <div class="pathway-steps" style="margin-top:12px;">
+      <div class="pathway-step">
+        <div class="p-num">STEP 1</div>
+        <div class="p-title">Initial Enquiry</div>
+        <div class="p-sub">Reach out on WhatsApp, email, or LinkedIn to see if EmbedOps is a fit.</div>
+      </div>
+      <div class="pathway-step">
+        <div class="p-num">STEP 2</div>
+        <div class="p-title">90-Minute Executive Visibility Diagnostic</div>
+        <div class="p-sub">A focused session to identify blind spots, bottlenecks, and the highest-value next action.</div>
+      </div>
+      <div class="pathway-step">
+        <div class="p-num">STEP 3</div>
+        <div class="p-title">Executive Program Visibility Sprint</div>
+        <div class="p-sub">An implementation engagement that builds a working executive visibility and governance system.</div>
+      </div>
+      <div class="pathway-step">
+        <div class="p-num">STEP 4</div>
+        <div class="p-title">Ongoing Support</div>
+        <div class="p-sub">Governance and reporting work scoped separately where a continuing need is identified.</div>
+      </div>
+    </div>
+
+    <p class="services-note">
+      Client information is treated as confidential and used only for the agreed engagement.
+    </p>
+
+    <div class="hero-actions" style="margin-top:32px;">
+      <a href="https://wa.me/917276087697" class="btn btn-primary" target="_blank" rel="noopener">
+        Discuss an Executive Visibility Diagnostic
+      </a>
+      <a href="mailto:jaideepphatak16@gmail.com?subject=Executive%20Visibility%20Diagnostic%20Enquiry" class="btn btn-secondary">
+        Start a Conversation
+      </a>
+      <a href="https://www.linkedin.com/in/jaideepphatak" class="btn btn-secondary" target="_blank" rel="noopener">
+        Connect on LinkedIn
+      </a>
+    </div>
   </div>
 </section>
 
@@ -1183,35 +1452,29 @@
       </dl>
     </div>
     <div class="about-copy">
-      <div class="eyebrow">About</div>
+      <div class="eyebrow">Professional Profile</div>
       <p>
-        I help engineering and product organizations bring structure to complex delivery by combining
-        program discipline, leadership reporting, and decision-support frameworks.
+        A credential and experience summary — for the philosophy behind the work, see
+        <a href="#meet-the-builder" style="color:var(--amber); font-weight:600;">Meet the Builder</a> above.
       </p>
       <div class="about-highlights-label">Highlights</div>
       <ul class="about-highlights">
-        <li>10+ years in the industry</li>
-        <li>7+ years leading global technical programs</li>
-        <li>35+ programs delivered across OEMs and Tier-1 suppliers</li>
-        <li>Portfolio governance up to $8M–$10M</li>
-        <li>80+ engineers coordinated across USA, UAE and India</li>
+        <li>10+ years in the industry, 7+ leading global technical programs</li>
+        <li>Global automotive and engineering programme delivery</li>
+        <li>Cost optimisation and VAVE programme experience</li>
+        <li>Led teams of 80+ people across USA, UAE and India</li>
         <li>PMP® Certified</li>
         <li>AI-enabled reporting and leadership dashboards</li>
       </ul>
-      <p>
-        My background combines engineering execution, cross-functional leadership, cost optimization,
-        reporting systems, and AI-enabled delivery support across global automotive and engineering
-        environments.
-      </p>
     </div>
   </div>
 </section>
 
-<!-- ================= CURRENT FOCUS ================= -->
+<!-- ================= OPEN TO ================= -->
 <section class="focus-banner" id="current-focus">
   <div class="wrap">
     <div>
-      <div class="eyebrow">Current Focus</div>
+      <div class="eyebrow">Open To</div>
       <div class="focus-roles">
         <span>Program Leadership</span>
         <span>Technical Program Leadership</span>
@@ -1238,6 +1501,11 @@
     </div>
     <div class="contact-grid">
       <div class="contact-card">
+        <svg class="c-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <div class="c-label">WhatsApp</div>
+        <a class="c-val" href="https://wa.me/917276087697" target="_blank" rel="noopener">+91 7276087697</a>
+      </div>
+      <div class="contact-card">
         <svg class="c-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
         <div class="c-label">Email</div>
         <a class="c-val" href="mailto:jaideepphatak16@gmail.com">jaideepphatak16@gmail.com</a>
@@ -1253,28 +1521,48 @@
         <a class="c-val" href="./resume/Jaideep_Phatak_Resume.pdf" target="_blank" rel="noopener">Download PDF</a>
       </div>
     </div>
+    <p class="services-note">
+      Information shared through these channels is treated as confidential and used only for the
+      conversation or engagement.
+    </p>
   </div>
 </section>
 
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <div class="wrap">
-    <div class="footer-top">
-      <div>
+    <div class="footer-top" style="border-bottom:none; padding-bottom:0; flex-direction:column; align-items:stretch;">
+      <div style="margin-bottom:26px;">
         <div class="footer-brand">Jaideep Phatak</div>
         <div class="footer-tag">Program Leadership | Delivery Systems | AI-Enabled Reporting</div>
         <div class="footer-tag">Pune, India</div>
       </div>
+      <div class="footer-ecosystem">
+        <div class="footer-eco-block">
+          <div class="fe-label">Executive Portfolio</div>
+          <div class="fe-desc">Interactive demonstrations of program and portfolio governance.</div>
+          <a href="#command-centers">Command Centers →</a>
+        </div>
+        <div class="footer-eco-block">
+          <div class="fe-label">Executive AI Toolkit</div>
+          <div class="fe-desc">Free, browser-based governance and decision-support tools.</div>
+          <a href="#ai-governance-toolkit">Explore the Toolkit →</a>
+        </div>
+        <div class="footer-eco-block">
+          <div class="fe-label">EmbedOps</div>
+          <div class="fe-desc">Consulting engagements for executive program visibility.</div>
+          <a href="#services">EmbedOps Services →</a>
+        </div>
+      </div>
       <div class="footer-links">
-        <a href="#command-centers">Command Centers</a>
-        <a href="#ai-governance-toolkit">AI Toolkit</a>
         <a href="#about">About</a>
+        <a href="https://wa.me/917276087697" target="_blank" rel="noopener">WhatsApp</a>
         <a href="mailto:jaideepphatak16@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/jaideepphatak" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Jaideep Phatak. All rights reserved.</span>
+    <div class="footer-bottom" style="border-top:1px solid rgba(255,255,255,.14); margin-top:22px; padding-top:22px;">
+      <span>© 2026 Jaideep Phatak — Executive Portfolio. Document Version 1.4, July 2026. All rights reserved.</span>
       <span>Pune, India</span>
     </div>
   </div>
@@ -1283,6 +1571,8 @@
 <button class="to-top" id="toTop" aria-label="Back to top">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
+
+</div><!-- /.page-content -->
 
 <script>
   (function(){
@@ -1338,6 +1628,43 @@
       });
     }, { threshold:0.15 });
     revealEls.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
+<!-- Scroll-spy for the fixed left navigation panel (desktop). Highlights the
+     nav item matching the section currently in view. Safe no-op on mobile,
+     where the side panel is not rendered. -->
+<script>
+  (function(){
+    "use strict";
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.side-nav-links a[data-section]'));
+    if(!navLinks.length) return;
+    var sections = navLinks
+      .map(function(a){ return document.getElementById(a.getAttribute('data-section')); })
+      .filter(Boolean)
+      .sort(function(a, b){ return a.offsetTop - b.offsetTop; });
+    if(!sections.length) return;
+
+    function setActive(id){
+      navLinks.forEach(function(a){
+        var match = a.getAttribute('data-section') === id;
+        a.classList.toggle('is-active', match);
+        if(match){ a.setAttribute('aria-current', 'true'); }
+        else{ a.removeAttribute('aria-current'); }
+      });
+    }
+
+    function onScroll(){
+      var y = (window.scrollY || window.pageYOffset) + 140;
+      var current = sections[0].id;
+      for(var i = 0; i < sections.length; i++){
+        if(sections[i].offsetTop <= y) current = sections[i].id;
+      }
+      setActive(current);
+    }
+    document.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
   })();
 </script>
 
